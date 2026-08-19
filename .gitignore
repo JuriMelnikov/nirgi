@@ -1,8 +1,8 @@
 cb-initial-data.conf
-deploy.sh
 .windsurfrules
 workspace.Dockerfile
 workspace-run.sh
+mariadb_data/
 .emv
 HELP.md
 target/
