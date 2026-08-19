@@ -223,7 +223,7 @@ function renderCalendar(year, month) {
         
         // Add week number cell
         const weekCell = document.createElement('div');
-        weekCell.className = 'p-2 text-center font-bold text-xs bg-base-300 rounded';
+        weekCell.className = 'py-0.5 text-center font-bold text-[10px] leading-tight bg-base-300 rounded';
         weekCell.textContent = weekNumber;
         
         if (selectedWeek && weekNumber === selectedWeek) {
@@ -245,7 +245,7 @@ function renderCalendar(year, month) {
             if (dayNum > 0 && dayNum <= totalDays) {
                 const currentDate = new Date(year, month, dayNum);
                 const dayCell = document.createElement('div');
-                dayCell.className = 'p-2 text-center cursor-pointer hover:bg-base-300 rounded';
+                dayCell.className = 'py-0.5 text-center text-[10px] leading-tight cursor-pointer hover:bg-base-300 rounded';
                 dayCell.textContent = dayNum;
                 
                 // Highlight Saturday (5) and Sunday (6) with red tint
@@ -269,7 +269,7 @@ function renderCalendar(year, month) {
             } else {
                 // Empty cell
                 const emptyCell = document.createElement('div');
-                emptyCell.className = 'p-2';
+                emptyCell.className = 'py-0.5';
                 calendarDays.appendChild(emptyCell);
             }
         }
