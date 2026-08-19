@@ -24,6 +24,31 @@
                         <span>Добавить заказ</span>
                     </h2>
                     <form id="addOrderForm" class="space-y-4">
+                        <!-- Calendar Display -->
+                        <div class="form-control flex justify-center">
+                            <label class="label justify-center">
+                                <span class="label-text font-medium">Календарь</span>
+                            </label>
+                            <div id="calendar" class="border rounded-lg p-2 bg-base-200 w-fit mx-auto">
+                                <div class="flex justify-between items-center mb-2">
+                                    <button id="prevMonth" class="btn btn-xs btn-circle">◀</button>
+                                    <span id="calendarTitle" class="font-bold text-sm"></span>
+                                    <button id="nextMonth" class="btn btn-xs btn-circle">▶</button>
+                                </div>
+                                <div class="grid grid-cols-8 gap-0.5 text-center">
+                                    <div class="font-bold text-xs">Нед</div>
+                                    <div class="font-bold text-xs">Пн</div>
+                                    <div class="font-bold text-xs">Вт</div>
+                                    <div class="font-bold text-xs">Ср</div>
+                                    <div class="font-bold text-xs">Чт</div>
+                                    <div class="font-bold text-xs">Пт</div>
+                                    <div class="font-bold text-xs">Сб</div>
+                                    <div class="font-bold text-xs">Вс</div>
+                                </div>
+                                <div id="calendarDays" class="grid grid-cols-8 gap-0.5 mt-1"></div>
+                            </div>
+                        </div>
+
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Название заказа</span>
@@ -66,31 +91,6 @@
                                 <select id="orderWeek" name="week" required class="select select-bordered w-full">
                                     <option value="">-- Выберите неделю --</option>
                                 </select>
-                            </div>
-                        </div>
-                        
-                        <!-- Calendar Display -->
-                        <div class="form-control flex justify-center">
-                            <label class="label justify-center">
-                                <span class="label-text font-medium">Календарь</span>
-                            </label>
-                            <div id="calendar" class="border rounded-lg p-2 bg-base-200 w-fit mx-auto">
-                                <div class="flex justify-between items-center mb-2">
-                                    <button id="prevMonth" class="btn btn-xs btn-circle">◀</button>
-                                    <span id="calendarTitle" class="font-bold text-sm"></span>
-                                    <button id="nextMonth" class="btn btn-xs btn-circle">▶</button>
-                                </div>
-                                <div class="grid grid-cols-8 gap-0.5 text-center">
-                                    <div class="font-bold text-xs">Нед</div>
-                                    <div class="font-bold text-xs">Пн</div>
-                                    <div class="font-bold text-xs">Вт</div>
-                                    <div class="font-bold text-xs">Ср</div>
-                                    <div class="font-bold text-xs">Чт</div>
-                                    <div class="font-bold text-xs">Пт</div>
-                                    <div class="font-bold text-xs">Сб</div>
-                                    <div class="font-bold text-xs">Вс</div>
-                                </div>
-                                <div id="calendarDays" class="grid grid-cols-8 gap-0.5 mt-1"></div>
                             </div>
                         </div>
 
