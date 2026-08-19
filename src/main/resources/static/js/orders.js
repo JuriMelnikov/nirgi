@@ -563,7 +563,7 @@ function renderOrdersTable(orders) {
     tbody.innerHTML = '';
     
     if (orders.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Нет заказов</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Нет заказов</td></tr>';
         return;
     }
     
@@ -573,17 +573,12 @@ function renderOrdersTable(orders) {
         const isTransferred = order.isTransferred;
         const orderIdForActions = isTransferred ? order.originalOrderId : order.id;
         
-        const modelsText = order.models && order.models.length > 0 
-            ? order.models.map(m => `${m.modelListName || 'Unknown'} - ${isTransferred ? m.remainingCount : m.count} экземпляров`).join(', ')
-            : 'Нет моделей';
-        
         // Highlight transferred orders
         const rowClass = isTransferred ? 'bg-yellow-50' : '';
         tr.className = rowClass;
         
         tr.innerHTML = `
             <td>${order.name}</td>
-            <td>${modelsText}</td>
             <td>
                 ${!isTransferred ? `
                 <button class="btn btn-sm btn-info mr-2" onclick="editOrder(${order.id})">
