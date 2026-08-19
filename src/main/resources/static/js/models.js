@@ -19,6 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
     let editingTechmapId = null;
     let allTechmaps = [];
 
+    // Price is stored in cents, but edited in euros
+    function eurosToCents(value) {
+        const euros = parseFloat(String(value).replace(',', '.'));
+        return isNaN(euros) ? '' : String(Math.round(euros * 100));
+    }
+
+    function centsToEuros(value) {
+        const cents = parseFloat(value);
+        return isNaN(cents) ? '' : (cents / 100).toFixed(2);
+    }
+
     // Load existing data on page load
     loadModelLists();
     loadSectionLists();
@@ -226,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
             serial: document.getElementById('techmapSerial').value,
             descriptor: document.getElementById('techmapDescriptor').value,
             time: document.getElementById('techmapTime').value,
-            price: document.getElementById('techmapPrice').value,
+            price: eurosToCents(document.getElementById('techmapPrice').value),
             modelList: {
                 id: document.getElementById('techmapModelList').value
             },
@@ -510,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('techmapSerial').value = techmap.serial || '';
         document.getElementById('techmapDescriptor').value = techmap.descriptor || '';
         document.getElementById('techmapTime').value = techmap.time || '';
-        document.getElementById('techmapPrice').value = techmap.price || '';
+        document.getElementById('techmapPrice').value = centsToEuros(techmap.price);
         document.getElementById('techmapModelList').value = techmap.modelList ? String(techmap.modelList.id) : '';
         document.getElementById('techmapSectionList').value = techmap.sectionList ? String(techmap.sectionList.id) : '';
     }
