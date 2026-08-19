@@ -18,7 +18,7 @@ jobs:
           port: 22
           script: |
             # 1. Переходим в директорию, где лежит ваш docker-compose.yml
-            cd /home/${{ secrets.SERVER_USER }} # Измените путь, если проект лежит в другом месте
+            cd /srv/nirgi-java # Измените путь, если проект лежит в другом месте
 
             # 2. Скачиваем свежие изменения из Git
             git pull origin main
