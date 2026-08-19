@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление работниками</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-base-200">
+    <!-- Navigation Bar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-4 lg:p-8">
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Stop Day Settings Card (for Managers only) -->
+            <div class="card bg-base-100 shadow-xl lg:col-span-2 hidden" id="stopDayCard">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Стоп день
+                    </h2>
+                    <div class="alert alert-info mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>Работники не смогут заносить данные в программу после указанного числа месяца.</span>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-medium">День месяца (1-31)</span>
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="number" id="stopDayInput" min="1" max="31" class="input input-bordered flex-1" placeholder="Например: 25">
+                            <button id="updateStopDayBtn" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Сохранить
+                            </button>
+                        </div>
+                        <span class="label-text-alt text-success hidden" id="stopDaySuccess">Настройка успешно сохранена</span>
+                        <span class="label-text-alt text-error hidden" id="stopDayError"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Employee Form -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <svg id="formIcon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                        <span id="formTitle">Добавление работника</span>
+                    </h2>
+                    <form id="addEmployeeForm" class="space-y-4">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Имя</span>
+                            </label>
+                            <input type="text" id="name" name="name" required class="input input-bordered w-full" placeholder="Введите имя">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Фамилия</span>
+                            </label>
+                            <input type="text" id="surname" name="surname" required class="input input-bordered w-full" placeholder="Введите фамилию">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Логин</span>
+                            </label>
+                            <input type="text" id="login" name="login" required class="input input-bordered w-full" placeholder="Автоматически генерируется если оставить пустым">
+                            <span class="label-text-alt text-warning hidden" id="loginWarning">Логин невозможно изменить после создания</span>
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Пароль входа</span>
+                            </label>
+                            <input type="password" id="password" name="password" class="input input-bordered w-full" placeholder="Оставьте пустым для сохранения текущего пароля">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Дата рождения</span>
+                            </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <input type="number" id="dey" name="dey" min="1" max="31" required class="input input-bordered w-full" placeholder="День">
+                                <input type="number" id="month" name="month" min="1" max="12" required class="input input-bordered w-full" placeholder="Месяц">
+                                <input type="number" id="year" name="year" required class="input input-bordered w-full" placeholder="Год">
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Телефон</span>
+                            </label>
+                            <input type="tel" id="phone" name="phone" required class="input input-bordered w-full" placeholder="+372 5___ ____">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Доступ к страницам</span>
+                            </label>
+                            <div class="grid grid-cols-1 gap-2">
+                                <label class="label cursor-pointer justify-start gap-2">
+                                    <input type="radio" name="roles" value="ADMINISTRATOR" class="radio radio-primary" />
+                                    <span class="label-text">АДМИНИСТРАТОР - все права доступа</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2">
+                                    <input type="radio" name="roles" value="MANAGER" class="radio radio-primary" />
+                                    <span class="label-text">МЕНЕДЖЕР - Работники, Модели и операции, Результаты работы, Заказы, Заработная плата</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2">
+                                    <input type="radio" name="roles" value="TECHNOLOGIST" class="radio radio-primary" />
+                                    <span class="label-text">ТЕХНОЛОГ - Модели и операции, Результаты работы и Заказы</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2">
+                                    <input type="radio" name="roles" value="MASTER" class="radio radio-primary" />
+                                    <span class="label-text">МАСТЕР - Заказы и Результаты работы</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2">
+                                    <input type="radio" name="roles" value="ACCOUNTANT" class="radio radio-primary" />
+                                    <span class="label-text">БУХГАЛТЕР - только Заработная плата</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2">
+                                    <input type="radio" name="roles" value="EMPLOYEE" class="radio radio-primary" />
+                                    <span class="label-text">РАБОТНИК - только Результаты работы</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label cursor-pointer justify-start gap-2">
+                                <input type="checkbox" id="active" name="active" class="checkbox checkbox-success" checked />
+                                <span class="label-text font-medium">Активный работник</span>
+                            </label>
+                        </div>
+
+                        <div class="divider">Адрес</div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Город</span>
+                            </label>
+                            <input type="text" id="city" name="city" required class="input input-bordered w-full" placeholder="Город">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Улица</span>
+                            </label>
+                            <input type="text" id="street" name="street" required class="input input-bordered w-full" placeholder="Улица">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-medium">Дом</span>
+                                </label>
+                                <input type="text" id="house" name="house" required class="input input-bordered w-full" placeholder="№ дома">
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-medium">Квартира</span>
+                                </label>
+                                <input type="text" id="room" name="room" class="input input-bordered w-full" placeholder="№ квартиры">
+                            </div>
+                        </div>
+
+                        <div class="form-control mt-6">
+                            <div class="flex gap-2">
+                                <button type="submit" id="submitButton" class="btn btn-primary flex-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    <span id="submitButtonText">Добавить работника</span>
+                                </button>
+                                <button type="button" id="cancelButton" class="btn btn-error hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Отменить
+                                </button>
+                                <button type="button" id="deleteButton" class="btn btn-secondary hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Удалить
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Employees List -->
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-2xl mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Существующие работники
+                    </h2>
+                    <div class="form-control mb-4">
+                        <label class="label cursor-pointer justify-start gap-2">
+                            <input type="checkbox" id="activeOnly" class="checkbox checkbox-primary" checked />
+                            <span class="label-text">Только активные работники</span>
+                        </label>
+                    </div>
+                    <div id="employeesList">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">Выберите работника</span>
+                            </label>
+                            <select id="employeeSelect" class="select select-bordered w-full">
+                                <option value="">-- Загрузка... --</option>
+                            </select>
+                        </div>
+                        <div id="employeeDetails" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth-helper.js"></script>
+    <script>checkPageAccess().then();</script>
+    <script type="module" src="/js/employees.js"></script>
+    <script type="module" src="/js/auth-menu.js"></script>
+</body>
+</html>

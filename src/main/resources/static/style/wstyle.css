@@ -1,0 +1,510 @@
+body{
+background-color: #eee5de;
+font-size:13pt;
+}
+h3{
+font-size:13pt;
+font-weight:bold;
+}
+a{
+	text-decoration:none;
+	color:black;
+}
+input{
+font-size:13pt;
+}
+select{
+font-size:13pt;
+}
+td{
+  vertical-align:top;
+  padding-top:5px;
+  padding-bottom:5px;
+}
+a:hover{
+color: #FF3300;
+}
+
+a{
+	text-decoration:none;
+	color:black;
+}
+.tooltip { position: relative; }
+.tooltip span {
+  position: absolute;
+  right: -600px;
+  top: -60px; /*насколько вверх поднято по сравнению с низом */
+  display: none;
+  min-width: 150px;
+  padding: 3px 5px;
+  white-space: nowrap; /*весь текст одной строкой, но с тегом br будет перенос */
+  font-size: 13pt;
+  text-align:left;
+  background-color: rgba(253,241,172,.8); /* белесый фон */
+  border-radius: 5px 5px 5px 5px;
+  z-index:95;
+  color: #000; /*черный текст*/
+}
+.tooltip:hover span { display: block; font-weight:normal;}
+#help2{
+position:relative;
+top:20px;
+width:20px;
+left:15px;
+color:#CD2609;
+font-weight:bold;
+z-index:85;
+}
+#btnLogout{
+position: absolute;
+width:70px;
+top:20px;
+left:20px;
+height:20px;
+padding:0;
+color:#0101DF;
+font-size:9pt;
+z-index: 50;
+}
+#account{
+width:400px;
+height:180px;
+text-align:center;
+background-color: #E0F8E0;
+border: solid 3px #A9E2F3;
+display:none;
+}
+#delAppointment,#delWorker{
+width:400px;
+height:100px;
+text-align:center;
+background-color: #E0F8E0;
+border: solid 3px #A9E2F3;
+display:none;
+}
+#yesW, #noW{
+position: relative;
+top:20px;
+  margin:auto;
+}
+#yesA, #noA{
+position: relative;
+top:20px;
+  margin:auto;
+}
+#mod_txtW,#mod_txtA{
+position: relative;
+top:10px;
+}
+#loginWindow{
+width:400px;
+height:180px;
+text-align:center;
+background-color: #E0F8E0;
+*border: solid 3px #A9E2F3;
+display:none;
+}
+#TB_overlay
+{
+   position:fixed;  
+    z-index: 90;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #E0F8E0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
+#TB_overlay1
+{
+   position:fixed;  
+    z-index: 90;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=25);
+    -moz-opacity: 0.25;
+    -khtml-opacity: 0.25;
+    opacity: 0.25;
+}
+#bgOverlay{
+position:absolute;  
+* z-index: 80;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+}
+#title{
+position: absolute;
+	top:-50px;
+	width:630px;
+	text-align:center;
+}
+#note{
+	position: absolute;
+	top:-20px;
+	width:630px;
+	text-align:center;
+	color:green;
+}
+#tposition{
+	position: absolute;
+    width: 630px; 
+    height: 400px; 
+    left: 50%; 
+    top: 140px; 
+    margin-left: -315px;
+    margin-top: -40px;	
+   * background: #FFDAB9; 
+   * border: solid 1px black;
+    padding: 10px;
+    *overflow: auto;	
+}
+#back{
+position: absolute;
+    width: 15px; 
+    left: 20px; 
+    top: -25px;
+}
+#buch{
+position: absolute;
+    width: 15px; 
+    left: 620px; 
+    top: -25px;
+}
+#spanFamily{
+  position: absolute;
+    width: 150px; 
+    left: 40px; 
+    top: 33px;
+	text-align: right;
+}
+#family{
+  position: absolute;
+    width: 200px;  
+    left: 200px; 
+    top: 30px; 
+}
+#spanName{
+  position: absolute;
+    width: 150px; 
+    height: 50px; 
+    left: 40px; 
+    top: 70px; 
+	text-align: right;
+	
+}
+#name{
+  position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 65px; 
+	font-size:13pt;
+}
+#spanL1{
+  position: absolute;
+    width: 300px; 
+    *height: 420px; 
+    left: 490px; 
+    top: 30px; 
+	font-size:13pt;
+}
+#L1{
+  position: absolute;
+    width: 40px; 
+    *height: 420px; 
+    left: 445px; 
+    top: 30px; 
+	font-size:13pt;
+	cursor: pointer;
+}
+#spanL2{
+  position: absolute;
+    width: 300px; 
+    *height: 420px; 
+    left: 490px; 
+    top: 50px; 
+	font-size:13pt;
+}
+#L2{
+  position: absolute;
+    width: 40px; 
+    *height: 420px; 
+    left: 445px; 
+    top: 50px; 
+	font-size:13pt;
+	cursor: pointer;
+}
+#spanL3{
+  position: absolute;
+    width: 300px; 
+    *height: 420px; 
+    left: 490px; 
+    top: 70px; 
+	font-size:13pt;
+}
+#L3{
+  position: absolute;
+    width: 40px; 
+    *height: 420px; 
+    left: 445px; 
+    top: 70px; 
+	font-size:13pt;
+	cursor: pointer;
+}
+#spanL4{
+  position: absolute;
+    width: 300px; 
+    *height: 420px; 
+    left: 490px; 
+    top: 90px; 
+	font-size:13pt;
+}
+#L4{
+  position: absolute;
+    width: 40px; 
+    *height: 420px; 
+    left: 445px; 
+    top: 90px; 
+	font-size:13pt;
+	cursor: pointer;
+}
+#spanL5{
+  position: absolute;
+    width: 300px; 
+    *height: 420px; 
+    left: 490px; 
+    top: 110px; 
+	font-size:13pt;
+}
+#L5{
+  position: absolute;
+    width: 40px; 
+    *height: 420px; 
+    left: 445px; 
+    top: 110px; 
+	font-size:13pt;
+	cursor: pointer;
+}
+#spanKood{
+  position: absolute;
+    width: 150px;  
+    left: 40px; 
+    top: 105px; 
+	text-align: right;
+}
+#kood{
+  position: absolute;
+    width: 150px; 
+    left: 200px; 
+    top: 100px; 
+}
+#spanAppointment{
+  position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 40px; 
+    top: 140px; 
+	text-align: right;
+}
+#spanAppointmentsList{
+  position: absolute;
+    width: 200px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 135px; 
+}
+#newAppointment{
+  position: absolute;
+    width: 200px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 135px; 
+	display:none;
+}
+#btnDelAppointment{
+	position: absolute;
+    width: 180px; 
+    height: 25px; 
+    left: 460px; 
+    top: 175px; 
+	*border: solid 1px black;
+	*padding-left:5px;
+	*color:#BDB76B;
+	cursor: pointer;
+}
+#selectAppointment{
+  position: absolute;
+    width: 200px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 135px; 
+	*display:none;
+	cursor: pointer;
+}
+#divNewAppointment{
+position: absolute;
+    width: 100px; 
+    *height: 420px; 
+    left: 410px; 
+    top: 140px;
+	cursor: pointer;
+	font-size:10pt;
+}
+
+#divSelectAppointment{
+position: absolute;
+    width: 100px; 
+    *height: 420px; 
+    left: 410px; 
+    top: 140px;
+	cursor: pointer;
+	font-size:10pt;
+	display:none;
+}
+#spanTelefon{
+  position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 40px; 
+    top: 175px; 
+	text-align: right;
+}
+#telefon{
+  position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 170px; 
+}
+#spanBankCount{
+position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 40px; 
+    top: 210px; 
+	text-align: right;
+}
+#bankCount{
+position: absolute;
+    width: 200px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 205px; 
+}
+#spanCity{
+position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 40px; 
+    top: 245px; 
+	text-align: right;
+}
+#city{
+position: absolute;
+    width: 200px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 240px; 
+}
+#spanAdress{
+position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 40px; 
+    top: 280px;
+	text-align: right;
+}
+#adress{
+position: absolute;
+    width: 200px; 
+    *height: 420px; 
+    left: 200px; 
+    top: 275px;
+}
+#spanWorkersList{
+position: absolute;
+    width: 150px; 
+    *height: 420px; 
+    left: 30px; 
+    top: 405px;
+	text-align: right;
+}
+#selectWorkersList{
+position: absolute;
+    width: 300px; 
+    *height: 420px; 
+    left: 190px; 
+    top: 400px; 
+cursor: pointer;
+}
+#btnWorker{
+	position: absolute;
+    width: 180px; 
+    height: 25px; 
+    left: 460px; 
+    top: 205px; 
+	*color:#BDB76B;
+	cursor: pointer;
+}
+#dayStop{
+	position: absolute;
+    width: 50px; 
+    height: 25px; 
+    left: 585px; 
+    top: 235px; 
+	*color:#BDB76B;
+	cursor: pointer;
+}
+#spanDayStop{
+	position: absolute;
+    width: 120px; 
+    height: 25px; 
+    left: 465px; 
+    top: 240px; 
+	*color:#BDB76B;
+	cursor: default;
+}
+#btnFiltr{
+	position: absolute;
+    width: 100px; 
+    height: 25px; 
+    left: -30px; 
+    top: 140px; 
+	color:#BDB76B;
+	cursor: pointer;
+}
+
+#btnAdd{
+position: absolute;
+    width: 100px; 
+    *height: 420px; 
+    left: 190px; 
+    top: 340px; 
+cursor: pointer;
+}
+#btnUpdate{
+position: absolute;
+    width: 100px; 
+    *height: 420px; 
+    left: 295px; 
+    top: 340px; 
+cursor: pointer;
+}
+#btnDelete{
+position: absolute;
+    width: 100px; 
+    *height: 420px; 
+    left: 400px; 
+    top: 340px; 
+cursor: pointer;
+}
+

@@ -1,0 +1,496 @@
+body{
+text-align:center;
+font-size:13pt;
+
+}
+h3{
+font-size:13pt;
+font-weight:bold;
+}
+input{
+font-size:13pt;
+}
+select{
+font-size:13pt;
+}
+a:hover{
+color: #FF3300;
+}
+a{
+	text-decoration:none;
+	color:black;
+}
+table{
+font-size:10pt;
+ border-collapse: collapse;
+}
+td, th {
+    padding: 3px; /* Поля вокруг содержимого таблицы */
+    border: 1px solid #BDBDBD; /* Параметры рамки */
+	cursor:default;
+   }
+th {
+    background: #E0E6F8; /* Цвет фона */
+    color: #333;  /* Цвет текста */
+}
+ tbody tr:hover {
+    background: #F7F2E0; /* Цвет фона при наведении */
+    *color: #fff; /* Цвет текста при наведении */
+}
+#tblKonto tr:hover{
+	background: #fff; /* Цвет фона при наведении */
+}
+#tblKonto td,tr{
+border-collapse: collapse;
+border: solid 0px #fff;
+}
+button, input.button {
+   padding:0 3px 0 3px;
+   width:auto;
+   overflow:visible;
+}
+
+#account{
+width:400px;
+height:180px;
+text-align:center;
+background-color: #E0F8E0;
+*border: solid 3px #A9E2F3;
+display:none;
+}
+#btnLogout{
+position: absolute;
+width:70px;
+top:20px;
+left:20px;
+height:20px;
+padding:0;
+color:#0101DF;
+font-size:9pt;
+z-index: 50;
+display:none;
+}
+#bgOverlay{
+position:absolute;  
+* z-index: 80;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+	
+}
+#TB_overlay
+{
+   position:fixed;  
+    z-index: 90;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #E0F8E0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity:1;
+}
+
+#sPosition{
+	*position: absolute;
+    width: 1024px; 
+    height: 380px; 
+    *left: 50%; 
+    *top: 100px; 
+    margin:150px auto 50px auto;
+    *margin-top: 150px;	
+    *background: #DDDDDD; 
+   *border: solid 1px black;
+    padding: 10px;
+    *overflow: auto;
+	display:none;
+}
+#title{
+position: relative;
+top:-110px;
+width:100%;
+text-align:center;
+
+}
+#note{
+position: relative;
+top:-90px;
+width:100%;
+height:30px;
+text-align:center;
+color:green;
+*border: solid 1px black;
+}
+#top{
+position: relative;
+top:100px;
+width:430px; 
+height:40px;
+margin:auto;
+*left:100px;
+*border: solid 1px black;
+}
+#txtShow1{
+position:absolute;
+left:0px; 
+top:0px;
+width:180px;
+text-align:right;
+font-size:10pt;
+
+}
+#txtShow2{
+position:absolute;
+left:0px; 
+top:15px;
+width:180px;
+text-align:right;
+font-size:10pt;
+}
+
+#radioPeriod1{
+position:absolute;
+	top: 0px; 
+    left:190px;
+	width:20px;
+font-size:10pt;
+
+}
+#radioPeriod2{
+position:absolute;
+	top: 15px; 
+    left:190px;
+	width:20px;
+font-size:10pt;
+
+}
+
+
+#toMonth{
+	position:absolute;
+	top: 3px; 
+    left: 285px;
+	width:50px;
+*display:none;
+
+	
+}
+#sWeek{
+	position:absolute;
+	top: 3px; 
+    left: 230px;
+	width:50px;
+*border: solid 1px black;
+
+	
+}
+#sYear{
+position:absolute;
+	top: 3px; 
+    left: 340px;
+	width:80px;
+*border: solid 1px black;
+}
+#elements{
+position:relative;
+	top:100px;
+	width:450px;
+	height:193px;
+	left:285px;
+border: 2px solid #BDBDBD;
+	*text-align:right;
+	background:#E0E6F8; 
+}
+#divCalendar{
+position: relative;
+left:0px;
+top:-230px;
+width:220px;
+height:150px;
+text-align:center;
+
+*border: solid 1px black;
+*background: #FFDAB9; 
+margin:auto;
+}
+#tblCalendar{
+	text-align:center;
+	margin:auto;
+}
+#toDay{
+color:#DF0101;
+font-weight: 600;
+}
+.holyday{
+background:#F8E0E0;
+}
+.week{
+color:#0101DF;
+
+*background:#E0F8EC;
+font-size:13px;
+}
+#monthCalendar{
+  background: #E0E6F8; /* Цвет фона */
+}
+#back{
+position: absolute;
+    width: 18px; 
+    left: 535px; 
+    top: -275px;
+	display:none;
+	
+}
+#sNameFamily{
+position:absolute;
+	top: 8px; 
+    left: 10px;
+	width:210px;
+	text-align:right;
+	
+}
+#sSelectNameFamily{
+	position:absolute;
+	top: 5px;
+	width:210px;
+	left:225px;
+	text-align:left
+}
+#sInputNameFamily{
+	position:absolute;
+	top: 5px;
+	width:210px;
+	left:225px;
+	*color::#DDDDDD;
+	*border: solid 1px black;
+	text-align:center;
+	display:none;
+}
+#stxtOrder{
+position:absolute;
+	top:35px;
+	width:210px;
+	left:10px;
+	text-align:right;
+	*border: solid 1px black;
+}
+#sOrder{
+position:absolute;
+	top:35px;
+	width:210px;
+	left:225px;
+	
+}
+#stxtModel{
+position:absolute;
+	top:65px;
+	width:210px;
+	left:10px;
+	text-align:right;
+}
+#sModel{
+	position:absolute;
+	top:65px;
+	width:210px;
+	left:225px;
+}
+#stxtSection{
+position:absolute;
+	top:95px;
+	width:210px;
+	left:10px;
+	text-align:right;
+}
+#sSection{
+	position:absolute;
+	top:95px;
+	width:210px;
+	left:225px;
+}
+#stxtOperate{
+	position:absolute;
+	top:125px;
+	width:210px;
+	left:10px;
+	text-align:right;
+}
+#sOperate{
+	position:absolute;
+	top:125px;
+	width:210px;
+	left:225px;
+}
+
+
+#stxtCount{
+	position:absolute;
+	top:155px;
+	width:210px;
+	left:10px;
+	text-align:right;
+}
+#sCount{
+	position:absolute;
+	top:155px;
+	width:210px;
+	left:225px;
+}
+#sRaportOperate{
+position:relative;
+	height:55px;
+	top:165px;
+	width:100%;
+	*left:-460px;
+*border: solid 1px black;
+}
+
+#sEditCount{
+position:absolute;
+	top:400px;
+	width:250px;
+	left:250px;
+	
+}
+#sDeleteOrder{
+position:absolute;
+	top:00px;
+	width:150px;
+	left:503px;
+	
+}
+#sAdd{
+position:relative;
+	width:100px;
+	top:50px;
+	*left:160px;
+	
+}
+
+#divTable{
+position:relative;
+ margin:auto;
+	width:800px;
+	height:100%;
+	top:240px;
+	*left:0px;
+	*border: solid 1px black;
+}
+#tbl{
+margin:auto;
+font-size:13pt;
+*width:100%;
+
+}
+#tblKonto{
+position:relative;
+font-size:13pt;
+* border-collapse: collapse;
+width:100%;
+*border:solid 1px #fff;
+*color:#DDDDDD;
+}
+#thId{
+width:20px;
+text-align:center;
+}
+#thFamily{
+width:200px;
+}
+#thYear{
+width:40px;
+}
+#thWeek{
+width:20px;
+}
+#thOrder{
+width:150px;
+}
+#thModel{
+width:150px;
+}
+#thSection{
+width:120px;
+}
+#thOperate{
+width:50px;
+}
+#thCount{
+width:30px;
+}
+#thPrice{
+width:30px;
+}
+#tdTimeValue{
+text-align:right;
+width:350px;
+}
+#tdSum{
+text-align:right;
+width:150px;
+}
+#tdSumValue{
+color:#8A0808;
+}
+.tdId{
+	
+}
+.tdFamily{
+
+}
+
+.tdYear{
+width:20px;
+text-align:center;
+}
+.tdWeek{
+text-align:center;
+}
+.tdOperate{
+text-align:center;
+}
+.tdOrder{
+
+}
+.tdCount{
+
+}
+.tdPrice{
+
+}
+#trTable{
+	height:45px;
+	*background:#F8ECE0;
+	font-size:13pt;
+	font-weight: 600;
+}
+#thId{
+width:30px;
+}
+#thS{
+	width:200px;
+}
+#thD{
+	width:600px;
+}
+#thT{
+	width:50px;
+}
+#thP{
+	width:50px;
+}
+#tabFooter{
+height:200px;
+}
+.tdDescript{
+	text-align:center;
+}
+#tbl2{
+width:100%;
+font-size:12pt;
+}
+.trTable2{
+background:#F8ECE0; /* Цвет фона */
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+    <div th:fragment="navbar" class="navbar bg-base-100 shadow-lg">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52" style="display: none;">
+                    <li><a href="/work-results" data-path="/work-results">Результаты работы</a></li>
+                    <li><a href="/orders" data-path="/orders">Заказы</a></li>
+                    <li><a href="/models" data-path="/models">Модели и операции</a></li>
+                    <li><a href="/employees" data-path="/employees">Работники</a></li>
+                    <li><a href="/salary" data-path="/salary">Бухгалтер</a></li>
+                </ul>
+            </div>
+            <a class="btn btn-ghost text-xl">👥 NirgiServis</a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+            <ul class="menu menu-horizontal px-1" style="display: none;">
+                <li><a href="/work-results" class="font-semibold" data-path="/work-results">Результаты работы</a></li>
+                <li><a href="/orders" class="font-semibold" data-path="/orders">Заказы</a></li>
+                <li><a href="/models" class="font-semibold" data-path="/models">Модели и операции</a></li>
+                <li><a href="/employees" class="font-semibold" data-path="/employees">Работники</a></li>
+                <li><a href="/salary" class="font-semibold" data-path="/salary">Бухгалтер</a></li>
+            </ul>
+        </div>
+        <div class="navbar-end">
+            <div id="userInfo" class="hidden mr-2">
+                <span class="badge badge-primary badge-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span id="userLogin"></span>
+                </span>
+            </div>
+            <div id="authButton"></div>
+        </div>
+    </div>
+</body>
+</html>

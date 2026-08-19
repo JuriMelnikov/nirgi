@@ -1,0 +1,773 @@
+body{
+background-color: #E6F8E0;
+font-size:13pt;
+}
+h3{
+font-size:13pt;
+font-weight:bold;
+}
+input{
+font-size:13pt;
+}
+select{
+font-size:13pt;
+}
+table{
+font-size:10pt;
+border-collapse: collapse;
+table-layout: fixed;
+}
+col#thId { width: 0px; }
+col.tdId { width: 0px; }
+td{
+    padding: 3px; /* Поля вокруг содержимого таблицы */
+    border: 1px solid #BDBDBD; /* Параметры рамки */
+   }
+th {
+height:30px;
+	padding: 3px;
+	border: 1px solid #BDBDBD;
+    background: #DDDDDD; /* Цвет фона */
+    color: #333;  /* Цвет текста */
+	vertical-align:middle:
+}
+ tbody tr:hover {
+    background: #ECF6CE; /* Цвет фона при наведении */
+    *color: #fff; /* Цвет текста при наведении */
+}
+a:hover{
+color: #FF3300;
+}
+
+a{
+	text-decoration:none;
+	color:black;
+}
+#btnLogout{
+position: absolute;
+width:70px;
+top:20px;
+left:20px;
+height:20px;
+padding:0;
+color:#0101DF;
+font-size:9pt;
+z-index: 50;
+}
+#bgOverlay{
+position:absolute;  
+* z-index: 80;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+	
+}
+#TB_overlay
+{
+   position:fixed;  
+    z-index: 90;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #E0F8E0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity: 1;
+}
+
+#account{
+width:400px;
+height:180px;
+text-align:center;
+*background-color: #E0F8E0;
+
+display:none;
+}
+#aposition{
+	*position: relative;
+    width: 1024px; 
+    height: 550px; 
+    *left: 50%; 
+    *top: 200px; 
+    margin:80px auto 50px auto;
+    	
+    *background: #FFDAB9; 
+   *border: solid 3px #A9E2F3;
+    *padding: 10px;
+    *overflow: auto;	
+}
+#nextPage{
+position: relative;
+width:30px;
+    top:0px;
+	left:820px; 
+}
+#back{
+position: relative;
+    width: 100px; 
+    left: 200px; 
+    top: 0px;
+}
+#title{
+position: relative;
+top:-50px;
+width:100%;
+height:30px;
+text-align:center;
+*border: solid 1px black;
+}
+#divCalendar{
+position: relative;
+top:-10px;
+width:220px;
+height:150px;
+text-align:center;
+
+*border: solid 1px black;
+*background: #FFDAB9; 
+margin:auto;
+}
+#tblCalendar{
+	text-align:center;
+	margin:auto;
+}
+#toDay{
+color:#DF0101;
+font-weight: 600;
+}
+.holyday{
+background:#F8E0E0;
+}
+.week{
+color:#0101DF;
+
+*background:#E0F8EC;
+font-size:13px;
+}
+#divCheck{
+position: absolute;
+top:20px;
+height:18px;
+width:150px;
+left:330px;
+
+}
+#textCheck{
+position: absolute;
+top:2px;
+width:50px;
+left:60px;
+font-size:10pt;
+}
+#check{
+position: absolute;
+top:0px;
+height:11px;
+width:30px;
+left:15px;
+}
+#top{
+position: relative;
+top:0px;
+width:1024px;
+height:90px;
+
+
+}
+#info{
+    width: 100%;
+    text-align: center;
+}
+#date{
+position: relative;
+margin:auto;
+top:-10px;
+width:500px;
+height:90px;
+text-align:center;
+*border: solid 1px #ADB021;/* green */
+
+}
+#currentDate{
+position: absolute;
+top:-15px;
+width:245px;
+height:20px;
+left:140px;
+line-height:20px;
+background: #E3F6CE;
+border: solid 1px #D8F6CE;/* brown */
+}
+#txtUpdateDate{
+position: absolute;
+width:250px;
+top:30px;
+left:130px;
+padding:0px;
+background: #DDDDDD;
+color:#DF0101;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD; /* yellow */
+z-index:2;
+display:none;
+}
+#txtWeek{
+position:absolute;
+width:78px;
+top:30px;
+left:130px;
+background: #DDDDDD;
+color:#1B2A0A;
+padding:0px;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD; /* yellow */
+float:left;
+z-index:1;
+}
+#txtMonth{
+position: absolute;
+width:78px;
+top:30px;
+left:215px;
+padding:0px;
+background: #DDDDDD;
+color:#1B2A0A;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD; /* yellow */
+float:left;
+z-index:1;
+}
+#txtYear{
+position: absolute;
+width:78px;
+top:30px;
+left:300px;
+padding:0px;
+background: #DDDDDD;
+color:#1B2A0A;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD; /* yellow */
+float:left;
+z-index:1;
+}
+#UweekMonthYear{
+clear:float;
+position: relative;
+width:100%;
+top:50px;
+left:0px;
+padding:0px;
+height:30px;
+text-align:center;
+*border: solid 1px #F5F224; /* yellow */
+display:none;
+}
+#UselWeek{
+position: absolute;
+width:80px;
+left:130px;
+}
+#UselMonth{
+position: absolute;
+width:80px;
+left:215px;
+}
+#UselYear{
+position: absolute;
+width:80px;
+left:300px;
+}
+
+#weekMonthYear{
+clear:float;
+position: relative;
+width:100%;
+top:50px;
+left:0px;
+padding:0px;
+height:30px;
+text-align:center;
+*border: solid 1px #F5F224; /* yellow */
+}
+#selWeek{
+position: absolute;
+width:80px;
+left:130px;
+}
+#selMonth{
+position: absolute;
+width:80px;
+left:215px;
+}
+#selYear{
+position: absolute;
+width:80px;
+left:300px;
+}
+#beginEndWeek{
+position: absolute;
+top:30px;
+width:80px;
+left:140px;
+font-size:10pt;
+}
+
+#elements{
+position: relative;
+*top:0px;
+width:580px;
+height:400px;
+*border: solid 1px black;
+float:left;
+}
+#raport{
+position:relative;
+top:-460px;
+width:500px;
+height:100%;
+left:550px;
+float:left;
+*border: solid 1px black;
+display:none;
+}
+#right{
+width:430px;
+height:70px;
+left:500px;
+float:left;
+*border: solid 1px black;
+}
+#table_div{
+width:400px;
+left:500px;
+clear: left;
+}
+
+#plus{
+
+position: absolute;
+width:30px;
+left:500px;
+top:70px;
+}
+#minus{
+position: absolute;
+width:30px;
+left:535px;
+top:70px;
+
+}
+#countInputs{
+position: absolute;
+width:65px;
+left:500px;
+top:100px;
+*display:none;
+}
+#divTxtOrder{
+position: relative;
+width:225px;
+top:20px;
+left:100px;
+*height:20px;
+*line-height:20px;
+text-align:center;
+font-size:10pt;
+ background: #DDDDDD;
+border: solid 1px #BDBDBD;
+}
+
+#aOrder{
+position: relative;
+width:370px;
+top:25px;
+
+left:100px;
+
+*border: solid 1px black;
+width:370px;
+
+
+}
+#txtModel{
+position: absolute;
+width:225px;
+left:100px;
+top:80px;
+*height:20px;
+*line-height:20px;
+text-align:center;
+background: #DDDDDD;
+border: solid 1px #BDBDBD;
+font-size:10pt;
+}
+
+#aModel1{
+position:absolute;
+width:300px;
+left:100px;
+top:100px;
+}
+#sel1{
+position:absolute;
+width:200px;
+left:100px;
+top:100px;
+}
+#aCount1{
+position: absolute;
+width:60px;
+left:410px;
+top:100px;
+}
+#section1{
+position: absolute;
+width:200px;
+left:310px;
+top:100px;
+}
+#aModel2{
+position: absolute;
+width:300px;
+left:100px;
+top:130px;
+}
+#sel2{
+position: absolute;
+width:200px;
+left:100px;
+top:130px;
+}
+#aCount2{
+position: absolute;
+width:60px;
+left:410px;
+top:130px;
+}
+#section2{
+position: absolute;
+width:200px;
+left:310px;
+top:130px;
+}
+#aModel3{
+position:absolute;
+width:300px;
+left:100px;
+top:160px;
+}
+#sel3{
+position:absolute;
+width:200px;
+left:100px;
+top:160px;
+}
+#aCount3{
+position: absolute;
+width:60px;
+left:410px;
+top:160px;
+}
+#section3{
+position: absolute;
+width:200px;
+left:310px;
+top:160px;
+}
+#aModel4{
+position: absolute;
+width:300px;
+left:100px;
+top:190px;
+}
+#sel4{
+position: absolute;
+width:200px;
+left:100px;
+top:190px;
+}
+#aCount4{
+position: absolute;
+width:60px;
+left:410px;
+top:190px;
+}
+#section4{
+position: absolute;
+width:200px;
+left:310px;
+top:190px;
+}
+#aModel5{
+position:absolute;
+width:300px;
+left:100px;
+top:220px;
+}
+#sel5{
+position:absolute;
+width:300px;
+left:100px;
+top:220px;
+}
+#aCount5{
+position: absolute;
+width:60px;
+left:410px;
+top:220px;
+}
+#section5{
+position: absolute;
+width:200px;
+left:310px;
+top:220px;
+}
+#aModel6{
+position: absolute;
+width:300px;
+left:100px;;
+top:250px;
+}
+#sel6{
+position: absolute;
+width:200px;
+left:100px;;
+top:250px;
+}
+#aCount6{
+position: absolute;
+width:60px;
+left:410px;
+top:250px;
+}
+#section6{
+position: absolute;
+width:200px;
+left:310px;
+top:250px;
+}
+#aModel7{
+position:absolute;
+width:300px;
+left:100px;
+top:280px;
+}
+#sel7{
+position:absolute;
+width:200px;
+left:100px;
+top:280px;
+}
+#aCount7{
+position: absolute;
+width:60px;
+left:410px;
+top:280px;
+}
+#section7{
+position: absolute;
+width:200px;
+left:310px;
+top:280px;
+}
+#aModel8{
+position: absolute;
+width:300px;
+left:100px;
+top:310px;
+}
+#sel8{
+position: absolute;
+width:200px;
+left:100px;
+top:310px;
+}
+#aCount8{
+position: absolute;
+width:60px;
+left:410px;
+top:310px;
+}
+#section8{
+position: absolute;
+width:200px;
+left:310px;
+top:310px;
+}
+#aModel9{
+position:absolute;
+width:300px;
+left:100px;
+top:340px;
+}
+#sel9{
+position:absolute;
+width:200px;
+left:100px;
+top:340px;
+}
+#aCount9{
+position: absolute;
+width:60px;
+left:410px;
+top:340px;
+}
+#section9{
+position: absolute;
+width:200px;
+left:310px;
+top:340px;
+}
+#aModel10{
+position: absolute;
+width:300px;
+left:100px;
+top:370px;
+}
+#sel10{
+position: absolute;
+width:200px;
+left:100px;
+top:370px;
+}
+#aCount10{
+position: absolute;
+width:60px;
+left:410px;
+top:370px;
+}
+#section10{
+position: absolute;
+width:200px;
+left:310px;
+top:370px;
+}
+
+#tdRС{
+text-align:center;
+}
+#abtnAdd{
+position: relative;
+width:100px;
+*left:640px;
+top:15px;
+float:left;
+font-size:10pt;
+
+}
+#abtnDubl{
+position: relative;
+width:100px;
+*left:640px;
+top:15px;
+float:left;
+font-size:10pt;
+display:none;
+}
+#abtnChange{
+position: relative;
+width:100px;
+*left:740px;
+top:15px;
+float:left;
+font-size:10pt;
+
+}
+#abtnDeleteOrder{
+position:  relative;
+width:100px;
+*left:840px;
+top:15px;
+float:left;
+font-size:10pt;
+}
+#abtnCanselChange{
+position:  relative;
+width:100px;
+*left:840px;
+top:15px;
+float:left;
+font-size:10pt;
+
+}
+#tblList{
+clear:float;
+position: relative;
+top:40px;
+width:310px;
+left:0px;
+font-size:13pt;
+
+}
+#thId{
+width:0px;
+font-size:1pt;
+}
+#thNo{
+width:30px;
+font-size:10pt;
+}
+#thOrder{
+width:355px;
+font-size:10pt;
+}
+.tdOrder{
+width:355px;
+background:#fff;
+}
+.tdId{
+width:0px;
+background:#fff;
+}
+.tdNo{
+width:30px;
+text-align:center;
+background:#fff;
+}
+#tblR{
+width:400px;
+font-size:13pt;
+margin:10px 0 0 0;
+border: solid 1px #173B0B;
+}
+#OrderModel{
+position: relative;
+margin:80px 0 0 0;
+width:400px;
+height:50px;
+}
+
+#tblRBodyF{
+width:50%;
+vertical-align:middle;
+}
+#tblRBodyS{
+width:25%;
+vertical-align:middle;
+}
+#tblRBodyC{
+width:25%;
+vertical-align:middle;
+}
+#tblROrder{
+color:#FF3300;
+}
+#tblRModel{
+color:#FF3300;
+}
+.tdRF{
+text-align:left;
+}
+.tdRS{
+text-align:center;
+}
+.tdRС{
+text-align:center;
+}

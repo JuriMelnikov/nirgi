@@ -1,0 +1,301 @@
+body{
+background-color: #E6F8E0;
+font-size:13pt;
+}
+h3{
+font-size:13pt;
+font-weight:bold;
+}
+input{
+font-size:13pt;
+}
+select{
+font-size:13pt;
+}
+table{
+font-size:10pt;
+border-collapse: collapse;
+table-layout: fixed;
+}
+col#thId { width: 0px; }
+col.tdId { width: 0px; }
+td, th {
+    padding: 3px; /* Поля вокруг содержимого таблицы */
+    border: 1px solid #BDBDBD; /* Параметры рамки */
+   }
+th {
+	height:25px;
+    background: #DDDDDD; /* Цвет фона */
+    color: #333;  /* Цвет текста */
+}
+ tbody tr:hover {
+    background: #ECF6CE; /* Цвет фона при наведении */
+    *color: #fff; /* Цвет текста при наведении */
+}
+a:hover{
+color: #FF3300;
+}
+
+a{
+	text-decoration:none;
+	color:black;
+}
+.tooltip { position: relative; }
+.tooltip span {
+  position: absolute;
+  right: -150px;
+  top: -60px; /*насколько вверх поднято по сравнению с низом */
+  display: none;
+  min-width: 150px;
+  padding: 3px 3px;
+  white-space: nowrap; /*весь текст одной строкой, но с тегом br будет перенос */
+  font-size: 13pt;
+  text-align:left;
+  background-color: rgba(251,250,206,.8); /* белесый фон */
+  border-radius: 5px 5px 5px 5px;
+  z-index:95;
+  color: #000; /*черный текст*/
+}
+.tooltip:hover span { display: block; font-weight:normal;}
+#help2{
+position:relative;
+top:85px;
+width:20px;
+left:160px;
+color:#CD2609;
+font-weight:bold;
+z-index:85;
+}
+#btnLogout{
+position: absolute;
+width:70px;
+top:20px;
+left:20px;
+height:20px;
+padding:0;
+color:#0101DF;
+font-size:9pt;
+z-index: 50;
+}
+#loginWindow{
+width:400px;
+height:180px;
+text-align:center;
+background-color: #E0F8E0;
+	*border: solid 3px #A9E2F3;
+display:none;
+}
+#TB_overlay
+{
+   position:fixed;  
+    z-index: 90;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #E0F8E0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=100);
+    -moz-opacity: 1;
+    -khtml-opacity: 1;
+    opacity:1;
+}
+#bgOverlay{
+position:absolute;  
+* z-index: 80;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+}
+#bPosition{
+	position: relative;
+    width: 800px; 
+    height: 550px; 
+    *left: 50%; 
+    *top: 200px; 
+    margin:100px auto 50px auto;
+			*border: solid 1px black; 	
+    *background: #FFDAB9; 
+
+    *padding: 10px;
+    *overflow: auto;	
+}
+
+#titl{
+position: relative;
+top:-50px;
+width:100%;
+height:20px;
+text-align:center;
+	*	border: solid 1px black;
+}
+#back{
+position: absolute;
+    width: 15px; 
+    left: 100px; 
+    top: 25px;
+	display:none;
+}
+#toPrint{
+ display:none;
+}
+#nextPage{
+position: relative;
+    top:-20px;
+	left:0px; 
+	*border: solid 1px red;
+text-align:right;
+}
+#selectors{
+position:relative;
+width:605px;
+height:60px;
+margin:auto;
+*border: solid 1px red;
+text-align:center;
+}
+#txtAppointment{
+position:relative;
+width:115px;
+top:0px;
+left:10px;
+margin:auto;
+background: #DDDDDD;
+color:#1B2A0A;
+padding:0px;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD; 
+float:left;
+*z-index:1;
+}
+#txtFamily{
+position:relative;
+width:285px;
+top:0px;
+left:25px;
+background: #DDDDDD;
+color:#1B2A0A;
+padding:0px;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD; 
+float:left;
+z-index:1;
+}
+#txtMonth{
+position: relative;
+width:68px;
+top:0px;
+left:40px;
+padding:0px;
+background: #DDDDDD;
+color:#1B2A0A;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD;
+float:left;
+z-index:1;
+}
+#txtYear{
+position: relative;
+width:68px;
+top:0px;
+left:55px;
+padding:0px;
+background: #DDDDDD;
+color:#1B2A0A;
+text-align:center;
+font-size:10pt;
+border: solid 1px #BDBDBD; 
+float:left;
+z-index:1;
+}
+
+#selAppointment{
+position: relative;
+width:130px;
+left:0px;
+float:left;
+}
+#selFamily{
+position: relative;
+width:300px;
+left:5px;
+float:left;
+}
+#selMonth{
+position: relative;
+width:80px;
+left:10px;
+float:left;
+}
+#selYear{
+position: relative;
+width:80px;
+left:15px;
+float:left;
+}
+
+#divTable{
+clear:float;
+position: relative;
+margin:auto;
+top:30px;
+width:450px;
+font-size:13pt;
+text-align:center;
+*border: solid 1px #E6F8E0;
+}
+
+
+#tbBuch{
+position: relative;
+top:0px;
+text-align:center;
+width:450px;
+font-size:13pt;
+}
+#thN{
+width:20px;
+}
+#thFamily{
+width:200px;
+
+}
+#thTime{
+width:70px;
+
+}
+#thSum{
+width:100px;
+
+}
+#tdKokku{
+text-align:right;
+font-size:13pt;
+}
+#tdKokkuRez{
+text-align:center;
+font-size:13pt;
+}
+.tdN{
+width:20px;
+background:#fff;
+}
+.tdFamily{
+width:200px;
+background:#fff;
+text-align:left;
+}
+.tdTime{
+width:70px;
+text-align:center;
+background:#fff;
+}
+.tdSum{
+width:60px;
+text-align:center;
+background:#fff;
+}

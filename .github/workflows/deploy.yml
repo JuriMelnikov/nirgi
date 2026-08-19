@@ -1,0 +1,31 @@
+name: Continuous Deployment to Debian 13
+
+on:
+  push:
+    branches: [ main ] # Деплой запускается автоматически при пуше или мерже в ветку main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH to Debian 13
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # 1. Переходим в директорию, где лежит ваш docker-compose.yml
+            cd /home/${{ secrets.SERVER_USER }} # Измените путь, если проект лежит в другом месте
+
+            # 2. Скачиваем свежие изменения из Git
+            git pull origin main
+
+            # 3. Пересобираем Docker-образ только для контейнера приложения и перезапускаем его
+            # (Замените 'app' на точное имя сервиса вашего Java-приложения из вашего docker-compose.yaml)
+            docker compose up -d --build app
+
+            # 4. Очищаем старые неиспользуемые слои образов, чтобы не забивать диск сервера
+            docker image prune -f

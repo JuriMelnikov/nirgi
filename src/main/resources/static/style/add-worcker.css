@@ -1,0 +1,14 @@
+/* src/main/resources/static/style/add-worker.css */
+#addWorkerForm {
+    width: 300px;
+    margin: 0 auto;
+}
+
+label, input {
+    display: block;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 5px 10px;
+}
