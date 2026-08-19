@@ -26,26 +26,26 @@
                     <form id="addOrderForm" class="space-y-4">
                         <!-- Calendar Display -->
                         <div class="form-control flex justify-center">
-                            <label class="label justify-center">
+                            <label class="label justify-center py-1">
                                 <span class="label-text font-medium">Календарь</span>
                             </label>
-                            <div id="calendar" class="border rounded-lg p-2 bg-base-200 w-fit mx-auto">
-                                <div class="flex justify-between items-center mb-2">
+                            <div id="calendar" class="border rounded-lg p-1 bg-base-200 w-fit mx-auto text-xs leading-none">
+                                <div class="flex justify-between items-center gap-2 mb-1">
                                     <button id="prevMonth" class="btn btn-xs btn-circle">◀</button>
-                                    <span id="calendarTitle" class="font-bold text-sm"></span>
+                                    <span id="calendarTitle" class="font-bold text-xs"></span>
                                     <button id="nextMonth" class="btn btn-xs btn-circle">▶</button>
                                 </div>
-                                <div class="grid grid-cols-8 gap-0.5 text-center">
-                                    <div class="font-bold text-xs">Нед</div>
-                                    <div class="font-bold text-xs">Пн</div>
-                                    <div class="font-bold text-xs">Вт</div>
-                                    <div class="font-bold text-xs">Ср</div>
-                                    <div class="font-bold text-xs">Чт</div>
-                                    <div class="font-bold text-xs">Пт</div>
-                                    <div class="font-bold text-xs">Сб</div>
-                                    <div class="font-bold text-xs">Вс</div>
+                                <div class="grid grid-cols-8 gap-px text-center">
+                                    <div class="font-bold text-[10px] w-6">Нед</div>
+                                    <div class="font-bold text-[10px] w-6">Пн</div>
+                                    <div class="font-bold text-[10px] w-6">Вт</div>
+                                    <div class="font-bold text-[10px] w-6">Ср</div>
+                                    <div class="font-bold text-[10px] w-6">Чт</div>
+                                    <div class="font-bold text-[10px] w-6">Пт</div>
+                                    <div class="font-bold text-[10px] w-6">Сб</div>
+                                    <div class="font-bold text-[10px] w-6">Вс</div>
                                 </div>
-                                <div id="calendarDays" class="grid grid-cols-8 gap-0.5 mt-1"></div>
+                                <div id="calendarDays" class="grid grid-cols-8 gap-px mt-0.5"></div>
                             </div>
                         </div>
 
