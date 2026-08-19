@@ -475,7 +475,6 @@ function showTechmapInfo() {
         document.getElementById('techmapInfo').classList.add('hidden');
         document.getElementById('quantityInput').disabled = true;
         document.getElementById('addButton').disabled = true;
-        document.getElementById('availableQuantity').textContent = '-';
     }
 }
 
@@ -553,8 +552,6 @@ async function calculateAvailableQuantity() {
             const quantityInput = document.getElementById('quantityInput');
             quantityInput.max = availableQuantity;
             quantityInput.value = Math.min(1, availableQuantity);
-
-            document.getElementById('availableQuantity').textContent = availableQuantity;
 
             if (availableQuantity <= 0) {
                 quantityInput.disabled = true;
