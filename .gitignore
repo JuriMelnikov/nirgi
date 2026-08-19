@@ -1,7 +1,5 @@
 cb-initial-data.conf
 deploy.sh
-.devin
-.devinrules
 .windsurfrules
 workspace.Dockerfile
 workspace-run.sh
