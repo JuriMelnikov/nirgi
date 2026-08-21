@@ -208,7 +208,7 @@
                                     <th>Модель</th>
                                     <th>Раздел</th>
                                     <th>Время (сек)</th>
-                                    <th>Цена (центы)</th>
+                                    <th>Цена (€)</th>
                                     <th>Действия</th>
                                 </tr>
                             </thead>
@@ -219,7 +219,7 @@
                                     <td th:text="${techmap.modelList != null ? techmap.modelList.name : ''}"></td>
                                     <td th:text="${techmap.sectionList != null ? techmap.sectionList.name : ''}"></td>
                                     <td th:text="${techmap.time}"></td>
-                                    <td th:text="${techmap.price}"></td>
+                                    <td th:text="${techmap.price != null and !#strings.isEmpty(techmap.price) ? #numbers.formatDecimal(new java.math.BigDecimal(techmap.price).divide(new java.math.BigDecimal('100')), 1, 2) + ' €' : ''}"></td>
                                     <td>
                                         <button class="btn btn-sm btn-info mr-1" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
