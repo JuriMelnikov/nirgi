@@ -27,15 +27,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function centsToEuros(value) {
         const cents = parseFloat(value);
-        return isNaN(cents) ? '' : (cents / 100).toFixed(2);
+        return isNaN(cents) ? '' : (cents / 100).toFixed(3);
     }
 
     function formatPrice(value) {
-        const cents = parseFloat(value);
-        if (isNaN(cents)) {
-            return value == null ? '' : value;
-        }
-        return (cents / 100).toFixed(3) + ' €';
+        const euros = centsToEuros(value);
+        return euros === '' ? (value == null ? '' : value) : euros + ' €';
     }
 
     // Load existing data on page load
