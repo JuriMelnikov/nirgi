@@ -31,8 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function formatPrice(value) {
-        const euros = centsToEuros(value);
-        return euros === '' ? (value == null ? '' : value) : euros + ' €';
+        const cents = parseFloat(value);
+        if (isNaN(cents)) {
+            return value == null ? '' : value;
+        }
+        return (cents / 100).toFixed(3) + ' €';
     }
 
     // Load existing data on page load
