@@ -107,7 +107,7 @@ public class Techmap {
         try {
             return new BigDecimal(price.trim())
                     .movePointLeft(2)
-                    .setScale(2, RoundingMode.HALF_UP)
+                    .setScale(3, RoundingMode.HALF_UP)
                     .toPlainString() + " €";
         } catch (NumberFormatException e) {
             return price;

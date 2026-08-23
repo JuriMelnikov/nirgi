@@ -14,9 +14,9 @@ class TechmapTest {
 
     @Test
     void formatsCentsAsEuros() {
-        assertEquals("1.50 €", withPrice("150").getPriceInEuros());
-        assertEquals("0.05 €", withPrice("5").getPriceInEuros());
-        assertEquals("12.00 €", withPrice("1200").getPriceInEuros());
+        assertEquals("1.500 €", withPrice("150").getPriceInEuros());
+        assertEquals("0.050 €", withPrice("5").getPriceInEuros());
+        assertEquals("12.000 €", withPrice("1200").getPriceInEuros());
     }
 
     @Test
