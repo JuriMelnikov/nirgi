@@ -4,6 +4,7 @@ import ee.jvm.nirgi_java.classes.Techmap;
 import ee.jvm.nirgi_java.repository.TechmapRepository;
 import ee.jvm.nirgi_java.repository.ModelListRepository;
 import ee.jvm.nirgi_java.repository.SectionListRepository;
+import ee.jvm.nirgi_java.repository.WorkResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,9 @@ public class TechmapController {
 
     @Autowired
     private SectionListRepository sectionListRepository;
+
+    @Autowired
+    private WorkResultRepository workResultRepository;
 
     @GetMapping
     public List<Techmap> getAllTechmaps() {
@@ -82,11 +86,21 @@ public class TechmapController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTechmap(@PathVariable Long id) {
+    public ResponseEntity<?> deleteTechmap(@PathVariable Long id) {
         return techmapRepository.findById(id)
                 .map(techmap -> {
-                    techmapRepository.delete(techmap);
-                    return ResponseEntity.ok().<Void>build();
+                    long workResultCount = workResultRepository.countByTechmapId(id);
+                    if (workResultCount > 0) {
+                        return ResponseEntity.badRequest()
+                                .body("Невозможно удалить технологическую карту. Существуют связанные выполненные работы (" + workResultCount + " шт.).");
+                    }
+                    try {
+                        techmapRepository.delete(techmap);
+                        return ResponseEntity.ok().build();
+                    } catch (Exception e) {
+                        return ResponseEntity.badRequest()
+                                .body("Невозможно удалить технологическую карту. Она используется в системе.");
+                    }
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
