@@ -27,7 +27,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function centsToEuros(value) {
         const cents = parseFloat(value);
-        return isNaN(cents) ? '' : (cents / 100).toFixed(2);
+        return isNaN(cents) ? '' : (cents / 100).toFixed(3);
+    }
+
+    function formatPrice(value) {
+        const euros = centsToEuros(value);
+        return euros === '' ? (value == null ? '' : value) : euros + ' €';
     }
 
     // Load existing data on page load
@@ -458,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${techmap.modelList ? techmap.modelList.name : ''}</td>
                 <td>${techmap.sectionList ? techmap.sectionList.name : ''}</td>
                 <td>${techmap.time}</td>
-                <td>${centsToEuros(techmap.price)} €</td>
+                <td>${formatPrice(techmap.price)}</td>
                 <td>
                     <button class="btn btn-sm btn-info mr-1" onclick="editTechmap(${techmap.id})">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

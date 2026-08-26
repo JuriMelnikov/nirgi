@@ -1,6 +1,9 @@
 package ee.jvm.nirgi_java.classes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 @Entity
@@ -89,6 +92,26 @@ public class Techmap {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    /**
+     * Price stored in cents, formatted for display in euros. Returns the raw
+     * value when it is not a valid number.
+     */
+    @Transient
+    @JsonIgnore
+    public String getPriceInEuros() {
+        if (price == null || price.isBlank()) {
+            return "";
+        }
+        try {
+            return new BigDecimal(price.trim())
+                    .movePointLeft(2)
+                    .setScale(3, RoundingMode.HALF_UP)
+                    .toPlainString() + " €";
+        } catch (NumberFormatException e) {
+            return price;
+        }
     }
 
     public SectionList getSectionList() {

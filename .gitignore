@@ -3,7 +3,7 @@ cb-initial-data.conf
 workspace.Dockerfile
 workspace-run.sh
 mariadb_data/
-.emv
+.env
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
