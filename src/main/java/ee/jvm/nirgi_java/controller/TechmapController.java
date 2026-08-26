@@ -4,6 +4,7 @@ import ee.jvm.nirgi_java.classes.Techmap;
 import ee.jvm.nirgi_java.repository.TechmapRepository;
 import ee.jvm.nirgi_java.repository.ModelListRepository;
 import ee.jvm.nirgi_java.repository.SectionListRepository;
+import ee.jvm.nirgi_java.repository.WorkResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,9 @@ public class TechmapController {
 
     @Autowired
     private SectionListRepository sectionListRepository;
+
+    @Autowired
+    private WorkResultRepository workResultRepository;
 
     @GetMapping
     public List<Techmap> getAllTechmaps() {
@@ -82,9 +86,14 @@ public class TechmapController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTechmap(@PathVariable Long id) {
+    public ResponseEntity<?> deleteTechmap(@PathVariable Long id) {
         return techmapRepository.findById(id)
                 .map(techmap -> {
+                    // Check if techmap is referenced by any WorkResult records
+                    if (workResultRepository.existsByTechmapId(id)) {
+                        return ResponseEntity.badRequest()
+                                .body("Невозможно удалить технологическую карту, так как она связана с результатами работы заказов");
+                    }
                     techmapRepository.delete(techmap);
                     return ResponseEntity.ok().<Void>build();
                 })
