@@ -71,4 +71,6 @@ public interface WorkResultRepository extends JpaRepository<WorkResult, Long> {
     @Modifying
     @Query("UPDATE WorkResult wr SET wr.employeeNameSnapshot = :name, wr.employeeSurnameSnapshot = :surname WHERE wr.employee.id = :employeeId")
     void updateEmployeeNameSnapshots(@Param("employeeId") Long employeeId, @Param("name") String name, @Param("surname") String surname);
+
+    boolean existsByTechmapId(Long techmapId);
 }
