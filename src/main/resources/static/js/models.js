@@ -485,14 +485,26 @@ document.addEventListener('DOMContentLoaded', function() {
     window.deleteTechmap = async function(id) {
         if (confirm('Вы уверены, что хотите удалить эту технологическую карту?')) {
             try {
-                const response = await authFetch(`/api/techmaps/${id}`, {
-                    method: 'DELETE'
+                const token = localStorage.getItem('token');
+                const userRoles = localStorage.getItem('userRoles');
+                console.log('Current user roles:', userRoles);
+                const response = await fetch(`/api/techmaps/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
+                console.log('Delete response status:', response.status);
                 if (response.ok) {
                     alert('Технологическая карта успешно удалена');
                     await loadTechmaps();
+                } else if (response.status === 401 || response.status === 403) {
+                    const errorText = await response.text();
+                    console.log('Error text:', errorText);
+                    alert('Ошибка: недостаточно прав для удаления технологической карты. Текущие роли: ' + userRoles + '. Пожалуйста, перезалогиньтесь для обновления прав.');
                 } else {
-                    alert('Ошибка при удалении технологической карты');
+                    const errorText = await response.text();
+                    alert('Ошибка при удалении технологической карты: ' + errorText);
                 }
             } catch (error) {
                 console.error('Error:', error);
