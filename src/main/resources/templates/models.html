@@ -215,8 +215,6 @@
                                 <tr>
                                     <th>Номер операции</th>
                                     <th>Описание</th>
-                                    <th>Модель</th>
-                                    <th>Раздел</th>
                                     <th>Время (сек)</th>
                                     <th>Цена (€)</th>
                                     <th>Действия</th>
@@ -226,8 +224,6 @@
                                 <tr th:each="techmap : ${techmaps}">
                                     <td th:text="${techmap.serial}"></td>
                                     <td th:text="${techmap.descriptor}"></td>
-                                    <td th:text="${techmap.modelList != null ? techmap.modelList.name : ''}"></td>
-                                    <td th:text="${techmap.sectionList != null ? techmap.sectionList.name : ''}"></td>
                                     <td th:text="${techmap.time}"></td>
                                     <td th:text="${techmap.priceInEuros}"></td>
                                     <td>
