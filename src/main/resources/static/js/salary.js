@@ -26,9 +26,9 @@ function populateYearSelect() {
 
 function formatNumber(num) {
     if (num === null || num === undefined) {
-        return '0.00';
+        return '0.000';
     }
-    return Number(num).toFixed(2);
+    return Number(num).toFixed(3);
 }
 
 function formatTime(totalSeconds) {

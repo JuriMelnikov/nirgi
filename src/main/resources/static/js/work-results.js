@@ -11,6 +11,12 @@ let allTechmaps = [];
 let selectedWorkResults = [];
 let selectedOrder = null;
 
+// Money is displayed in euros with three decimals
+function formatEuros(amount) {
+    const euros = Number(amount);
+    return isNaN(euros) ? '0.000' : euros.toFixed(3);
+}
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     initializeYearSelect();
@@ -459,7 +465,7 @@ function showTechmapInfo() {
                 <td>${selectedOption.textContent}</td>
                 <td>${selectedOption.dataset.descriptor}</td>
                 <td>${selectedOption.dataset.time}</td>
-                <td>${selectedOption.dataset.price}</td>
+                <td>${formatEuros(selectedOption.dataset.price / 100)}</td>
             </tr>
         `;
         
@@ -874,7 +880,7 @@ function renderWorkResultsTable(workResults, orders) {
             <td>${workResult.sectionList ? workResult.sectionList.name : '-'}</td>
             <td>${workResult.techmap ? workResult.techmap.serial : '-'}</td>
             <td>${completedQuantity} / ${remainingQuantity}</td>
-            <td>${totalCost.toFixed(2)} €</td>
+            <td>${formatEuros(totalCost)} €</td>
             <td>
                 <button class="btn btn-sm btn-error" onclick="deleteWorkResult(${workResult.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -887,7 +893,7 @@ function renderWorkResultsTable(workResults, orders) {
     });
     
     totalTimeElement.textContent = formatTime(totalSeconds);
-    totalEarningsElement.textContent = `€${totalEarnings.toFixed(2)}`;
+    totalEarningsElement.textContent = `€${formatEuros(totalEarnings)}`;
 }
 
 // Format time from seconds to HH:MM:SS

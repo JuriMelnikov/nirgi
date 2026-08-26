@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function centsToEuros(value) {
         const cents = parseFloat(value);
-        return isNaN(cents) ? '' : (cents / 100).toFixed(2);
+        return isNaN(cents) ? '' : (cents / 100).toFixed(3);
     }
 
     function formatPrice(value) {
