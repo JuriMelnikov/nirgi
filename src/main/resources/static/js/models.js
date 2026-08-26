@@ -40,6 +40,56 @@ document.addEventListener('DOMContentLoaded', function() {
     loadSectionLists();
     loadTechmaps();
 
+    // Collapsible form functionality
+    function toggleFormVisibility(formContentId, chevronId) {
+        const formContent = document.getElementById(formContentId);
+        const chevron = document.getElementById(chevronId);
+        
+        if (formContent.classList.contains('hidden')) {
+            formContent.classList.remove('hidden');
+            chevron.classList.add('rotate-180');
+        } else {
+            formContent.classList.add('hidden');
+            chevron.classList.remove('rotate-180');
+        }
+    }
+
+    // Model List Form Header click
+    document.getElementById('modelListFormHeader').addEventListener('click', function() {
+        toggleFormVisibility('modelListFormContent', 'modelListChevron');
+    });
+
+    // Section List Form Header click
+    document.getElementById('sectionListFormHeader').addEventListener('click', function() {
+        toggleFormVisibility('sectionListFormContent', 'sectionListChevron');
+    });
+
+    // Hide Model List Form when any button is clicked
+    const modelListButtons = document.querySelectorAll('#addModelListForm button');
+    modelListButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            setTimeout(() => {
+                const formContent = document.getElementById('modelListFormContent');
+                const chevron = document.getElementById('modelListChevron');
+                formContent.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }, 100);
+        });
+    });
+
+    // Hide Section List Form when any button is clicked
+    const sectionListButtons = document.querySelectorAll('#addSectionListForm button');
+    sectionListButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            setTimeout(() => {
+                const formContent = document.getElementById('sectionListFormContent');
+                const chevron = document.getElementById('sectionListChevron');
+                formContent.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }, 100);
+        });
+    });
+
     // Model List Cancel Button
     document.getElementById('modelListCancelButton').addEventListener('click', function() {
         resetModelListEditMode();
