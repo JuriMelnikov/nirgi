@@ -510,8 +510,6 @@ document.addEventListener('DOMContentLoaded', function() {
             row.innerHTML = `
                 <td>${techmap.serial}</td>
                 <td>${techmap.descriptor}</td>
-                <td>${techmap.modelList ? techmap.modelList.name : ''}</td>
-                <td>${techmap.sectionList ? techmap.sectionList.name : ''}</td>
                 <td>${techmap.time}</td>
                 <td>${formatPrice(techmap.price)}</td>
                 <td>
