@@ -25,6 +25,8 @@ public interface WorkResultRepository extends JpaRepository<WorkResult, Long> {
 
     List<WorkResult> findByEmployeeIdAndOrderIdAndYearAndMonthAndWeek(Long employeeId, Long orderId, Integer year, Integer month, Integer week);
 
+    long countByTechmapId(Long techmapId);
+
     @Query("SELECT SUM(wr.quantity) FROM WorkResult wr WHERE wr.employee.id = :employeeId AND wr.order.id = :orderId AND wr.modelList.id = :modelListId AND wr.sectionList.id = :sectionListId AND wr.techmap.id = :techmapId AND wr.year = :year AND wr.month = :month AND wr.week = :week")
     Integer sumQuantityByEmployeeOrderModelSectionTechmapAndDate(
             @Param("employeeId") Long employeeId,
