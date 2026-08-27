@@ -19,19 +19,19 @@ document.addEventListener('DOMContentLoaded', function() {
     let editingTechmapId = null;
     let allTechmaps = [];
 
-    // Price is stored in cents, but edited in euros
-    function eurosToCents(value) {
+    // Price is stored in tenths of cents (for 3 decimal places), but edited in euros
+    function eurosToTenthsOfCents(value) {
         const euros = parseFloat(String(value).replace(',', '.'));
-        return isNaN(euros) ? '' : String(Math.round(euros * 100));
+        return isNaN(euros) ? '' : String(Math.round(euros * 1000));
     }
 
-    function centsToEuros(value) {
-        const cents = parseFloat(value);
-        return isNaN(cents) ? '' : (cents / 100).toFixed(3);
+    function tenthsOfCentsToEuros(value) {
+        const tenthsOfCents = parseFloat(value);
+        return isNaN(tenthsOfCents) ? '' : (tenthsOfCents / 1000).toFixed(3);
     }
 
     function formatPrice(value) {
-        const euros = centsToEuros(value);
+        const euros = tenthsOfCentsToEuros(value);
         return euros === '' ? (value == null ? '' : value) : euros + ' €';
     }
 
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
             serial: document.getElementById('techmapSerial').value,
             descriptor: document.getElementById('techmapDescriptor').value,
             time: document.getElementById('techmapTime').value,
-            price: eurosToCents(document.getElementById('techmapPrice').value),
+            price: eurosToTenthsOfCents(document.getElementById('techmapPrice').value),
             modelList: {
                 id: document.getElementById('techmapModelList').value
             },
@@ -588,7 +588,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('techmapSerial').value = techmap.serial || '';
         document.getElementById('techmapDescriptor').value = techmap.descriptor || '';
         document.getElementById('techmapTime').value = techmap.time || '';
-        document.getElementById('techmapPrice').value = centsToEuros(techmap.price);
+        document.getElementById('techmapPrice').value = tenthsOfCentsToEuros(techmap.price);
         document.getElementById('techmapModelList').value = techmap.modelList ? String(techmap.modelList.id) : '';
         document.getElementById('techmapSectionList').value = techmap.sectionList ? String(techmap.sectionList.id) : '';
     }
