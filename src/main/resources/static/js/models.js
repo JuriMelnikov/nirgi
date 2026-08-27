@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function() {
         techmaps.forEach(techmap => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${techmap.serial}</td>
+                <td class="text-center">${techmap.serial}</td>
                 <td>${techmap.descriptor}</td>
                 <td>${techmap.time}</td>
                 <td>${formatPrice(techmap.price)}</td>

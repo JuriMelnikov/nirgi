@@ -210,10 +210,10 @@
                     
                     <div class="divider">Существующие технологические карты</div>
                     <div class="overflow-x-auto">
-                        <table id="techmapsTable" class="table table-zebra w-full">
+                        <table id="techmapsTable" class="table table-zebra table-sm w-full">
                             <thead>
                                 <tr>
-                                    <th>Номер операции</th>
+                                    <th class="text-center">№ операции</th>
                                     <th>Описание</th>
                                     <th>Время (сек)</th>
                                     <th>Цена (€)</th>
@@ -222,7 +222,7 @@
                             </thead>
                             <tbody>
                                 <tr th:each="techmap : ${techmaps}">
-                                    <td th:text="${techmap.serial}"></td>
+                                    <td class="text-center" th:text="${techmap.serial}"></td>
                                     <td th:text="${techmap.descriptor}"></td>
                                     <td th:text="${techmap.time}"></td>
                                     <td th:text="${techmap.priceInEuros}"></td>
