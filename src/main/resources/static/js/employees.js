@@ -386,6 +386,23 @@ document.addEventListener('DOMContentLoaded', function() {
         return age;
     }
 
+    function getAgeWord(age) {
+        const lastDigit = age % 10;
+        const lastTwoDigits = age % 100;
+        
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+            return 'лет';
+        }
+        
+        if (lastDigit === 1) {
+            return 'год';
+        } else if (lastDigit >= 2 && lastDigit <= 4) {
+            return 'года';
+        } else {
+            return 'лет';
+        }
+    }
+
     async function loadEmployees() {
         console.log('Loading employees...');
         const activeOnlyCheckbox = document.getElementById('activeOnly');
@@ -454,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p><strong>ID:</strong> ${employee.id}</p>
                 <p><strong>Имя:</strong> ${employee.name}</p>
                 <p><strong>Фамилия:</strong> ${employee.surname}</p>
-                <p><strong>Дата рождения:</strong> ${employee.day}.${employee.month}.${employee.year} (${calculateAge(employee.day, employee.month, employee.year)} лет)</p>
+                <p><strong>Дата рождения:</strong> ${employee.day}.${employee.month}.${employee.year} (${calculateAge(employee.day, employee.month, employee.year)} ${getAgeWord(calculateAge(employee.day, employee.month, employee.year))})</p>
                 <p><strong>Телефон:</strong> ${employee.phone}</p>
                 <p><strong>Роль:</strong> ${primaryRole}</p>
                 <p><strong>Адрес:</strong> ${employee.city}, ${employee.street}, д. ${employee.house}${employee.room ? ', кв. ' + employee.room : ''}</p>
