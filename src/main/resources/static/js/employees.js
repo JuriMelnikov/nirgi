@@ -9,9 +9,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const updateStopDayBtn = document.getElementById('updateStopDayBtn');
     const stopDaySuccess = document.getElementById('stopDaySuccess');
     const stopDayError = document.getElementById('stopDayError');
+    const stopDayTitle = document.getElementById('stopDayTitle');
+    const stopDayContent = document.getElementById('stopDayContent');
+    const stopDayToggleIcon = document.getElementById('stopDayToggleIcon');
 
     // Load stop day settings and show card for managers
     loadStopDaySettings();
+
+    // Toggle stop day form visibility on title click
+    stopDayTitle.addEventListener('click', function() {
+        stopDayContent.classList.toggle('hidden');
+        stopDayToggleIcon.classList.toggle('rotate-180');
+    });
 
     async function loadStopDaySettings() {
         try {
@@ -68,6 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 stopDayError.classList.add('hidden');
                 setTimeout(() => {
                     stopDaySuccess.classList.add('hidden');
+                    stopDayContent.classList.add('hidden');
+                    stopDayToggleIcon.classList.remove('rotate-180');
                 }, 3000);
             } else {
                 const errorText = await response.text();

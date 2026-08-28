@@ -17,33 +17,38 @@
             <!-- Stop Day Settings Card (for Managers only) -->
             <div class="card bg-base-100 shadow-xl lg:col-span-2 hidden" id="stopDayCard">
                 <div class="card-body">
-                    <h2 class="card-title text-2xl mb-4">
+                    <h2 class="card-title text-2xl mb-4 cursor-pointer" id="stopDayTitle">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Стоп день
-                    </h2>
-                    <div class="alert alert-info mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <svg id="stopDayToggleIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-auto transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
-                        <span>Работники не смогут заносить данные в программу после указанного числа месяца.</span>
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text font-medium">День месяца (1-31)</span>
-                        </label>
-                        <div class="flex gap-2">
-                            <input type="number" id="stopDayInput" min="1" max="31" class="input input-bordered flex-1" placeholder="Например: 25">
-                            <button id="updateStopDayBtn" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Сохранить
-                            </button>
+                    </h2>
+                    <div id="stopDayContent" class="hidden">
+                        <div class="alert alert-info mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="text-white stroke-current shrink-0 w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-white">Работники не смогут заносить данные в программу после указанного числа месяца.</span>
                         </div>
-                        <span class="label-text-alt text-success hidden" id="stopDaySuccess">Настройка успешно сохранена</span>
-                        <span class="label-text-alt text-error hidden" id="stopDayError"></span>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-medium">День месяца (1-31)</span>
+                            </label>
+                            <div class="flex gap-2">
+                                <input type="number" id="stopDayInput" min="1" max="31" class="input input-bordered flex-1" placeholder="Например: 25">
+                                <button id="updateStopDayBtn" class="btn btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Сохранить
+                                </button>
+                            </div>
+                            <span class="label-text-alt text-success hidden" id="stopDaySuccess">Настройка успешно сохранена</span>
+                            <span class="label-text-alt text-error hidden" id="stopDayError"></span>
+                        </div>
                     </div>
                 </div>
             </div>
