@@ -880,7 +880,7 @@ function renderWorkResultsTable(workResults, orders) {
             <td>${workResult.sectionList ? workResult.sectionList.name : '-'}</td>
             <td>${workResult.techmap ? workResult.techmap.serial : '-'}</td>
             <td>${completedQuantity} / ${remainingQuantity}</td>
-            <td>${formatEuros(totalCost)} €</td>
+            <td>${formatEuros(totalCost)}</td>
             <td>
                 <button class="btn btn-sm btn-error" onclick="deleteWorkResult(${workResult.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -893,7 +893,7 @@ function renderWorkResultsTable(workResults, orders) {
     });
     
     totalTimeElement.textContent = formatTime(totalSeconds);
-    totalEarningsElement.textContent = `€${formatEuros(totalEarnings)}`;
+    totalEarningsElement.textContent = `${formatEuros(totalEarnings)}`;
 }
 
 // Format time from seconds to HH:MM:SS
