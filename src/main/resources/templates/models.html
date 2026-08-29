@@ -210,23 +210,23 @@
                     
                     <div class="divider">Существующие технологические карты</div>
                     <div class="overflow-x-auto">
-                        <table id="techmapsTable" class="table table-zebra table-sm w-full p-0 m-0">
+                        <table id="techmapsTable" class="table table-zebra table-sm w-full p-0 m-0" style="border-collapse: collapse;">
                             <thead>
-                                <tr class="p-0 m-0 h-[25px]">
-                                    <th class="text-center p-1 m-0 text-xs leading-none">№ операции</th>
-                                    <th class="p-1 m-0 text-xs leading-none">Описание</th>
-                                    <th class="p-1 m-0 text-xs leading-none">Время (сек)</th>
-                                    <th class="p-1 m-0 text-xs leading-none">Цена (€)</th>
-                                    <th class="p-1 m-0 text-xs leading-none">Действия</th>
+                                <tr class="p-0 m-0" style="height: 25px;">
+                                    <th class="text-center p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">№ операции</th>
+                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Описание</th>
+                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Время (сек)</th>
+                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Цена (€)</th>
+                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Действия</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="techmap : ${techmaps}" class="p-0 m-0 h-[25px]">
-                                    <td class="text-center p-1 m-0 text-xs leading-none" th:text="${techmap.serial}"></td>
-                                    <td class="p-1 m-0 text-xs leading-none" th:text="${techmap.descriptor}"></td>
-                                    <td class="p-1 m-0 text-xs leading-none" th:text="${techmap.time}"></td>
-                                    <td class="p-1 m-0 text-xs leading-none" th:text="${techmap.priceInEuros}"></td>
-                                    <td class="p-1 m-0 text-xs leading-none">
+                                <tr th:each="techmap : ${techmaps}" class="p-0 m-0" style="height: 25px;">
+                                    <td class="text-center p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.serial}"></td>
+                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.descriptor}"></td>
+                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.time}"></td>
+                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.priceInEuros}"></td>
+                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">
                                         <div class="flex gap-1">
                                             <button class="btn btn-xs btn-info h-4 min-h-4 px-1" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
