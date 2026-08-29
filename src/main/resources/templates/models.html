@@ -210,23 +210,23 @@
                     
                     <div class="divider">Существующие технологические карты</div>
                     <div class="overflow-x-auto">
-                        <table id="techmapsTable" class="table table-zebra table-sm w-full p-0 m-0" style="border-collapse: collapse;">
+                        <table id="techmapsTable" class="w-full" style="border-collapse: collapse; border: 1px solid #e5e7eb;">
                             <thead>
-                                <tr class="p-0 m-0" style="height: 25px;">
-                                    <th class="text-center p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">№ операции</th>
-                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Описание</th>
-                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Время (сек)</th>
-                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Цена (€)</th>
-                                    <th class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">Действия</th>
+                                <tr style="height: 25px; background-color: #f3f4f6;">
+                                    <th class="text-center text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">№ операции</th>
+                                    <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Описание</th>
+                                    <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Время (сек)</th>
+                                    <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Цена (€)</th>
+                                    <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Действия</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="techmap : ${techmaps}" class="p-0 m-0" style="height: 25px;">
-                                    <td class="text-center p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.serial}"></td>
-                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.descriptor}"></td>
-                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.time}"></td>
-                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;" th:text="${techmap.priceInEuros}"></td>
-                                    <td class="p-0 m-0 text-xs leading-none" style="padding: 2px 4px; height: 25px;">
+                                <tr th:each="techmap : ${techmaps}" style="height: 25px;">
+                                    <td class="text-center text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.serial}"></td>
+                                    <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.descriptor}"></td>
+                                    <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.time}"></td>
+                                    <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.priceInEuros}"></td>
+                                    <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">
                                         <div class="flex gap-1">
                                             <button class="btn btn-xs btn-info h-4 min-h-4 px-1" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
