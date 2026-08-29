@@ -38,3 +38,4 @@ build/
 ### VS Code ###
 .vscode/
 deploy.sh
+deploy.psl
