@@ -927,7 +927,6 @@ async function deleteWorkResult(workResultId) {
         
         if (response.ok) {
             loadWorkResults();
-            alert('Результат работы успешно удален');
         } else {
             alert('Ошибка при удалении результата работы');
         }
