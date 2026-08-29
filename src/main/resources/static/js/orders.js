@@ -420,6 +420,26 @@ function addModel() {
     renderSelectedModels();
 }
 
+// Get correct form of "экземпляр" based on number
+function getInstanceForm(count) {
+    const lastTwo = count % 100;
+    const lastOne = count % 10;
+    
+    if (lastTwo >= 11 && lastTwo <= 19) {
+        return 'экземпляров';
+    }
+    
+    if (lastOne === 1) {
+        return 'экземпляр';
+    }
+    
+    if (lastOne >= 2 && lastOne <= 4) {
+        return 'экземпляра';
+    }
+    
+    return 'экземпляров';
+}
+
 // Render selected models
 function renderSelectedModels() {
     const container = document.getElementById('selectedModels');
@@ -429,7 +449,7 @@ function renderSelectedModels() {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between bg-base-200 p-2 rounded';
         div.innerHTML = `
-            <span>${model.modelListName} - ${model.count} экземпляров</span>
+            <span>${model.modelListName} - ${model.count} ${getInstanceForm(model.count)}</span>
             <button type="button" class="btn btn-sm btn-error" style="height: 25px; min-height: 25px;" onclick="removeModel(${index})">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -794,7 +814,7 @@ function renderEditSelectedModels() {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between bg-base-200 p-2 rounded';
         div.innerHTML = `
-            <span>${model.modelListName} - ${model.count} экземпляров</span>
+            <span>${model.modelListName} - ${model.count} ${getInstanceForm(model.count)}</span>
             <button type="button" class="btn btn-sm btn-error" style="height: 25px; min-height: 25px;" onclick="removeEditModel(${index})">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
