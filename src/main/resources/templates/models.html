@@ -144,50 +144,38 @@
                         <span id="techmapFormTitle">Технологическая карта</span>
                     </h2>
                     <form id="addTechmapForm" class="space-y-1">
-                        <div class="grid lg:grid-cols-2 gap-4">
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium">Модель</span>
-                                </label>
-                                <select id="techmapModelList" name="modelListId" required class="select select-bordered w-full h-[25px] min-h-[25px] text-sm">
+                        <div class="grid lg:grid-cols-2 gap-2">
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs font-medium whitespace-nowrap">Модель:</label>
+                                <select id="techmapModelList" name="modelListId" required class="select select-bordered flex-1 h-[25px] min-h-[25px] text-sm">
                                     <option value="">-- Выберите модель --</option>
                                     <option th:each="modelList : ${modelLists}" th:value="${modelList.id}" th:text="${modelList.name}"></option>
                                 </select>
                             </div>
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium">Раздел</span>
-                                </label>
-                                <select id="techmapSectionList" name="sectionListId" required class="select select-bordered w-full h-[25px] min-h-[25px] text-sm">
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs font-medium whitespace-nowrap">Раздел:</label>
+                                <select id="techmapSectionList" name="sectionListId" required class="select select-bordered flex-1 h-[25px] min-h-[25px] text-sm">
                                     <option value="">-- Выберите раздел --</option>
                                     <option th:each="sectionList : ${sectionLists}" th:value="${sectionList.id}" th:text="${sectionList.name}"></option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Номер операции</span>
-                            </label>
-                            <input type="text" id="techmapSerial" name="serial" required class="input input-bordered w-1/2 h-[25px] min-h-[25px] text-sm" placeholder="Введите номер операции">
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs font-medium whitespace-nowrap">№ операции:</label>
+                            <input type="text" id="techmapSerial" name="serial" required class="input input-bordered flex-1 h-[25px] min-h-[25px] text-sm" placeholder="Введите номер операции">
                         </div>
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Описание</span>
-                            </label>
-                            <textarea id="techmapDescriptor" name="descriptor" required class="textarea textarea-bordered w-full h-[25px] min-h-[25px] text-sm" placeholder="Введите описание" rows="1"></textarea>
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs font-medium whitespace-nowrap">Описание:</label>
+                            <textarea id="techmapDescriptor" name="descriptor" required class="textarea textarea-bordered flex-1 h-[25px] min-h-[25px] text-sm" placeholder="Введите описание" rows="1"></textarea>
                         </div>
-                        <div class="grid lg:grid-cols-2 gap-4">
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium">Время (сек)</span>
-                                </label>
-                                <input type="text" id="techmapTime" name="time" required class="input input-bordered w-1/2 h-[25px] min-h-[25px] text-sm" placeholder="Время выполнения">
+                        <div class="grid lg:grid-cols-2 gap-2">
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs font-medium whitespace-nowrap">Время (сек):</label>
+                                <input type="text" id="techmapTime" name="time" required class="input input-bordered flex-1 h-[25px] min-h-[25px] text-sm" placeholder="Время выполнения">
                             </div>
-                            <div class="form-control">
-                                <label class="label">
-                                    <span class="label-text font-medium">Цена (€)</span>
-                                </label>
-                                <input type="text" id="techmapPrice" name="price" required class="input input-bordered w-1/2 h-[25px] min-h-[25px] text-sm" placeholder="Цена операции в евро, например 1.50">
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs font-medium whitespace-nowrap">Цена (€):</label>
+                                <input type="text" id="techmapPrice" name="price" required class="input input-bordered flex-1 h-[25px] min-h-[25px] text-sm" placeholder="Цена операции в евро, например 1.50">
                             </div>
                         </div>
                         <div class="form-control mt-[20px]">
