@@ -12,25 +12,25 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <!-- Main Content -->
-    <div class="container mx-auto p-4 lg:p-8">
-        <div class="grid lg:grid-cols-2 gap-8">
+    <div class="container mx-auto p-[3px] lg:p-[3px]">
+        <div class="grid lg:grid-cols-2 gap-[3px]">
             <!-- Add Order Form -->
             <div class="card bg-base-100 shadow-xl">
                 <div class="card-body">
-                    <h2 class="card-title text-2xl mb-4">
+                    <h2 class="card-title text-2xl mb-[3px]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>
                         <span>Добавить заказ</span>
                     </h2>
-                    <form id="addOrderForm" class="space-y-4">
+                    <form id="addOrderForm" class="space-y-[3px]">
                         <!-- Calendar Display -->
                         <div class="form-control flex justify-center">
-                            <label class="label justify-center py-1">
+                            <label class="label justify-center py-[3px]">
                                 <span class="label-text font-medium">Календарь</span>
                             </label>
-                            <div id="calendar" class="border rounded-lg p-1 bg-base-200 w-fit mx-auto text-xs leading-none">
-                                <div class="flex justify-between items-center gap-2 mb-1">
+                            <div id="calendar" class="border rounded-lg p-[3px] bg-base-200 w-fit mx-auto text-xs leading-none">
+                                <div class="flex justify-between items-center gap-[3px] mb-[3px]">
                                     <button id="prevMonth" class="btn btn-xs btn-circle">◀</button>
                                     <span id="calendarTitle" class="font-bold text-xs"></span>
                                     <button id="nextMonth" class="btn btn-xs btn-circle">▶</button>
@@ -45,7 +45,7 @@
                                     <div class="font-bold text-[10px] w-6">Сб</div>
                                     <div class="font-bold text-[10px] w-6">Вс</div>
                                 </div>
-                                <div id="calendarDays" class="grid grid-cols-8 gap-px mt-0.5"></div>
+                                <div id="calendarDays" class="grid grid-cols-8 gap-[3px] mt-[3px]"></div>
                             </div>
                         </div>
 
@@ -53,14 +53,14 @@
                             <label class="label">
                                 <span class="label-text font-medium">Название заказа</span>
                             </label>
-                            <input type="text" id="orderName" name="name" required class="input input-bordered w-full" placeholder="Введите название заказа">
+                            <input type="text" id="orderName" name="name" required class="input input-bordered w-full" placeholder="Введите название заказа" style="height: 25px;">
                         </div>
-                        <div class="grid lg:grid-cols-3 gap-4">
+                        <div class="grid lg:grid-cols-3 gap-[3px]">
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text font-medium">Неделя</span>
                                 </label>
-                                <select id="orderWeek" name="week" required class="select select-bordered w-full">
+                                <select id="orderWeek" name="week" required class="select select-bordered w-full" style="height: 25px;">
                                     <option value="">-- Выберите неделю --</option>
                                 </select>
                             </div>
@@ -68,7 +68,7 @@
                                 <label class="label">
                                     <span class="label-text font-medium">Месяц</span>
                                 </label>
-                                <select id="orderMonth" name="month" required class="select select-bordered w-full">
+                                <select id="orderMonth" name="month" required class="select select-bordered w-full" style="height: 25px;">
                                     <option value="">-- Выберите месяц --</option>
                                     <option value="1">Январь</option>
                                     <option value="2">Февраль</option>
@@ -88,7 +88,7 @@
                                 <label class="label">
                                     <span class="label-text font-medium">Год</span>
                                 </label>
-                                <select id="orderYear" name="year" required class="select select-bordered w-full">
+                                <select id="orderYear" name="year" required class="select select-bordered w-full" style="height: 25px;">
                                     <option value="">-- Выберите год --</option>
                                 </select>
                             </div>
@@ -100,22 +100,22 @@
                                 <span class="label-text font-medium">Модели</span>
                             </label>
                             <div id="modelsContainer">
-                                <div class="flex gap-2 mb-2">
-                                    <select id="modelSelect" class="select select-bordered flex-1">
+                                <div class="flex gap-[3px] mb-[3px]">
+                                    <select id="modelSelect" class="select select-bordered flex-1" style="height: 25px;">
                                         <option value="">-- Выберите модель --</option>
                                     </select>
-                                    <input type="number" id="modelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во">
+                                    <input type="number" id="modelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во" style="height: 25px;">
                                     <button type="button" id="addModelBtn" class="btn btn-secondary">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                         </svg>
                                     </button>
                                 </div>
-                                <div id="selectedModels" class="space-y-2"></div>
+                                <div id="selectedModels" class="space-y-[3px]"></div>
                             </div>
                         </div>
 
-                        <div class="form-control mt-6">
+                        <div class="form-control mt-[3px]">
                             <button type="submit" id="submitButton" class="btn btn-primary w-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -130,7 +130,7 @@
             <!-- Orders List -->
             <div class="card bg-base-100 shadow-xl">
                 <div class="card-body">
-                    <h2 class="card-title text-2xl mb-4">
+                    <h2 class="card-title text-2xl mb-[3px]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
@@ -138,13 +138,13 @@
                     </h2>
                     
                     <!-- Filter -->
-                    <h3 class="font-bold text-lg mb-2">Фильтр</h3>
-                    <div class="grid lg:grid-cols-3 gap-4 mb-4">
+                    <h3 class="font-bold text-lg mb-[3px]">Фильтр</h3>
+                    <div class="grid lg:grid-cols-3 gap-[3px] mb-[3px]">
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">по неделе</span>
                             </label>
-                            <select id="filterWeek" class="select select-bordered w-full">
+                            <select id="filterWeek" class="select select-bordered w-full" style="height: 25px;">
                                 <option value="">-- Все недели --</option>
                             </select>
                         </div>
@@ -152,7 +152,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">по месяцу</span>
                             </label>
-                            <select id="filterMonth" class="select select-bordered w-full">
+                            <select id="filterMonth" class="select select-bordered w-full" style="height: 25px;">
                                 <option value="">-- Все месяцы --</option>
                                 <option value="1">Январь</option>
                                 <option value="2">Февраль</option>
@@ -172,7 +172,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">по году</span>
                             </label>
-                            <select id="filterYear" class="select select-bordered w-full">
+                            <select id="filterYear" class="select select-bordered w-full" style="height: 25px;">
                                 <option value="">-- Все годы --</option>
                             </select>
                         </div>
@@ -200,28 +200,28 @@
     <!-- Edit Order Modal -->
     <dialog id="editOrderModal" class="modal">
         <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Редактировать заказ</h3>
-            <form id="editOrderForm" class="space-y-4">
+            <h3 class="font-bold text-lg mb-[3px]">Редактировать заказ</h3>
+            <form id="editOrderForm" class="space-y-[3px]">
                 <input type="hidden" id="editOrderId">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text font-medium">Название заказа</span>
                     </label>
-                    <input type="text" id="editOrderName" name="name" required class="input input-bordered w-full">
+                    <input type="text" id="editOrderName" name="name" required class="input input-bordered w-full" style="height: 25px;">
                 </div>
-                <div class="grid lg:grid-cols-3 gap-4">
+                <div class="grid lg:grid-cols-3 gap-[3px]">
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text font-medium">Неделя</span>
                         </label>
-                        <select id="editOrderWeek" name="week" required class="select select-bordered w-full">
+                        <select id="editOrderWeek" name="week" required class="select select-bordered w-full" style="height: 25px;">
                         </select>
                     </div>
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text font-medium">Месяц</span>
                         </label>
-                        <select id="editOrderMonth" name="month" required class="select select-bordered w-full">
+                        <select id="editOrderMonth" name="month" required class="select select-bordered w-full" style="height: 25px;">
                             <option value="1">Январь</option>
                             <option value="2">Февраль</option>
                             <option value="3">Март</option>
@@ -240,7 +240,7 @@
                         <label class="label">
                             <span class="label-text font-medium">Год</span>
                         </label>
-                        <select id="editOrderYear" name="year" required class="select select-bordered w-full">
+                        <select id="editOrderYear" name="year" required class="select select-bordered w-full" style="height: 25px;">
                         </select>
                     </div>
                 </div>
@@ -249,18 +249,18 @@
                         <span class="label-text font-medium">Модели</span>
                     </label>
                     <div id="editModelsContainer">
-                        <div class="flex gap-2 mb-2">
-                            <select id="editModelSelect" class="select select-bordered flex-1">
+                        <div class="flex gap-[3px] mb-[3px]">
+                            <select id="editModelSelect" class="select select-bordered flex-1" style="height: 25px;">
                                 <option value="">-- Выберите модель --</option>
                             </select>
-                            <input type="number" id="editModelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во">
+                            <input type="number" id="editModelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во" style="height: 25px;">
                             <button type="button" id="editAddModelBtn" class="btn btn-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
                             </button>
                         </div>
-                        <div id="editSelectedModels" class="space-y-2"></div>
+                        <div id="editSelectedModels" class="space-y-[3px]"></div>
                     </div>
                 </div>
                 <div class="modal-action">
@@ -277,8 +277,8 @@
     <!-- Create DublOrder Modal -->
     <dialog id="createDublOrderModal" class="modal">
         <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Перенести заказ на следующую неделю</h3>
-            <form id="createDublOrderForm" class="space-y-4">
+            <h3 class="font-bold text-lg mb-[3px]">Перенести заказ на следующую неделю</h3>
+            <form id="createDublOrderForm" class="space-y-[3px]">
                 <input type="hidden" id="dublOrderId">
                 <div class="alert alert-info">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
@@ -291,10 +291,10 @@
                     <label class="label">
                         <span class="label-text font-medium">Целевая неделя</span>
                     </label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <select id="dublTargetWeek" class="select select-bordered">
+                    <div class="grid grid-cols-3 gap-[3px]">
+                        <select id="dublTargetWeek" class="select select-bordered" style="height: 25px;">
                         </select>
-                        <select id="dublTargetMonth" class="select select-bordered">
+                        <select id="dublTargetMonth" class="select select-bordered" style="height: 25px;">
                             <option value="1">Янв</option>
                             <option value="2">Фев</option>
                             <option value="3">Мар</option>
@@ -308,7 +308,7 @@
                             <option value="11">Ноя</option>
                             <option value="12">Дек</option>
                         </select>
-                        <select id="dublTargetYear" class="select select-bordered">
+                        <select id="dublTargetYear" class="select select-bordered" style="height: 25px;">
                         </select>
                     </div>
                 </div>
@@ -317,7 +317,7 @@
                     <label class="label">
                         <span class="label-text font-medium">Выполненная работа по моделям</span>
                     </label>
-                    <div id="dublModelsContainer" class="space-y-2"></div>
+                    <div id="dublModelsContainer" class="space-y-[3px]"></div>
                 </div>
 
                 <div class="modal-action">
@@ -334,24 +334,24 @@
     <!-- Order Execution History Modal -->
     <dialog id="executionHistoryModal" class="modal">
         <div class="modal-box max-w-5xl">
-            <h3 class="font-bold text-lg mb-4">История выполнения заказа</h3>
+            <h3 class="font-bold text-lg mb-[3px]">История выполнения заказа</h3>
             <input type="hidden" id="executionHistoryOrderId">
             
-            <div class="mb-4">
-                <h4 class="font-semibold mb-2" id="executionHistoryOrderName"></h4>
+            <div class="mb-[3px]">
+                <h4 class="font-semibold mb-[3px]" id="executionHistoryOrderName"></h4>
                 <p class="text-sm text-gray-600" id="executionHistoryOrderDate"></p>
             </div>
             
             <!-- Filters -->
-            <div class="grid grid-cols-3 gap-4 mb-4">
+            <div class="grid grid-cols-3 gap-[3px] mb-[3px]">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text font-medium">Неделя</span>
                     </label>
-                    <div class="flex gap-2">
-                        <select id="executionHistoryWeek" class="select select-bordered w-1/3">
+                    <div class="flex gap-[3px]">
+                        <select id="executionHistoryWeek" class="select select-bordered w-1/3" style="height: 25px;">
                         </select>
-                        <select id="executionHistoryMonth" class="select select-bordered w-1/3">
+                        <select id="executionHistoryMonth" class="select select-bordered w-1/3" style="height: 25px;">
                             <option value="">--</option>
                             <option value="1">Янв</option>
                             <option value="2">Фев</option>
@@ -366,7 +366,7 @@
                             <option value="11">Ноя</option>
                             <option value="12">Дек</option>
                         </select>
-                        <select id="executionHistoryYear" class="select select-bordered w-1/3">
+                        <select id="executionHistoryYear" class="select select-bordered w-1/3" style="height: 25px;">
                         </select>
                     </div>
                 </div>
@@ -374,7 +374,7 @@
                     <label class="label">
                         <span class="label-text font-medium">Модель</span>
                     </label>
-                    <select id="executionHistoryModelSelect" class="select select-bordered w-full">
+                    <select id="executionHistoryModelSelect" class="select select-bordered w-full" style="height: 25px;">
                         <option value="">-- Все модели --</option>
                     </select>
                 </div>
@@ -382,7 +382,7 @@
                     <label class="label">
                         <span class="label-text font-medium">Раздел</span>
                     </label>
-                    <select id="executionHistorySectionSelect" class="select select-bordered w-full" disabled>
+                    <select id="executionHistorySectionSelect" class="select select-bordered w-full" disabled style="height: 25px;">
                         <option value="">-- Все разделы --</option>
                     </select>
                 </div>
