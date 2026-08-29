@@ -893,7 +893,7 @@ function renderWorkResultsTable(workResults, orders) {
     });
     
     totalTimeElement.textContent = formatTime(totalSeconds);
-    totalEarningsElement.textContent = `€${formatEuros(totalEarnings)}`;
+    totalEarningsElement.textContent = `${formatEuros(totalEarnings)}`;
 }
 
 // Format time from seconds to HH:MM:SS
