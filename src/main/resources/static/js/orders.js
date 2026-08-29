@@ -673,7 +673,6 @@ async function deleteOrder(orderId) {
         if (response.ok) {
             console.log('Delete successful, calling loadOrders()');
             loadOrders();
-            alert('Заказ успешно удален');
         } else {
             const errorText = await response.text();
             console.error('Delete error:', errorText);
@@ -702,7 +701,6 @@ async function deleteDublOrder(dublOrderId) {
         
         if (response.ok) {
             loadOrders();
-            alert('Перенос заказа успешно удален');
         } else {
             const errorText = await response.text();
             console.error('Delete dubl order error:', errorText);
