@@ -532,8 +532,6 @@ async function handleOrderSubmit(event) {
             
             // Reload orders
             loadOrders();
-            
-            alert('Заказ успешно создан');
         } else {
             const error = await response.json();
             alert('Ошибка при создании заказа: ' + (error.message || 'Неизвестная ошибка'));
@@ -880,7 +878,6 @@ async function handleEditOrderSubmit(event) {
         if (response.ok) {
             closeEditModal();
             loadOrders();
-            alert('Заказ успешно обновлен');
         } else {
             const error = await response.json();
             alert('Ошибка при обновлении заказа: ' + (error.message || 'Неизвестная ошибка'));
