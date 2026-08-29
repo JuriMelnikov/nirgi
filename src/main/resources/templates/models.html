@@ -208,7 +208,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="techmap : ${techmaps}" style="height: 25px; cursor: pointer;" class="hover:bg-base-200" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
+                            <tr th:each="techmap : ${techmaps}" style="height: 25px; cursor: pointer;" class="hover:bg-warning/20" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
                                 <td class="text-xs text-center" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 40px;" th:text="${techmap.serial}"></td>
                                 <td class="text-xs text-left" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.descriptor}"></td>
                                 <td class="text-xs text-left" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 80px;" th:text="${techmap.time}"></td>
