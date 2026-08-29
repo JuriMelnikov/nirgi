@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function formatPrice(value) {
         const euros = tenthsOfCentsToEuros(value);
-        return euros === '' ? (value == null ? '' : value) : euros + ' €';
+        return euros === '' ? (value == null ? '' : value) : euros;
     }
 
     // Load existing data on page load
