@@ -27,29 +27,29 @@
                         </svg>
                     </h2>
                     <div id="modelListFormContent" class="hidden">
-                    <form id="addModelListForm" class="space-y-4">
+                    <form id="addModelListForm" class="space-y-1">
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Название модели</span>
                             </label>
-                            <input type="text" id="modelListName" name="name" required class="input input-bordered w-full" placeholder="Введите название модели">
+                            <input type="text" id="modelListName" name="name" required class="input input-bordered w-full h-[25px] min-h-[25px] text-sm" placeholder="Введите название модели">
                         </div>
                         <div class="form-control mt-6">
                             <div class="flex gap-2">
-                                <button type="submit" id="modelListSubmitButton" class="btn btn-primary flex-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="submit" id="modelListSubmitButton" class="btn btn-primary flex-1 h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
                                     <span id="modelListSubmitButtonText">Добавить модель</span>
                                 </button>
-                                <button type="button" id="modelListCancelButton" class="btn btn-error hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="button" id="modelListCancelButton" class="btn btn-error hidden h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                     Отменить
                                 </button>
-                                <button type="button" id="modelListDeleteButton" class="btn btn-error hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="button" id="modelListDeleteButton" class="btn btn-error hidden h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
                                     Удалить
@@ -64,7 +64,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">Выберите модель</span>
                             </label>
-                            <select id="modelListSelect" class="select select-bordered w-full">
+                            <select id="modelListSelect" class="select select-bordered w-full h-[25px] min-h-[25px] text-sm">
                                 <option value="">-- Выберите модель --</option>
                                 <option th:each="modelList : ${modelLists}" th:value="${modelList.id}" th:text="${modelList.name}"></option>
                             </select>
@@ -87,29 +87,29 @@
                         </svg>
                     </h2>
                     <div id="sectionListFormContent" class="hidden">
-                    <form id="addSectionListForm" class="space-y-4">
+                    <form id="addSectionListForm" class="space-y-1">
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Название раздела</span>
                             </label>
-                            <input type="text" id="sectionListName" name="name" required class="input input-bordered w-full" placeholder="Введите название раздела">
+                            <input type="text" id="sectionListName" name="name" required class="input input-bordered w-full h-[25px] min-h-[25px] text-sm" placeholder="Введите название раздела">
                         </div>
                         <div class="form-control mt-6">
                             <div class="flex gap-2">
-                                <button type="submit" id="sectionListSubmitButton" class="btn btn-primary flex-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="submit" id="sectionListSubmitButton" class="btn btn-primary flex-1 h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
                                     <span id="sectionListSubmitButtonText">Добавить раздел</span>
                                 </button>
-                                <button type="button" id="sectionListCancelButton" class="btn btn-error hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="button" id="sectionListCancelButton" class="btn btn-error hidden h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                     Отменить
                                 </button>
-                                <button type="button" id="sectionListDeleteButton" class="btn btn-error hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="button" id="sectionListDeleteButton" class="btn btn-error hidden h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
                                     Удалить
@@ -124,7 +124,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">Выберите раздел</span>
                             </label>
-                            <select id="sectionListSelect" class="select select-bordered w-full">
+                            <select id="sectionListSelect" class="select select-bordered w-full h-[25px] min-h-[25px] text-sm">
                                 <option value="">-- Выберите раздел --</option>
                                 <option th:each="sectionList : ${sectionLists}" th:value="${sectionList.id}" th:text="${sectionList.name}"></option>
                             </select>
@@ -136,20 +136,20 @@
 
             <!-- Add Techmap Form -->
             <div class="card bg-base-100 shadow-xl lg:col-span-2">
-                <div class="card-body">
-                    <h2 class="card-title text-2xl mb-4">
-                        <svg id="techmapFormIcon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-base leading-none mb-1">
+                        <svg id="techmapFormIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>
                         <span id="techmapFormTitle">Технологическая карта</span>
                     </h2>
-                    <form id="addTechmapForm" class="space-y-4">
+                    <form id="addTechmapForm" class="space-y-1">
                         <div class="grid lg:grid-cols-2 gap-4">
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text font-medium">Модель</span>
                                 </label>
-                                <select id="techmapModelList" name="modelListId" required class="select select-bordered w-full">
+                                <select id="techmapModelList" name="modelListId" required class="select select-bordered w-full h-[25px] min-h-[25px] text-sm">
                                     <option value="">-- Выберите модель --</option>
                                     <option th:each="modelList : ${modelLists}" th:value="${modelList.id}" th:text="${modelList.name}"></option>
                                 </select>
@@ -158,7 +158,7 @@
                                 <label class="label">
                                     <span class="label-text font-medium">Раздел</span>
                                 </label>
-                                <select id="techmapSectionList" name="sectionListId" required class="select select-bordered w-full">
+                                <select id="techmapSectionList" name="sectionListId" required class="select select-bordered w-full h-[25px] min-h-[25px] text-sm">
                                     <option value="">-- Выберите раздел --</option>
                                     <option th:each="sectionList : ${sectionLists}" th:value="${sectionList.id}" th:text="${sectionList.name}"></option>
                                 </select>
@@ -168,38 +168,38 @@
                             <label class="label">
                                 <span class="label-text font-medium">Номер операции</span>
                             </label>
-                            <input type="text" id="techmapSerial" name="serial" required class="input input-bordered w-1/2" placeholder="Введите номер операции">
+                            <input type="text" id="techmapSerial" name="serial" required class="input input-bordered w-1/2 h-[25px] min-h-[25px] text-sm" placeholder="Введите номер операции">
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-medium">Описание</span>
                             </label>
-                            <textarea id="techmapDescriptor" name="descriptor" required class="textarea textarea-bordered w-full" placeholder="Введите описание" rows="3"></textarea>
+                            <textarea id="techmapDescriptor" name="descriptor" required class="textarea textarea-bordered w-full h-[25px] min-h-[25px] text-sm" placeholder="Введите описание" rows="1"></textarea>
                         </div>
                         <div class="grid lg:grid-cols-2 gap-4">
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text font-medium">Время (сек)</span>
                                 </label>
-                                <input type="text" id="techmapTime" name="time" required class="input input-bordered w-1/2" placeholder="Время выполнения">
+                                <input type="text" id="techmapTime" name="time" required class="input input-bordered w-1/2 h-[25px] min-h-[25px] text-sm" placeholder="Время выполнения">
                             </div>
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text font-medium">Цена (€)</span>
                                 </label>
-                                <input type="text" id="techmapPrice" name="price" required class="input input-bordered w-1/2" placeholder="Цена операции в евро, например 1.50">
+                                <input type="text" id="techmapPrice" name="price" required class="input input-bordered w-1/2 h-[25px] min-h-[25px] text-sm" placeholder="Цена операции в евро, например 1.50">
                             </div>
                         </div>
-                        <div class="form-control mt-6">
+                        <div class="form-control mt-1">
                             <div class="flex gap-2">
-                                <button type="submit" id="techmapSubmitButton" class="btn btn-primary flex-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="submit" id="techmapSubmitButton" class="btn btn-primary flex-1 h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
                                     <span id="techmapSubmitButtonText">Добавить технологическую карту</span>
                                 </button>
-                                <button type="button" id="techmapCancelButton" class="btn btn-error hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="button" id="techmapCancelButton" class="btn btn-error hidden h-[25px] min-h-[25px] text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                     Отменить
@@ -228,12 +228,12 @@
                                     <td th:text="${techmap.priceInEuros}"></td>
                                     <td>
                                         <div class="flex gap-2">
-                                            <button class="btn btn-xs btn-info h-6 min-h-6 px-2" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
+                                            <button class="btn btn-xs btn-info h-5 min-h-5 px-2" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </button>
-                                            <button class="btn btn-xs btn-error h-6 min-h-6 px-2" th:onclick="'deleteTechmap(' + ${techmap.id} + ')'">
+                                            <button class="btn btn-xs btn-error h-5 min-h-5 px-2" th:onclick="'deleteTechmap(' + ${techmap.id} + ')'">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
