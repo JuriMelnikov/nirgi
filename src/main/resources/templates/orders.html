@@ -53,14 +53,14 @@
                             <label class="label">
                                 <span class="label-text font-medium">Название заказа</span>
                             </label>
-                            <input type="text" id="orderName" name="name" required class="input input-bordered w-full" placeholder="Введите название заказа" style="height: 25px;">
+                            <input type="text" id="orderName" name="name" required class="input input-bordered w-full" placeholder="Введите название заказа" style="height: 25px; padding: 3px;">
                         </div>
                         <div class="grid lg:grid-cols-3 gap-[3px]">
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text font-medium">Неделя</span>
                                 </label>
-                                <select id="orderWeek" name="week" required class="select select-bordered w-full" style="height: 25px;">
+                                <select id="orderWeek" name="week" required class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                                     <option value="">-- Выберите неделю --</option>
                                 </select>
                             </div>
@@ -68,7 +68,7 @@
                                 <label class="label">
                                     <span class="label-text font-medium">Месяц</span>
                                 </label>
-                                <select id="orderMonth" name="month" required class="select select-bordered w-full" style="height: 25px;">
+                                <select id="orderMonth" name="month" required class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                                     <option value="">-- Выберите месяц --</option>
                                     <option value="1">Январь</option>
                                     <option value="2">Февраль</option>
@@ -88,7 +88,7 @@
                                 <label class="label">
                                     <span class="label-text font-medium">Год</span>
                                 </label>
-                                <select id="orderYear" name="year" required class="select select-bordered w-full" style="height: 25px;">
+                                <select id="orderYear" name="year" required class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                                     <option value="">-- Выберите год --</option>
                                 </select>
                             </div>
@@ -101,10 +101,10 @@
                             </label>
                             <div id="modelsContainer">
                                 <div class="flex gap-[3px] mb-[3px]">
-                                    <select id="modelSelect" class="select select-bordered flex-1" style="height: 25px;">
+                                    <select id="modelSelect" class="select select-bordered flex-1" style="height: 25px; padding: 3px;">
                                         <option value="">-- Выберите модель --</option>
                                     </select>
-                                    <input type="number" id="modelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во" style="height: 25px;">
+                                    <input type="number" id="modelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во" style="height: 25px; padding: 3px;">
                                     <button type="button" id="addModelBtn" class="btn btn-secondary">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -144,7 +144,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">по неделе</span>
                             </label>
-                            <select id="filterWeek" class="select select-bordered w-full" style="height: 25px;">
+                            <select id="filterWeek" class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                                 <option value="">-- Все недели --</option>
                             </select>
                         </div>
@@ -152,7 +152,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">по месяцу</span>
                             </label>
-                            <select id="filterMonth" class="select select-bordered w-full" style="height: 25px;">
+                            <select id="filterMonth" class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                                 <option value="">-- Все месяцы --</option>
                                 <option value="1">Январь</option>
                                 <option value="2">Февраль</option>
@@ -172,7 +172,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">по году</span>
                             </label>
-                            <select id="filterYear" class="select select-bordered w-full" style="height: 25px;">
+                            <select id="filterYear" class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                                 <option value="">-- Все годы --</option>
                             </select>
                         </div>
@@ -207,21 +207,21 @@
                     <label class="label">
                         <span class="label-text font-medium">Название заказа</span>
                     </label>
-                    <input type="text" id="editOrderName" name="name" required class="input input-bordered w-full" style="height: 25px;">
+                    <input type="text" id="editOrderName" name="name" required class="input input-bordered w-full" style="height: 25px; padding: 3px;">
                 </div>
                 <div class="grid lg:grid-cols-3 gap-[3px]">
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text font-medium">Неделя</span>
                         </label>
-                        <select id="editOrderWeek" name="week" required class="select select-bordered w-full" style="height: 25px;">
+                        <select id="editOrderWeek" name="week" required class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                         </select>
                     </div>
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text font-medium">Месяц</span>
                         </label>
-                        <select id="editOrderMonth" name="month" required class="select select-bordered w-full" style="height: 25px;">
+                        <select id="editOrderMonth" name="month" required class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                             <option value="1">Январь</option>
                             <option value="2">Февраль</option>
                             <option value="3">Март</option>
@@ -240,7 +240,7 @@
                         <label class="label">
                             <span class="label-text font-medium">Год</span>
                         </label>
-                        <select id="editOrderYear" name="year" required class="select select-bordered w-full" style="height: 25px;">
+                        <select id="editOrderYear" name="year" required class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                         </select>
                     </div>
                 </div>
@@ -250,10 +250,10 @@
                     </label>
                     <div id="editModelsContainer">
                         <div class="flex gap-[3px] mb-[3px]">
-                            <select id="editModelSelect" class="select select-bordered flex-1" style="height: 25px;">
+                            <select id="editModelSelect" class="select select-bordered flex-1" style="height: 25px; padding: 3px;">
                                 <option value="">-- Выберите модель --</option>
                             </select>
-                            <input type="number" id="editModelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во" style="height: 25px;">
+                            <input type="number" id="editModelCount" min="1" value="1" class="input input-bordered w-24" placeholder="Кол-во" style="height: 25px; padding: 3px;">
                             <button type="button" id="editAddModelBtn" class="btn btn-secondary">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -292,9 +292,9 @@
                         <span class="label-text font-medium">Целевая неделя</span>
                     </label>
                     <div class="grid grid-cols-3 gap-[3px]">
-                        <select id="dublTargetWeek" class="select select-bordered" style="height: 25px;">
+                        <select id="dublTargetWeek" class="select select-bordered" style="height: 25px; padding: 3px;">
                         </select>
-                        <select id="dublTargetMonth" class="select select-bordered" style="height: 25px;">
+                        <select id="dublTargetMonth" class="select select-bordered" style="height: 25px; padding: 3px;">
                             <option value="1">Янв</option>
                             <option value="2">Фев</option>
                             <option value="3">Мар</option>
@@ -308,7 +308,7 @@
                             <option value="11">Ноя</option>
                             <option value="12">Дек</option>
                         </select>
-                        <select id="dublTargetYear" class="select select-bordered" style="height: 25px;">
+                        <select id="dublTargetYear" class="select select-bordered" style="height: 25px; padding: 3px;">
                         </select>
                     </div>
                 </div>
@@ -349,9 +349,9 @@
                         <span class="label-text font-medium">Неделя</span>
                     </label>
                     <div class="flex gap-[3px]">
-                        <select id="executionHistoryWeek" class="select select-bordered w-1/3" style="height: 25px;">
+                        <select id="executionHistoryWeek" class="select select-bordered w-1/3" style="height: 25px; padding: 3px;">
                         </select>
-                        <select id="executionHistoryMonth" class="select select-bordered w-1/3" style="height: 25px;">
+                        <select id="executionHistoryMonth" class="select select-bordered w-1/3" style="height: 25px; padding: 3px;">
                             <option value="">--</option>
                             <option value="1">Янв</option>
                             <option value="2">Фев</option>
@@ -366,7 +366,7 @@
                             <option value="11">Ноя</option>
                             <option value="12">Дек</option>
                         </select>
-                        <select id="executionHistoryYear" class="select select-bordered w-1/3" style="height: 25px;">
+                        <select id="executionHistoryYear" class="select select-bordered w-1/3" style="height: 25px; padding: 3px;">
                         </select>
                     </div>
                 </div>
@@ -374,7 +374,7 @@
                     <label class="label">
                         <span class="label-text font-medium">Модель</span>
                     </label>
-                    <select id="executionHistoryModelSelect" class="select select-bordered w-full" style="height: 25px;">
+                    <select id="executionHistoryModelSelect" class="select select-bordered w-full" style="height: 25px; padding: 3px;">
                         <option value="">-- Все модели --</option>
                     </select>
                 </div>
@@ -382,7 +382,7 @@
                     <label class="label">
                         <span class="label-text font-medium">Раздел</span>
                     </label>
-                    <select id="executionHistorySectionSelect" class="select select-bordered w-full" disabled style="height: 25px;">
+                    <select id="executionHistorySectionSelect" class="select select-bordered w-full" disabled style="height: 25px; padding: 3px;">
                         <option value="">-- Все разделы --</option>
                     </select>
                 </div>
