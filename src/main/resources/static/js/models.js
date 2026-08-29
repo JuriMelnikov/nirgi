@@ -509,11 +509,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const row = document.createElement('tr');
             row.style.height = '25px';
             row.innerHTML = `
-                <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 40px;">${techmap.serial}</td>
-                <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">${techmap.descriptor}</td>
-                <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">${techmap.time}</td>
-                <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">${formatPrice(techmap.price)}</td>
-                <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">
+                <td class="text-xs text-center" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 40px;">${techmap.serial}</td>
+                <td class="text-xs text-left" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">${techmap.descriptor}</td>
+                <td class="text-xs text-left" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 80px;">${techmap.time}</td>
+                <td class="text-xs text-left" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 80px;">${formatPrice(techmap.price)}</td>
+                <td class="text-xs text-left" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 80px;">
                     <div class="flex gap-1">
                         <button class="btn btn-xs btn-info h-4 min-h-4 px-1" onclick="editTechmap(${techmap.id})">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
