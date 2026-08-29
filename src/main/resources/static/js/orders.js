@@ -447,7 +447,7 @@ function renderSelectedModels() {
     
     selectedModels.forEach((model, index) => {
         const div = document.createElement('div');
-        div.className = 'flex items-center justify-between bg-base-200 p-2 rounded';
+        div.className = 'flex items-center justify-between bg-base-200 rounded';
         div.innerHTML = `
             <span>${model.modelListName} - ${model.count} ${getInstanceForm(model.count)}</span>
             <button type="button" class="btn btn-sm btn-error" style="height: 25px; min-height: 25px;" onclick="removeModel(${index})">
@@ -813,7 +813,7 @@ function renderEditSelectedModels() {
     
     editSelectedModels.forEach((model, index) => {
         const div = document.createElement('div');
-        div.className = 'flex items-center justify-between bg-base-200 p-2 rounded';
+        div.className = 'flex items-center justify-between bg-base-200 rounded';
         div.innerHTML = `
             <span>${model.modelListName} - ${model.count} ${getInstanceForm(model.count)}</span>
             <button type="button" class="btn btn-sm btn-error" style="height: 25px; min-height: 25px;" onclick="removeEditModel(${index})">
