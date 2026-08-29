@@ -509,7 +509,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const row = document.createElement('tr');
             row.style.height = '25px';
             row.style.cursor = 'pointer';
-            row.classList.add('hover:bg-base-200');
+            row.classList.add('hover:bg-warning/20');
             row.onclick = () => editTechmap(techmap.id);
             row.innerHTML = `
                 <td class="text-xs text-center" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 40px;">${techmap.serial}</td>
