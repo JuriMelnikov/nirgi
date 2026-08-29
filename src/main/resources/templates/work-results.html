@@ -104,109 +104,112 @@
                     </div>
                 </div>
 
-                <!-- Worker selector -->
-                <div class="form-control py-0">
-                    <div class="flex items-center gap-4">
-                        <label class="label w-48 py-0 justify-end">
-                            <span class="label-text font-medium">Работник</span>
+                <!-- Form selectors container -->
+                <div class="px-8">
+                    <!-- Worker selector -->
+                    <div class="form-control py-0">
+                        <div class="flex items-center gap-4">
+                            <label class="label w-48 py-0 justify-end">
+                                <span class="label-text font-medium">Работник</span>
+                            </label>
+                            <!-- Select for users with multiple roles -->
+                            <select id="employeeSelect" class="select select-bordered flex-1 hidden py-0 px-1">
+                                <option value="">-- Выберите работника --</option>
+                            </select>
+                            <!-- Label for EMPLOYEE-only users -->
+                            <label id="employeeLabel" class="label-text text-blue-800 font-semibold hidden"></label>
+                            <input type="hidden" id="employeeIdInput">
+                        </div>
+                    </div>
+
+                    <!-- Order selector -->
+                    <div class="form-control py-0">
+                        <div class="flex items-center gap-4">
+                            <label class="label w-48 py-0 justify-end">
+                                <span class="label-text font-medium">Заказ</span>
+                            </label>
+                            <select id="orderSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
+                                <option value="">-- Сначала выберите неделю --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Model selector -->
+                    <div class="form-control py-0">
+                        <div class="flex items-center gap-4">
+                            <label class="label w-48 py-0 justify-end">
+                                <span class="label-text font-medium">Модель</span>
+                            </label>
+                            <select id="modelSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
+                                <option value="">-- Сначала выберите заказ --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section selector -->
+                    <div class="form-control py-0">
+                        <div class="flex items-center gap-4">
+                            <label class="label w-48 py-0 justify-end">
+                                <span class="label-text font-medium">Раздел</span>
+                            </label>
+                            <select id="sectionSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
+                                <option value="">-- Сначала выберите модель --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Operation number selector -->
+                    <div class="form-control py-0">
+                        <div class="flex items-center gap-4">
+                            <label class="label w-48 py-0 justify-end">
+                                <span class="label-text font-medium">Номер операции</span>
+                            </label>
+                            <select id="operationSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
+                                <option value="">-- Сначала выберите модель и раздел --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Quantity selector -->
+                    <div class="form-control py-0">
+                        <div class="flex items-center gap-4">
+                            <label class="label w-48 py-0 justify-end">
+                                <span class="label-text font-medium">Количество изделий</span>
+                            </label>
+                            <input type="number" id="quantityInput" min="1" value="1" class="input input-bordered flex-1 py-0 px-1" placeholder="Введите количество изделий" disabled>
+                        </div>
+                    </div>
+
+                    <!-- Techmap info table (shown when operation is selected) -->
+                    <div id="techmapInfo" class="hidden py-0">
+                        <label class="label py-0">
+                            <span class="label-text font-medium">Информация об операции</span>
                         </label>
-                        <!-- Select for users with multiple roles -->
-                        <select id="employeeSelect" class="select select-bordered flex-1 hidden py-0 px-1">
-                            <option value="">-- Выберите работника --</option>
-                        </select>
-                        <!-- Label for EMPLOYEE-only users -->
-                        <label id="employeeLabel" class="label-text text-blue-800 font-semibold hidden"></label>
-                        <input type="hidden" id="employeeIdInput">
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>Номер</th>
+                                        <th>Описание</th>
+                                        <th>Время</th>
+                                        <th>Расценка</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="techmapTableBody">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Order selector -->
-                <div class="form-control py-0">
-                    <div class="flex items-center gap-4">
-                        <label class="label w-48 py-0 justify-end">
-                            <span class="label-text font-medium">Заказ</span>
-                        </label>
-                        <select id="orderSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
-                            <option value="">-- Сначала выберите неделю --</option>
-                        </select>
+                    <!-- Add button -->
+                    <div class="form-control mt-2 py-0">
+                        <button type="button" id="addButton" class="btn btn-primary w-full" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Добавить
+                        </button>
                     </div>
-                </div>
-
-                <!-- Model selector -->
-                <div class="form-control py-0">
-                    <div class="flex items-center gap-4">
-                        <label class="label w-48 py-0 justify-end">
-                            <span class="label-text font-medium">Модель</span>
-                        </label>
-                        <select id="modelSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
-                            <option value="">-- Сначала выберите заказ --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Section selector -->
-                <div class="form-control py-0">
-                    <div class="flex items-center gap-4">
-                        <label class="label w-48 py-0 justify-end">
-                            <span class="label-text font-medium">Раздел</span>
-                        </label>
-                        <select id="sectionSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
-                            <option value="">-- Сначала выберите модель --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Operation number selector -->
-                <div class="form-control py-0">
-                    <div class="flex items-center gap-4">
-                        <label class="label w-48 py-0 justify-end">
-                            <span class="label-text font-medium">Номер операции</span>
-                        </label>
-                        <select id="operationSelect" class="select select-bordered flex-1 py-0 px-1" disabled>
-                            <option value="">-- Сначала выберите модель и раздел --</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Quantity selector -->
-                <div class="form-control py-0">
-                    <div class="flex items-center gap-4">
-                        <label class="label w-48 py-0 justify-end">
-                            <span class="label-text font-medium">Количество изделий</span>
-                        </label>
-                        <input type="number" id="quantityInput" min="1" value="1" class="input input-bordered flex-1 py-0 px-1" placeholder="Введите количество изделий" disabled>
-                    </div>
-                </div>
-
-                <!-- Techmap info table (shown when operation is selected) -->
-                <div id="techmapInfo" class="hidden py-0">
-                    <label class="label py-0">
-                        <span class="label-text font-medium">Информация об операции</span>
-                    </label>
-                    <div class="overflow-x-auto">
-                        <table class="table table-zebra w-full">
-                            <thead>
-                                <tr>
-                                    <th>Номер</th>
-                                    <th>Описание</th>
-                                    <th>Время</th>
-                                    <th>Расценка</th>
-                                </tr>
-                            </thead>
-                            <tbody id="techmapTableBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Add button -->
-                <div class="form-control mt-2 py-0">
-                    <button type="button" id="addButton" class="btn btn-primary w-full" disabled>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        Добавить
-                    </button>
                 </div>
 
                 <!-- Summary -->
