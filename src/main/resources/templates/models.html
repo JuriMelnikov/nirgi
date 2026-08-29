@@ -140,7 +140,7 @@
                         <span id="techmapFormTitle">Технологическая карта</span>
                     </h2>
                     <form id="addTechmapForm" class="space-y-1">
-                        <div class="grid grid-cols-[auto_1fr] gap-2">
+                        <div class="grid grid-cols-[auto_1fr_auto_1fr] gap-2">
                             <label class="text-xs font-medium whitespace-nowrap self-start text-right">Модель:</label>
                             <select id="techmapModelList" name="modelListId" required class="select select-bordered h-[25px] min-h-[25px] text-sm">
                                 <option value="">-- Выберите модель --</option>
@@ -152,6 +152,8 @@
                                 <option value="">-- Выберите раздел --</option>
                                 <option th:each="sectionList : ${sectionLists}" th:value="${sectionList.id}" th:text="${sectionList.name}"></option>
                             </select>
+                        </div>
+                        <div class="grid grid-cols-[auto_1fr] gap-2">
 
                             <label class="text-xs font-medium whitespace-nowrap self-start text-right">№ операции:</label>
                             <input type="text" id="techmapSerial" name="serial" required class="input input-bordered w-fit h-[25px] min-h-[25px] text-sm" placeholder="Введите номер операции">
