@@ -592,11 +592,11 @@ function renderOrdersTable(orders) {
     tbody.innerHTML = '';
     
     if (orders.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Нет заказов</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Нет заказов</td></tr>';
         return;
     }
     
-    orders.forEach(order => {
+    orders.forEach((order, index) => {
         const tr = document.createElement('tr');
         
         const isTransferred = order.isTransferred;
@@ -607,6 +607,7 @@ function renderOrdersTable(orders) {
         tr.className = rowClass;
         
         tr.innerHTML = `
+            <td>${index + 1}</td>
             <td>${order.name}</td>
             <td>
                 <div class="flex gap-1">
