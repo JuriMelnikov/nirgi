@@ -745,7 +745,6 @@ async function addWorkResult() {
         });
 
         if (response.ok) {
-            alert('Результат работы успешно добавлен');
             loadWorkResults();
             calculateAvailableQuantity();
 
