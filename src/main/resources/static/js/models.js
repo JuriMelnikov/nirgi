@@ -214,11 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 const result = await response.json();
-                if (editingModelListId) {
-                    alert('Модель успешно обновлена! ID: ' + result.id);
-                } else {
-                    alert('Модель успешно добавлена! ID: ' + result.id);
-                }
                 modelListForm.reset();
                 resetModelListEditMode();
                 loadModelLists();
@@ -265,11 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 const result = await response.json();
-                if (editingSectionListId) {
-                    alert('Раздел успешно обновлен! ID: ' + result.id);
-                } else {
-                    alert('Раздел успешно добавлен! ID: ' + result.id);
-                }
                 sectionListForm.reset();
                 resetSectionListEditMode();
                 loadSectionLists();
@@ -326,7 +316,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 const result = await response.json();
                 if (editingTechmapId) {
-                    alert('Технологическая карта успешно обновлена! ID: ' + result.id);
                     // Keep model and section selected for filtering, reset other fields
                     const selectedModelId = document.getElementById('techmapModelList').value;
                     const selectedSectionId = document.getElementById('techmapSectionList').value;
@@ -335,7 +324,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('techmapSectionList').value = selectedSectionId;
                     resetTechmapEditMode();
                 } else {
-                    alert('Технологическая карта успешно добавлена! ID: ' + result.id);
                     // Keep model and section selected for filtering, reset other fields
                     const selectedModelId = document.getElementById('techmapModelList').value;
                     const selectedSectionId = document.getElementById('techmapSectionList').value;
