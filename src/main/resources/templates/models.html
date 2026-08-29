@@ -213,8 +213,7 @@
                         <table id="techmapsTable" class="w-full" style="border-collapse: collapse; border: 1px solid #e5e7eb;">
                             <thead>
                                 <tr style="height: 25px; background-color: #f3f4f6;">
-                                    <th class="text-center text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 60px;">№</th>
-                                    <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Описание</th>
+                                    <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">№ Описание</th>
                                     <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Время (сек)</th>
                                     <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Цена (€)</th>
                                     <th class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">Действия</th>
@@ -222,8 +221,10 @@
                             </thead>
                             <tbody>
                                 <tr th:each="techmap : ${techmaps}" style="height: 25px;">
-                                    <td class="text-center text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb; width: 60px;" th:text="${techmap.serial}"></td>
-                                    <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.descriptor}"></td>
+                                    <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">
+                                        <span style="width: 40px; display: inline-block;" th:text="${techmap.serial}"></span>
+                                        <span th:text="${techmap.descriptor}"></span>
+                                    </td>
                                     <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.time}"></td>
                                     <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;" th:text="${techmap.priceInEuros}"></td>
                                     <td class="text-xs" style="padding: 0px 4px; height: 25px; border: 1px solid #e5e7eb;">
