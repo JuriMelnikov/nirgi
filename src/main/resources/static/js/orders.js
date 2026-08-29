@@ -429,10 +429,7 @@ function renderSelectedModels() {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between bg-base-200 p-2 rounded';
         div.innerHTML = `
-            <span>${model.modelListName} - <input type="number" min="1" value="${model.count}" 
-                   class="input input-bordered w-16 inline" 
-                   style="height: 25px; padding: 3px;"
-                   onchange="updateModelCount(${index}, this.value)"> экземпляров</span>
+            <span>${model.modelListName} - ${model.count} экземпляров</span>
             <button type="button" class="btn btn-sm btn-error" style="height: 25px; min-height: 25px;" onclick="removeModel(${index})">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -797,10 +794,7 @@ function renderEditSelectedModels() {
         const div = document.createElement('div');
         div.className = 'flex items-center justify-between bg-base-200 p-2 rounded';
         div.innerHTML = `
-            <span>${model.modelListName} - <input type="number" min="1" value="${model.count}" 
-                   class="input input-bordered w-16 inline" 
-                   style="height: 25px; padding: 3px;"
-                   onchange="updateEditModelCount(${index}, this.value)"> экземпляров</span>
+            <span>${model.modelListName} - ${model.count} экземпляров</span>
             <button type="button" class="btn btn-sm btn-error" style="height: 25px; min-height: 25px;" onclick="removeEditModel(${index})">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
