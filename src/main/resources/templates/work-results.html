@@ -181,12 +181,25 @@
                     </div>
 
                     <!-- Techmap info table (shown when operation is selected) -->
-                    <div id="techmapInfo" class="hidden py-[3px]">
-                        <label class="label py-0">
-                            <span class="label-text font-medium text-sm lg:text-base">Информация об операции</span>
-                        </label>
+                    <div id="techmapInfo" class="hidden py-[2px]">
                         <div class="overflow-x-auto">
-                            <table class="table table-zebra w-full">
+                            <table class="table table-zebra w-full" style="table-layout: fixed;">
+                                <colgroup>
+                                    <col style="width: 15%;">
+                                    <col style="width: 50%;">
+                                    <col style="width: 15%;">
+                                    <col style="width: 20%;">
+                                </colgroup>
+                                <style>
+                                    #techmapTableBody td {
+                                        height: 25px;
+                                        padding: 2px 8px;
+                                    }
+                                    #techmapTableBody th {
+                                        height: 25px;
+                                        padding: 2px 8px;
+                                    }
+                                </style>
                                 <thead>
                                     <tr>
                                         <th>Номер</th>
