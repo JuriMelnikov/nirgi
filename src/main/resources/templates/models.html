@@ -190,7 +190,7 @@
                                 <input type="text" id="techmapPrice" name="price" required class="input input-bordered w-1/2 h-[25px] min-h-[25px] text-sm" placeholder="Цена операции в евро, например 1.50">
                             </div>
                         </div>
-                        <div class="form-control mt-[10px]">
+                        <div class="form-control mt-[20px]">
                             <div class="flex gap-2">
                                 <button type="submit" id="techmapSubmitButton" class="btn btn-primary flex-1 h-[25px] min-h-[25px] text-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -210,30 +210,30 @@
                     
                     <div class="divider">Существующие технологические карты</div>
                     <div class="overflow-x-auto">
-                        <table id="techmapsTable" class="table table-zebra table-sm w-full">
+                        <table id="techmapsTable" class="table table-zebra table-sm w-full p-0 m-0">
                             <thead>
-                                <tr>
-                                    <th class="text-center">№ операции</th>
-                                    <th>Описание</th>
-                                    <th>Время (сек)</th>
-                                    <th>Цена (€)</th>
-                                    <th>Действия</th>
+                                <tr class="p-0 m-0">
+                                    <th class="text-center p-1 m-0 text-xs">№ операции</th>
+                                    <th class="p-1 m-0 text-xs">Описание</th>
+                                    <th class="p-1 m-0 text-xs">Время (сек)</th>
+                                    <th class="p-1 m-0 text-xs">Цена (€)</th>
+                                    <th class="p-1 m-0 text-xs">Действия</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="techmap : ${techmaps}">
-                                    <td class="text-center" th:text="${techmap.serial}"></td>
-                                    <td th:text="${techmap.descriptor}"></td>
-                                    <td th:text="${techmap.time}"></td>
-                                    <td th:text="${techmap.priceInEuros}"></td>
-                                    <td>
-                                        <div class="flex gap-2">
-                                            <button class="btn btn-xs btn-info h-5 min-h-5 px-2" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
+                                <tr th:each="techmap : ${techmaps}" class="p-0 m-0">
+                                    <td class="text-center p-1 m-0 text-xs" th:text="${techmap.serial}"></td>
+                                    <td class="p-1 m-0 text-xs" th:text="${techmap.descriptor}"></td>
+                                    <td class="p-1 m-0 text-xs" th:text="${techmap.time}"></td>
+                                    <td class="p-1 m-0 text-xs" th:text="${techmap.priceInEuros}"></td>
+                                    <td class="p-1 m-0 text-xs">
+                                        <div class="flex gap-1">
+                                            <button class="btn btn-xs btn-info h-4 min-h-4 px-1" th:onclick="'editTechmap(' + ${techmap.id} + ')'">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </button>
-                                            <button class="btn btn-xs btn-error h-5 min-h-5 px-2" th:onclick="'deleteTechmap(' + ${techmap.id} + ')'">
+                                            <button class="btn btn-xs btn-error h-4 min-h-4 px-1" th:onclick="'deleteTechmap(' + ${techmap.id} + ')'">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
