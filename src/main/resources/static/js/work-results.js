@@ -462,10 +462,10 @@ function showTechmapInfo() {
         
         tbody.innerHTML = `
             <tr>
-                <td>${selectedOption.textContent}</td>
-                <td>${selectedOption.dataset.descriptor}</td>
-                <td>${selectedOption.dataset.time}</td>
-                <td>${formatEuros(selectedOption.dataset.price / 100)}</td>
+                <td style="text-align: center;">${selectedOption.textContent}</td>
+                <td style="text-align: left;">${selectedOption.dataset.descriptor}</td>
+                <td style="text-align: left;">${selectedOption.dataset.time}</td>
+                <td style="text-align: left;">${formatEuros(selectedOption.dataset.price / 100)}</td>
             </tr>
         `;
         
