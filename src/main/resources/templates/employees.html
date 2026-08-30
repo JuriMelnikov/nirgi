@@ -6,6 +6,23 @@
     <title>Управление работниками</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .input {
+            min-height: 2rem !important;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
+        }
+        .select {
+            min-height: 2rem !important;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
+        }
+        .btn {
+            min-height: 2rem !important;
+            padding-top: 0.25rem !important;
+            padding-bottom: 0.25rem !important;
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-base-200">
     <!-- Navigation Bar -->
@@ -68,7 +85,7 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Имя</span>
                                 </label>
-                                <input type="text" id="name" name="name" required class="input input-bordered flex-1" placeholder="Введите имя">
+                                <input type="text" id="name" name="name" required class="input input-bordered input-sm flex-1" placeholder="Введите имя">
                             </div>
                         </div>
 
@@ -77,7 +94,7 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Фамилия</span>
                                 </label>
-                                <input type="text" id="surname" name="surname" required class="input input-bordered flex-1" placeholder="Введите фамилию">
+                                <input type="text" id="surname" name="surname" required class="input input-bordered input-sm flex-1" placeholder="Введите фамилию">
                             </div>
                         </div>
 
@@ -87,7 +104,7 @@
                                     <span class="label-text font-medium text-right w-full">Логин</span>
                                 </label>
                                 <div class="flex-1">
-                                    <input type="text" id="login" name="login" required class="input input-bordered w-full" placeholder="Автоматически генерируется если оставить пустым">
+                                    <input type="text" id="login" name="login" required class="input input-bordered input-sm w-full" placeholder="Автоматически генерируется если оставить пустым">
                                     <span class="label-text-alt text-warning hidden" id="loginWarning">Логин невозможно изменить после создания</span>
                                 </div>
                             </div>
@@ -97,7 +114,7 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Пароль входа</span>
                                 </label>
-                                <input type="password" id="password" name="password" class="input input-bordered flex-1" placeholder="Оставьте пустым для сохранения текущего пароля">
+                                <input type="password" id="password" name="password" class="input input-bordered input-sm flex-1" placeholder="Оставьте пустым для сохранения текущего пароля">
                             </div>
                         </div>
 
@@ -107,9 +124,9 @@
                                     <span class="label-text font-medium text-right w-full">Дата рождения</span>
                                 </label>
                                 <div class="grid grid-cols-3 gap-2 flex-1">
-                                    <input type="number" id="dey" name="dey" min="1" max="31" required class="input input-bordered w-full" placeholder="День">
-                                    <input type="number" id="month" name="month" min="1" max="12" required class="input input-bordered w-full" placeholder="Месяц">
-                                    <input type="number" id="year" name="year" required class="input input-bordered w-full" placeholder="Год">
+                                    <input type="number" id="dey" name="dey" min="1" max="31" required class="input input-bordered input-sm w-full" placeholder="День">
+                                    <input type="number" id="month" name="month" min="1" max="12" required class="input input-bordered input-sm w-full" placeholder="Месяц">
+                                    <input type="number" id="year" name="year" required class="input input-bordered input-sm w-full" placeholder="Год">
                                 </div>
                             </div>
                         </div>
@@ -119,7 +136,7 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Телефон</span>
                                 </label>
-                                <input type="tel" id="phone" name="phone" required class="input input-bordered flex-1" placeholder="+372 5___ ____">
+                                <input type="tel" id="phone" name="phone" required class="input input-bordered input-sm flex-1" placeholder="+372 5___ ____">
                             </div>
                         </div>
 
@@ -176,7 +193,7 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Город</span>
                                 </label>
-                                <input type="text" id="city" name="city" required class="input input-bordered flex-1" placeholder="Город">
+                                <input type="text" id="city" name="city" required class="input input-bordered input-sm flex-1" placeholder="Город">
                             </div>
                         </div>
 
@@ -185,7 +202,7 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Улица</span>
                                 </label>
-                                <input type="text" id="street" name="street" required class="input input-bordered flex-1" placeholder="Улица">
+                                <input type="text" id="street" name="street" required class="input input-bordered input-sm flex-1" placeholder="Улица">
                             </div>
                         </div>
 
@@ -194,7 +211,7 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Дом</span>
                                 </label>
-                                <input type="text" id="house" name="house" required class="input input-bordered flex-1" placeholder="№ дома">
+                                <input type="text" id="house" name="house" required class="input input-bordered input-sm flex-1" placeholder="№ дома">
                             </div>
                         </div>
                         <div class="form-control">
@@ -202,26 +219,26 @@
                                 <label class="label w-1/3">
                                     <span class="label-text font-medium text-right w-full">Квартира</span>
                                 </label>
-                                <input type="text" id="room" name="room" class="input input-bordered flex-1" placeholder="№ квартиры">
+                                <input type="text" id="room" name="room" class="input input-bordered input-sm flex-1" placeholder="№ квартиры">
                             </div>
                         </div>
 
                         <div class="form-control mt-6">
                             <div class="flex gap-2">
-                                <button type="submit" id="submitButton" class="btn btn-primary flex-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="submit" id="submitButton" class="btn btn-primary btn-sm flex-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                     </svg>
                                     <span id="submitButtonText">Добавить работника</span>
                                 </button>
-                                <button type="button" id="cancelButton" class="btn btn-error hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="button" id="cancelButton" class="btn btn-error btn-sm hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                     Отменить
                                 </button>
-                                <button type="button" id="deleteButton" class="btn btn-secondary hidden">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="button" id="deleteButton" class="btn btn-secondary btn-sm hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                     </svg>
                                     Удалить
@@ -252,7 +269,7 @@
                             <label class="label">
                                 <span class="label-text font-medium">Выберите работника</span>
                             </label>
-                            <select id="employeeSelect" class="select select-bordered w-full">
+                            <select id="employeeSelect" class="select select-bordered select-sm w-full">
                                 <option value="">-- Загрузка... --</option>
                             </select>
                         </div>
