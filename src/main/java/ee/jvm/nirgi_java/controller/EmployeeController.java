@@ -375,8 +375,25 @@ public class EmployeeController {
                     // Update active status based on checkbox
                     employee.setActive(employeeDetails.getActive());
                     
-                    // Login cannot be changed - ignore any login updates from request
-                    logger.info("Login changes are not allowed");
+                    // Update login if provided and different from current
+                    if (employeeDetails.getLogin() != null && !employeeDetails.getLogin().trim().isEmpty()) {
+                        String newLogin = employeeDetails.getLogin().trim().toLowerCase();
+                        String currentLogin = employee.getUser() != null ? employee.getUser().getLogin() : null;
+                        
+                        if (!newLogin.equals(currentLogin)) {
+                            // Check if new login already exists
+                            if (userRepository.existsByLogin(newLogin)) {
+                                return ResponseEntity.badRequest().body("Пользователь с таким логином уже существует");
+                            }
+                            
+                            // Update login in user entity
+                            if (employee.getUser() != null) {
+                                employee.getUser().setLogin(newLogin);
+                                userRepository.save(employee.getUser());
+                                logger.info("Login updated from {} to {}", currentLogin, newLogin);
+                            }
+                        }
+                    }
                     
                     // Update roles if provided
                     logger.info("Roles from request: {}", employeeDetails.getRoles());
