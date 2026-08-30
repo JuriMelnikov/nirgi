@@ -529,7 +529,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 console.log('Delete response status:', response.status);
                 if (response.ok) {
+                    // Keep model and section selected for filtering
+                    const selectedModelId = document.getElementById('techmapModelList').value;
+                    const selectedSectionId = document.getElementById('techmapSectionList').value;
                     await loadTechmaps();
+                    document.getElementById('techmapModelList').value = selectedModelId;
+                    document.getElementById('techmapSectionList').value = selectedSectionId;
+                    filterTechmapsTable();
                 } else if (response.status === 401 || response.status === 403) {
                     const errorText = await response.text();
                     console.log('Error text:', errorText);
