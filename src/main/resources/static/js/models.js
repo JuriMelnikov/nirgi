@@ -40,6 +40,19 @@ document.addEventListener('DOMContentLoaded', function() {
     loadSectionLists();
     loadTechmaps();
 
+    // Restore model and section selection from localStorage
+    const savedModelId = localStorage.getItem('selectedTechmapModelId');
+    const savedSectionId = localStorage.getItem('selectedTechmapSectionId');
+    if (savedModelId) {
+        document.getElementById('techmapModelList').value = savedModelId;
+    }
+    if (savedSectionId) {
+        document.getElementById('techmapSectionList').value = savedSectionId;
+    }
+    if (savedModelId && savedSectionId) {
+        filterTechmapsTable();
+    }
+
     // Collapsible form functionality
     function toggleFormVisibility(formContentId, chevronId) {
         const formContent = document.getElementById(formContentId);
@@ -177,8 +190,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Filter techmaps table when model or section changes
-    document.getElementById('techmapModelList').addEventListener('change', filterTechmapsTable);
-    document.getElementById('techmapSectionList').addEventListener('change', filterTechmapsTable);
+    document.getElementById('techmapModelList').addEventListener('change', function() {
+        localStorage.setItem('selectedTechmapModelId', this.value);
+        filterTechmapsTable();
+    });
+    document.getElementById('techmapSectionList').addEventListener('change', function() {
+        localStorage.setItem('selectedTechmapSectionId', this.value);
+        filterTechmapsTable();
+    });
 
     // Model List Form Submit
     modelListForm.addEventListener('submit', async function(e) {
@@ -317,6 +336,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Keep model and section selected for filtering, reset other fields
                     const selectedModelId = document.getElementById('techmapModelList').value;
                     const selectedSectionId = document.getElementById('techmapSectionList').value;
+                    localStorage.setItem('selectedTechmapModelId', selectedModelId);
+                    localStorage.setItem('selectedTechmapSectionId', selectedSectionId);
                     techmapForm.reset();
                     document.getElementById('techmapModelList').value = selectedModelId;
                     document.getElementById('techmapSectionList').value = selectedSectionId;
@@ -325,6 +346,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Keep model and section selected for filtering, reset other fields
                     const selectedModelId = document.getElementById('techmapModelList').value;
                     const selectedSectionId = document.getElementById('techmapSectionList').value;
+                    localStorage.setItem('selectedTechmapModelId', selectedModelId);
+                    localStorage.setItem('selectedTechmapSectionId', selectedSectionId);
                     techmapForm.reset();
                     document.getElementById('techmapModelList').value = selectedModelId;
                     document.getElementById('techmapSectionList').value = selectedSectionId;
@@ -409,6 +432,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await authFetch('/api/techmaps');
             if (response.ok) {
                 allTechmaps = await response.json();
+                // Restore selection from localStorage before filtering
+                const savedModelId = localStorage.getItem('selectedTechmapModelId');
+                const savedSectionId = localStorage.getItem('selectedTechmapSectionId');
+                if (savedModelId) {
+                    document.getElementById('techmapModelList').value = savedModelId;
+                }
+                if (savedSectionId) {
+                    document.getElementById('techmapSectionList').value = savedSectionId;
+                }
                 filterTechmapsTable();
             }
         } catch (error) {
@@ -532,6 +564,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Keep model and section selected for filtering
                     const selectedModelId = document.getElementById('techmapModelList').value;
                     const selectedSectionId = document.getElementById('techmapSectionList').value;
+                    localStorage.setItem('selectedTechmapModelId', selectedModelId);
+                    localStorage.setItem('selectedTechmapSectionId', selectedSectionId);
                     await loadTechmaps();
                     document.getElementById('techmapModelList').value = selectedModelId;
                     document.getElementById('techmapSectionList').value = selectedSectionId;
