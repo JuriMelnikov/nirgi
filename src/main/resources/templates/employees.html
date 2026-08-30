@@ -64,118 +64,145 @@
                     </h2>
                     <form id="addEmployeeForm" class="space-y-4">
                         <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Имя</span>
-                            </label>
-                            <input type="text" id="name" name="name" required class="input input-bordered w-full" placeholder="Введите имя">
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Фамилия</span>
-                            </label>
-                            <input type="text" id="surname" name="surname" required class="input input-bordered w-full" placeholder="Введите фамилию">
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Логин</span>
-                            </label>
-                            <input type="text" id="login" name="login" required class="input input-bordered w-full" placeholder="Автоматически генерируется если оставить пустым">
-                            <span class="label-text-alt text-warning hidden" id="loginWarning">Логин невозможно изменить после создания</span>
-                        </div>
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Пароль входа</span>
-                            </label>
-                            <input type="password" id="password" name="password" class="input input-bordered w-full" placeholder="Оставьте пустым для сохранения текущего пароля">
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Дата рождения</span>
-                            </label>
-                            <div class="grid grid-cols-3 gap-2">
-                                <input type="number" id="dey" name="dey" min="1" max="31" required class="input input-bordered w-full" placeholder="День">
-                                <input type="number" id="month" name="month" min="1" max="12" required class="input input-bordered w-full" placeholder="Месяц">
-                                <input type="number" id="year" name="year" required class="input input-bordered w-full" placeholder="Год">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Имя</span>
+                                </label>
+                                <input type="text" id="name" name="name" required class="input input-bordered flex-1" placeholder="Введите имя">
                             </div>
                         </div>
 
                         <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Телефон</span>
-                            </label>
-                            <input type="tel" id="phone" name="phone" required class="input input-bordered w-full" placeholder="+372 5___ ____">
-                        </div>
-
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Доступ к страницам</span>
-                            </label>
-                            <div class="grid grid-cols-1 gap-2">
-                                <label class="label cursor-pointer justify-start gap-2">
-                                    <input type="radio" name="roles" value="ADMINISTRATOR" class="radio radio-primary" />
-                                    <span class="label-text">АДМИНИСТРАТОР - все права доступа</span>
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Фамилия</span>
                                 </label>
-                                <label class="label cursor-pointer justify-start gap-2">
-                                    <input type="radio" name="roles" value="MANAGER" class="radio radio-primary" />
-                                    <span class="label-text">МЕНЕДЖЕР - Работники, Модели и операции, Результаты работы, Заказы, Заработная плата</span>
-                                </label>
-                                <label class="label cursor-pointer justify-start gap-2">
-                                    <input type="radio" name="roles" value="TECHNOLOGIST" class="radio radio-primary" />
-                                    <span class="label-text">ТЕХНОЛОГ - Модели и операции, Результаты работы и Заказы</span>
-                                </label>
-                                <label class="label cursor-pointer justify-start gap-2">
-                                    <input type="radio" name="roles" value="MASTER" class="radio radio-primary" />
-                                    <span class="label-text">МАСТЕР - Заказы и Результаты работы</span>
-                                </label>
-                                <label class="label cursor-pointer justify-start gap-2">
-                                    <input type="radio" name="roles" value="ACCOUNTANT" class="radio radio-primary" />
-                                    <span class="label-text">БУХГАЛТЕР - только Заработная плата</span>
-                                </label>
-                                <label class="label cursor-pointer justify-start gap-2">
-                                    <input type="radio" name="roles" value="EMPLOYEE" class="radio radio-primary" />
-                                    <span class="label-text">РАБОТНИК - только Результаты работы</span>
-                                </label>
+                                <input type="text" id="surname" name="surname" required class="input input-bordered flex-1" placeholder="Введите фамилию">
                             </div>
                         </div>
 
                         <div class="form-control">
-                            <label class="label cursor-pointer justify-start gap-2">
-                                <input type="checkbox" id="active" name="active" class="checkbox checkbox-success" checked />
-                                <span class="label-text font-medium">Активный работник</span>
-                            </label>
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Логин</span>
+                                </label>
+                                <div class="flex-1">
+                                    <input type="text" id="login" name="login" required class="input input-bordered w-full" placeholder="Автоматически генерируется если оставить пустым">
+                                    <span class="label-text-alt text-warning hidden" id="loginWarning">Логин невозможно изменить после создания</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-control">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Пароль входа</span>
+                                </label>
+                                <input type="password" id="password" name="password" class="input input-bordered flex-1" placeholder="Оставьте пустым для сохранения текущего пароля">
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Дата рождения</span>
+                                </label>
+                                <div class="grid grid-cols-3 gap-2 flex-1">
+                                    <input type="number" id="dey" name="dey" min="1" max="31" required class="input input-bordered w-full" placeholder="День">
+                                    <input type="number" id="month" name="month" min="1" max="12" required class="input input-bordered w-full" placeholder="Месяц">
+                                    <input type="number" id="year" name="year" required class="input input-bordered w-full" placeholder="Год">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Телефон</span>
+                                </label>
+                                <input type="tel" id="phone" name="phone" required class="input input-bordered flex-1" placeholder="+372 5___ ____">
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <div class="flex gap-4 items-start">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Доступ к страницам</span>
+                                </label>
+                                <div class="grid grid-cols-1 gap-2 flex-1">
+                                    <label class="label cursor-pointer justify-start gap-2">
+                                        <input type="radio" name="roles" value="ADMINISTRATOR" class="radio radio-primary" />
+                                        <span class="label-text">АДМИНИСТРАТОР - все права доступа</span>
+                                    </label>
+                                    <label class="label cursor-pointer justify-start gap-2">
+                                        <input type="radio" name="roles" value="MANAGER" class="radio radio-primary" />
+                                        <span class="label-text">МЕНЕДЖЕР - Работники, Модели и операции, Результаты работы, Заказы, Заработная плата</span>
+                                    </label>
+                                    <label class="label cursor-pointer justify-start gap-2">
+                                        <input type="radio" name="roles" value="TECHNOLOGIST" class="radio radio-primary" />
+                                        <span class="label-text">ТЕХНОЛОГ - Модели и операции, Результаты работы и Заказы</span>
+                                    </label>
+                                    <label class="label cursor-pointer justify-start gap-2">
+                                        <input type="radio" name="roles" value="MASTER" class="radio radio-primary" />
+                                        <span class="label-text">МАСТЕР - Заказы и Результаты работы</span>
+                                    </label>
+                                    <label class="label cursor-pointer justify-start gap-2">
+                                        <input type="radio" name="roles" value="ACCOUNTANT" class="radio radio-primary" />
+                                        <span class="label-text">БУХГАЛТЕР - только Заработная плата</span>
+                                    </label>
+                                    <label class="label cursor-pointer justify-start gap-2">
+                                        <input type="radio" name="roles" value="EMPLOYEE" class="radio radio-primary" />
+                                        <span class="label-text">РАБОТНИК - только Результаты работы</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-control">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Статус</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2">
+                                    <input type="checkbox" id="active" name="active" class="checkbox checkbox-success" checked />
+                                    <span class="label-text font-medium">Активный работник</span>
+                                </label>
+                            </div>
                         </div>
 
                         <div class="divider">Адрес</div>
 
                         <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Город</span>
-                            </label>
-                            <input type="text" id="city" name="city" required class="input input-bordered w-full" placeholder="Город">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Город</span>
+                                </label>
+                                <input type="text" id="city" name="city" required class="input input-bordered flex-1" placeholder="Город">
+                            </div>
                         </div>
 
                         <div class="form-control">
-                            <label class="label">
-                                <span class="label-text font-medium">Улица</span>
-                            </label>
-                            <input type="text" id="street" name="street" required class="input input-bordered w-full" placeholder="Улица">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
+                                    <span class="label-text font-medium">Улица</span>
+                                </label>
+                                <input type="text" id="street" name="street" required class="input input-bordered flex-1" placeholder="Улица">
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="form-control">
-                                <label class="label">
+                        <div class="form-control">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
                                     <span class="label-text font-medium">Дом</span>
                                 </label>
-                                <input type="text" id="house" name="house" required class="input input-bordered w-full" placeholder="№ дома">
+                                <input type="text" id="house" name="house" required class="input input-bordered flex-1" placeholder="№ дома">
                             </div>
-                            <div class="form-control">
-                                <label class="label">
+                        </div>
+                        <div class="form-control">
+                            <div class="flex gap-4 items-center">
+                                <label class="label w-1/3">
                                     <span class="label-text font-medium">Квартира</span>
                                 </label>
-                                <input type="text" id="room" name="room" class="input input-bordered w-full" placeholder="№ квартиры">
+                                <input type="text" id="room" name="room" class="input input-bordered flex-1" placeholder="№ квартиры">
                             </div>
                         </div>
 
