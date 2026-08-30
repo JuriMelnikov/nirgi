@@ -111,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 console.log('Delete response status:', response.status);
                 if (response.ok) {
-                    alert('Модель успешно удалена');
                     resetModelListEditMode();
                     modelListForm.reset();
                     loadModelLists();
@@ -152,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 console.log('Delete response status:', response.status);
                 if (response.ok) {
-                    alert('Раздел успешно удален');
                     resetSectionListEditMode();
                     sectionListForm.reset();
                     loadSectionLists();
@@ -531,7 +529,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 console.log('Delete response status:', response.status);
                 if (response.ok) {
-                    alert('Технологическая карта успешно удалена');
                     await loadTechmaps();
                 } else if (response.status === 401 || response.status === 403) {
                     const errorText = await response.text();
