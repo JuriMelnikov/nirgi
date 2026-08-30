@@ -141,36 +141,34 @@
                         </div>
 
                         <div class="form-control">
-                            <div class="flex gap-4 items-start">
-                                <label class="label w-1/3">
-                                    <span class="label-text font-medium text-right w-full">Доступ к страницам</span>
+                            <label class="label">
+                                <span class="label-text font-medium">Доступ к страницам</span>
+                            </label>
+                            <div class="grid grid-cols-1 gap-1">
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input type="radio" name="roles" value="ADMINISTRATOR" class="radio radio-primary" />
+                                    <span class="label-text">АДМИНИСТРАТОР - все права доступа</span>
                                 </label>
-                                <div class="grid grid-cols-1 gap-2 flex-1">
-                                    <label class="label cursor-pointer justify-start gap-2">
-                                        <input type="radio" name="roles" value="ADMINISTRATOR" class="radio radio-primary" />
-                                        <span class="label-text">АДМИНИСТРАТОР - все права доступа</span>
-                                    </label>
-                                    <label class="label cursor-pointer justify-start gap-2">
-                                        <input type="radio" name="roles" value="MANAGER" class="radio radio-primary" />
-                                        <span class="label-text">МЕНЕДЖЕР - Работники, Модели и операции, Результаты работы, Заказы, Заработная плата</span>
-                                    </label>
-                                    <label class="label cursor-pointer justify-start gap-2">
-                                        <input type="radio" name="roles" value="TECHNOLOGIST" class="radio radio-primary" />
-                                        <span class="label-text">ТЕХНОЛОГ - Модели и операции, Результаты работы и Заказы</span>
-                                    </label>
-                                    <label class="label cursor-pointer justify-start gap-2">
-                                        <input type="radio" name="roles" value="MASTER" class="radio radio-primary" />
-                                        <span class="label-text">МАСТЕР - Заказы и Результаты работы</span>
-                                    </label>
-                                    <label class="label cursor-pointer justify-start gap-2">
-                                        <input type="radio" name="roles" value="ACCOUNTANT" class="radio radio-primary" />
-                                        <span class="label-text">БУХГАЛТЕР - только Заработная плата</span>
-                                    </label>
-                                    <label class="label cursor-pointer justify-start gap-2">
-                                        <input type="radio" name="roles" value="EMPLOYEE" class="radio radio-primary" />
-                                        <span class="label-text">РАБОТНИК - только Результаты работы</span>
-                                    </label>
-                                </div>
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input type="radio" name="roles" value="MANAGER" class="radio radio-primary" />
+                                    <span class="label-text">МЕНЕДЖЕР - Работники, Модели и операции, Результаты работы, Заказы, Заработная плата</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input type="radio" name="roles" value="TECHNOLOGIST" class="radio radio-primary" />
+                                    <span class="label-text">ТЕХНОЛОГ - Модели и операции, Результаты работы и Заказы</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input type="radio" name="roles" value="MASTER" class="radio radio-primary" />
+                                    <span class="label-text">МАСТЕР - Заказы и Результаты работы</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input type="radio" name="roles" value="ACCOUNTANT" class="radio radio-primary" />
+                                    <span class="label-text">БУХГАЛТЕР - только Заработная плата</span>
+                                </label>
+                                <label class="label cursor-pointer justify-start gap-2 py-1">
+                                    <input type="radio" name="roles" value="EMPLOYEE" class="radio radio-primary" />
+                                    <span class="label-text">РАБОТНИК - только Результаты работы</span>
+                                </label>
                             </div>
                         </div>
 
