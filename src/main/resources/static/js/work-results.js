@@ -587,11 +587,13 @@ function setupEventListeners() {
     document.getElementById('yearSelect').addEventListener('change', function() {
         currentYear = parseInt(this.value);
         renderCalendar(currentYear, currentMonth);
+        loadOrdersForWeek();
     });
     
     document.getElementById('monthSelect').addEventListener('change', function() {
         currentMonth = parseInt(this.value) - 1;
         renderCalendar(currentYear, currentMonth);
+        loadOrdersForWeek();
     });
     
     document.getElementById('weekSelect').addEventListener('change', function() {
