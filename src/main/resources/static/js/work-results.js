@@ -18,11 +18,11 @@ function formatEuros(amount) {
 }
 
 // Initialize the page
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     initializeYearSelect();
     initializeWeekSelect();
     initializeCalendar();
-    initializeEmployeeSelector();
+    await initializeEmployeeSelector();
     setDefaults();
     setupEventListeners();
     loadOrdersForWeek();
@@ -233,8 +233,6 @@ async function initializeEmployeeSelector() {
                     
                     // Load work results for the current employee
                     loadWorkResults();
-                    // Load orders for the current week
-                    loadOrdersForWeek();
                 }
             }
         } catch (error) {
