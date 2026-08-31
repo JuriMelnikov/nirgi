@@ -58,21 +58,26 @@ public class EmployeeController {
             
             // Check if user has EMPLOYEE role ONLY (no other roles)
             boolean hasEmployeeRole = userDetails.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("EMPLOYEE"));
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_EMPLOYEE"));
             boolean hasOtherRoles = userDetails.getAuthorities().stream()
                 .anyMatch(auth -> 
-                    auth.getAuthority().equals("MANAGER") ||
-                    auth.getAuthority().equals("MASTER") ||
-                    auth.getAuthority().equals("TECHNOLOGIST") ||
-                    auth.getAuthority().equals("ADMINISTRATOR") ||
-                    auth.getAuthority().equals("ACCOUNTANT")
+                    auth.getAuthority().equals("ROLE_MANAGER") ||
+                    auth.getAuthority().equals("ROLE_MASTER") ||
+                    auth.getAuthority().equals("ROLE_TECHNOLOGIST") ||
+                    auth.getAuthority().equals("ROLE_ADMINISTRATOR") ||
+                    auth.getAuthority().equals("ROLE_ACCOUNTANT")
                 );
             boolean isEmployeeOnly = hasEmployeeRole && !hasOtherRoles;
             
             if (isEmployeeOnly) {
                 // Return only current employee
+                logger.info("EMPLOYEE-only user detected: {}", currentUsername);
                 return userRepository.findByLogin(currentUsername)
-                    .map(user -> user.getEmployee())
+                    .map(user -> {
+                        logger.info("User found: {}, employee: {}", user.getLogin(), 
+                            user.getEmployee() != null ? user.getEmployee().getId() : "null");
+                        return user.getEmployee();
+                    })
                     .map(employee -> {
                         if (employee.getUser() != null) {
                             if (employee.getUser().getRoles() != null) {
@@ -80,6 +85,8 @@ public class EmployeeController {
                             }
                             employee.setLogin(employee.getUser().getLogin());
                         }
+                        logger.info("Returning employee for EMPLOYEE user: {} {} (ID: {})", 
+                            employee.getName(), employee.getSurname(), employee.getId());
                         return java.util.Collections.singletonList(employee);
                     })
                     .orElse(java.util.Collections.emptyList());
@@ -294,16 +301,20 @@ public class EmployeeController {
             
             // Save employee first
             Employee savedEmployee = employeeRepository.save(employee);
+            logger.info("Employee saved with ID: {}", savedEmployee.getId());
             
             // Link user to employee and save
             user.setEmployee(savedEmployee);
             User savedUser = userRepository.save(user);
+            logger.info("User saved with ID: {}, linked to employee ID: {}", savedUser.getId(), savedEmployee.getId());
             
             // Update employee with user reference
             savedEmployee.setUser(savedUser);
             employeeRepository.save(savedEmployee);
+            logger.info("Employee updated with user reference: {}", savedEmployee.getId());
             
-            logger.info("Employee and user saved successfully: {}", savedEmployee);
+            logger.info("Employee and user saved successfully: {} {} (ID: {})", 
+                savedEmployee.getName(), savedEmployee.getSurname(), savedEmployee.getId());
             return ResponseEntity.ok(savedEmployee);
         } catch (Exception e) {
             logger.error("Error creating employee: {}", e.getMessage(), e);
