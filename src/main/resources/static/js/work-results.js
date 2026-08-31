@@ -233,6 +233,8 @@ async function initializeEmployeeSelector() {
                     
                     // Load work results for the current employee
                     loadWorkResults();
+                    // Load orders for the current week
+                    loadOrdersForWeek();
                 }
             }
         } catch (error) {
