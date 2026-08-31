@@ -62,17 +62,9 @@ function setDefaults() {
     const currentMonth = now.getMonth() + 1; // 1-12
     const currentWeek = getWeekNumber(now);
     
-    console.log('setDefaults - setting values:', { currentYear, currentMonth, currentWeek });
-    
     document.getElementById('yearSelect').value = currentYear;
     document.getElementById('monthSelect').value = currentMonth;
     document.getElementById('weekSelect').value = currentWeek;
-    
-    console.log('setDefaults - values after setting:', {
-        year: document.getElementById('yearSelect').value,
-        month: document.getElementById('monthSelect').value,
-        week: document.getElementById('weekSelect').value
-    });
 }
 
 // Initialize calendar
@@ -305,23 +297,11 @@ async function loadEmployees() {
 
 // Load orders for selected week
 async function loadOrdersForWeek() {
-    const yearSelect = document.getElementById('yearSelect');
-    const monthSelect = document.getElementById('monthSelect');
-    const weekSelect = document.getElementById('weekSelect');
-    
-    const year = parseInt(yearSelect?.value);
-    const month = parseInt(monthSelect?.value);
-    const week = parseInt(weekSelect?.value);
-
-    console.log('loadOrdersForWeek called - values:', { 
-        yearSelectValue: yearSelect?.value, 
-        monthSelectValue: monthSelect?.value, 
-        weekSelectValue: weekSelect?.value,
-        parsed: { year, month, week }
-    });
+    const year = parseInt(document.getElementById('yearSelect').value);
+    const month = parseInt(document.getElementById('monthSelect').value);
+    const week = parseInt(document.getElementById('weekSelect').value);
 
     if (!year || !month || !week) {
-        console.log('loadOrdersForWeek skipped - missing values');
         return;
     }
 
@@ -337,12 +317,9 @@ async function loadOrdersForWeek() {
             }
         });
 
-        console.log('loadOrdersForWeek response status:', response.status);
-        
         if (response.ok) {
             allOrders = await response.json();
             console.log('Orders loaded:', allOrders);
-            console.log('Orders count:', allOrders.length);
 
             const orderSelect = document.getElementById('orderSelect');
             orderSelect.innerHTML = '<option value="">-- Выберите заказ --</option>';
