@@ -39,3 +39,5 @@ build/
 .vscode/
 deploy.sh
 deploy.psl
+bin
+
