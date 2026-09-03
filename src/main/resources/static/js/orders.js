@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeExecutionHistoryWeekSelects();
     initializeCalendar();
     loadModelLists();
+    restoreDateSelection();
     setFilterDefaults();
     loadOrders();
     setupEventListeners();
@@ -44,7 +45,7 @@ function initializeYearSelects() {
         filterYearSelect.appendChild(option2);
     }
     
-    // Set current year as default
+    // Set current year as default (will be overridden by restoreDateSelection if saved)
     orderYearSelect.value = currentYear;
 }
 
@@ -155,6 +156,48 @@ function setFilterDefaults() {
     document.getElementById('filterYear').value = currentYear;
     document.getElementById('filterMonth').value = currentMonth;
     document.getElementById('filterWeek').value = currentWeek;
+}
+
+// Restore date selection from localStorage
+function restoreDateSelection() {
+    const savedSelection = localStorage.getItem('orderDateSelection');
+    if (savedSelection) {
+        try {
+            const { year, month, week } = JSON.parse(savedSelection);
+            
+            // Only restore if values are valid
+            if (year && month && week) {
+                document.getElementById('orderYear').value = year;
+                document.getElementById('orderMonth').value = month;
+                document.getElementById('orderWeek').value = week;
+                
+                // Update calendar to match restored month
+                currentYear = parseInt(year);
+                currentMonth = parseInt(month) - 1; // Convert 1-12 to 0-11
+                renderCalendar(currentYear, currentMonth);
+                
+                console.log('Restored date selection:', { year, month, week });
+            }
+        } catch (error) {
+            console.error('Error restoring date selection:', error);
+        }
+    }
+}
+
+// Save date selection to localStorage
+function saveDateSelection() {
+    const year = document.getElementById('orderYear').value;
+    const month = document.getElementById('orderMonth').value;
+    const week = document.getElementById('orderWeek').value;
+    
+    if (year && month && week) {
+        localStorage.setItem('orderDateSelection', JSON.stringify({
+            year: year,
+            month: month,
+            week: week
+        }));
+        console.log('Saved date selection:', { year, month, week });
+    }
 }
 
 // Initialize calendar
@@ -352,15 +395,18 @@ function setupEventListeners() {
     document.getElementById('orderYear').addEventListener('change', function() {
         currentYear = parseInt(this.value);
         renderCalendar(currentYear, currentMonth);
+        saveDateSelection();
     });
     
     document.getElementById('orderMonth').addEventListener('change', function() {
         currentMonth = parseInt(this.value) - 1;
         renderCalendar(currentYear, currentMonth);
+        saveDateSelection();
     });
     
     document.getElementById('orderWeek').addEventListener('change', function() {
         renderCalendar(currentYear, currentMonth);
+        saveDateSelection();
     });
     
     // Execution history filter changes
@@ -520,15 +566,32 @@ async function handleOrderSubmit(event) {
         });
         
         if (response.ok) {
+            // Save current date selection before reset
+            const savedYear = document.getElementById('orderYear').value;
+            const savedMonth = document.getElementById('orderMonth').value;
+            const savedWeek = document.getElementById('orderWeek').value;
+            
             // Reset form
             document.getElementById('addOrderForm').reset();
             selectedModels = [];
             renderSelectedModels();
             
-            // Reset year/month to current
-            const currentYear = new Date().getFullYear();
-            document.getElementById('orderYear').value = currentYear;
-            currentMonth = new Date().getMonth();
+            // Restore date selection
+            document.getElementById('orderYear').value = savedYear;
+            document.getElementById('orderMonth').value = savedMonth;
+            document.getElementById('orderWeek').value = savedWeek;
+            
+            // Update calendar to match restored month
+            currentYear = parseInt(savedYear);
+            currentMonth = parseInt(savedMonth) - 1; // Convert 1-12 to 0-11
+            renderCalendar(currentYear, currentMonth);
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('orderDateSelection', JSON.stringify({
+                year: savedYear,
+                month: savedMonth,
+                week: savedWeek
+            }));
             
             // Reload orders
             loadOrders();
