@@ -474,15 +474,15 @@ function showTechmapInfo() {
         
         techmapInfo.classList.remove('hidden');
         
-        // Enable quantity input and add button
-        document.getElementById('quantityInput').disabled = false;
+        // Enable quantity select and add button
+        document.getElementById('quantitySelect').disabled = false;
         document.getElementById('addButton').disabled = false;
         
         // Calculate available quantity
         calculateAvailableQuantity();
     } else {
         document.getElementById('techmapInfo').classList.add('hidden');
-        document.getElementById('quantityInput').disabled = true;
+        document.getElementById('quantitySelect').disabled = true;
         document.getElementById('addButton').disabled = true;
     }
 }
@@ -558,13 +558,21 @@ async function calculateAvailableQuantity() {
             // Available quantity = total - transferred - completed in current week
             const availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
 
-            const quantityInput = document.getElementById('quantityInput');
-            quantityInput.max = availableQuantity;
-            quantityInput.value = Math.min(1, availableQuantity);
+            const quantitySelect = document.getElementById('quantitySelect');
+            quantitySelect.innerHTML = '<option value="">-- Выберите --</option>';
+            
+            for (let i = 1; i <= availableQuantity; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                quantitySelect.appendChild(option);
+            }
 
             if (availableQuantity <= 0) {
-                quantityInput.disabled = true;
+                quantitySelect.disabled = true;
                 document.getElementById('addButton').disabled = true;
+            } else {
+                quantitySelect.disabled = false;
             }
         }
     } catch (error) {
@@ -621,7 +629,7 @@ function setupEventListeners() {
         document.getElementById('operationSelect').innerHTML = '<option value="">-- Сначала выберите модель и раздел --</option>';
         document.getElementById('operationSelect').disabled = true;
         document.getElementById('techmapInfo').classList.add('hidden');
-        document.getElementById('quantityInput').disabled = true;
+        document.getElementById('quantitySelect').disabled = true;
         document.getElementById('addButton').disabled = true;
     });
     
@@ -630,7 +638,7 @@ function setupEventListeners() {
         loadOperationsForModelAndSection();
         document.getElementById('operationSelect').value = '';
         document.getElementById('techmapInfo').classList.add('hidden');
-        document.getElementById('quantityInput').disabled = true;
+        document.getElementById('quantitySelect').disabled = true;
         document.getElementById('addButton').disabled = true;
     });
     
@@ -650,7 +658,7 @@ async function addWorkResult() {
     const modelListId = parseInt(document.getElementById('modelSelect').value);
     const sectionListId = parseInt(document.getElementById('sectionSelect').value);
     const techmapId = parseInt(document.getElementById('operationSelect').value);
-    const quantity = parseInt(document.getElementById('quantityInput').value);
+    const quantity = parseInt(document.getElementById('quantitySelect').value);
     const year = parseInt(document.getElementById('yearSelect').value);
     const month = parseInt(document.getElementById('monthSelect').value);
     const week = parseInt(document.getElementById('weekSelect').value);
@@ -762,8 +770,8 @@ async function addWorkResult() {
             document.getElementById('operationSelect').disabled = true;
             document.getElementById('operationSelect').innerHTML = '<option value="">-- Сначала выберите модель и раздел --</option>';
             document.getElementById('techmapInfo').classList.add('hidden');
-            document.getElementById('quantityInput').value = '1';
-            document.getElementById('quantityInput').disabled = true;
+            document.getElementById('quantitySelect').innerHTML = '<option value="">-- Выберите --</option>';
+            document.getElementById('quantitySelect').disabled = true;
             document.getElementById('addButton').disabled = true;
         } else {
             const error = await response.json();
