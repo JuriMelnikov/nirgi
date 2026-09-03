@@ -465,7 +465,7 @@ function showTechmapInfo() {
                 <td style="text-align: center;">${selectedOption.textContent}</td>
                 <td style="text-align: left;">${selectedOption.dataset.descriptor}</td>
                 <td style="text-align: left;">${selectedOption.dataset.time}</td>
-                <td style="text-align: left;">${formatEuros(selectedOption.dataset.price / 100)}</td>
+                <td style="text-align: left;">${formatEuros(parseFloat(selectedOption.dataset.price) / 100)}</td>
             </tr>
         `;
         
@@ -850,8 +850,8 @@ function renderWorkResultsTable(workResults, orders) {
     workResults.forEach(workResult => {
         const tr = document.createElement('tr');
         
-        const price = workResult.techmap ? workResult.techmap.price / 100 : 0;
-        const time = workResult.techmap ? workResult.techmap.time : 0;
+        const price = workResult.techmap ? parseFloat(workResult.techmap.price) / 100 : 0;
+        const time = workResult.techmap ? parseFloat(workResult.techmap.time) : 0;
         const totalCost = workResult.quantity * price;
         const totalTimeForItem = workResult.quantity * time;
         
