@@ -461,7 +461,7 @@ function showTechmapInfo() {
         const tbody = document.getElementById('techmapTableBody');
         
         const priceInCents = selectedOption.dataset.price;
-        const priceInEuros = parseFloat(priceInCents) / 100;
+        const priceInEuros = parseFloat(priceInCents) / 1000; // Divide by 1000 for thousandths of euro
         
         tbody.innerHTML = `
             <tr>
@@ -853,7 +853,7 @@ function renderWorkResultsTable(workResults, orders) {
     workResults.forEach(workResult => {
         const tr = document.createElement('tr');
         
-        const price = workResult.techmap ? parseFloat(workResult.techmap.price) / 100 : 0;
+        const price = workResult.techmap ? parseFloat(workResult.techmap.price) / 1000 : 0; // Divide by 1000 for thousandths of euro
         const time = workResult.techmap ? parseFloat(workResult.techmap.time) : 0;
         const totalCost = workResult.quantity * price;
         const totalTimeForItem = workResult.quantity * time;
