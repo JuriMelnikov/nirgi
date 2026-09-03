@@ -427,6 +427,7 @@ async function loadOperationsForModelAndSection() {
         
         if (response.ok) {
             allTechmaps = await response.json();
+            console.log('Techmaps loaded:', allTechmaps);
             
             const operationSelect = document.getElementById('operationSelect');
             operationSelect.innerHTML = '<option value="">-- Выберите операцию --</option>';
@@ -436,13 +437,16 @@ async function loadOperationsForModelAndSection() {
                 t.modelList.id === modelListId && t.sectionList.id === sectionListId
             );
             
+            console.log('Filtered techmaps:', filteredTechmaps);
+            
             filteredTechmaps.forEach(techmap => {
                 const option = document.createElement('option');
                 option.value = techmap.id;
                 option.textContent = techmap.serial;
                 option.dataset.descriptor = techmap.descriptor;
                 option.dataset.time = techmap.time;
-                option.dataset.price = techmap.price;
+                option.dataset.price = techmap.price; // Store as string in cents
+                console.log('Techmap price:', techmap.price, 'Type:', typeof techmap.price);
                 operationSelect.appendChild(option);
             });
         }
@@ -460,12 +464,17 @@ function showTechmapInfo() {
         const techmapInfo = document.getElementById('techmapInfo');
         const tbody = document.getElementById('techmapTableBody');
         
+        const priceInCents = selectedOption.dataset.price;
+        console.log('Price from dataset:', priceInCents, 'Type:', typeof priceInCents);
+        const priceInEuros = parseFloat(priceInCents) / 100;
+        console.log('Price in euros:', priceInEuros);
+        
         tbody.innerHTML = `
             <tr>
                 <td style="text-align: center;">${selectedOption.textContent}</td>
                 <td style="text-align: left;">${selectedOption.dataset.descriptor}</td>
                 <td style="text-align: left;">${selectedOption.dataset.time}</td>
-                <td style="text-align: left;">${formatEuros(parseFloat(selectedOption.dataset.price) / 100)}</td>
+                <td style="text-align: left;">${formatEuros(priceInEuros)}</td>
             </tr>
         `;
         
