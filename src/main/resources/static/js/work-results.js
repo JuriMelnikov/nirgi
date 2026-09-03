@@ -427,7 +427,6 @@ async function loadOperationsForModelAndSection() {
         
         if (response.ok) {
             allTechmaps = await response.json();
-            console.log('Techmaps loaded:', allTechmaps);
             
             const operationSelect = document.getElementById('operationSelect');
             operationSelect.innerHTML = '<option value="">-- Выберите операцию --</option>';
@@ -437,8 +436,6 @@ async function loadOperationsForModelAndSection() {
                 t.modelList.id === modelListId && t.sectionList.id === sectionListId
             );
             
-            console.log('Filtered techmaps:', filteredTechmaps);
-            
             filteredTechmaps.forEach(techmap => {
                 const option = document.createElement('option');
                 option.value = techmap.id;
@@ -446,7 +443,6 @@ async function loadOperationsForModelAndSection() {
                 option.dataset.descriptor = techmap.descriptor;
                 option.dataset.time = techmap.time;
                 option.dataset.price = techmap.price; // Store as string in cents
-                console.log('Techmap price:', techmap.price, 'Type:', typeof techmap.price);
                 operationSelect.appendChild(option);
             });
         }
@@ -465,9 +461,7 @@ function showTechmapInfo() {
         const tbody = document.getElementById('techmapTableBody');
         
         const priceInCents = selectedOption.dataset.price;
-        console.log('Price from dataset:', priceInCents, 'Type:', typeof priceInCents);
         const priceInEuros = parseFloat(priceInCents) / 100;
-        console.log('Price in euros:', priceInEuros);
         
         tbody.innerHTML = `
             <tr>
