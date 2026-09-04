@@ -18,9 +18,9 @@ Write-Host "Отправка изменений на удаленный репо
 git push origin main
 
 # 3. Подключение по SSH и выполнение команд на сервере
-Write-Host "Подключение к серверу и обновление кода..." -ForegroundColor Cyan
+#Write-Host "Подключение к серверу и обновление кода..." -ForegroundColor Cyan
 
 # Используем переменную окружения GIT_MERGE_AUTO_EDIT для автоматического сохранения merge-коммита без открытия nano
-ssh root@debian-server "cd /srv/nirgi-java && export GIT_MERGE_AUTO_EDIT=no && git pull origin main"
+#ssh root@debian-server "cd /srv/nirgi-java && export GIT_MERGE_AUTO_EDIT=no && git pull origin main"
 
-Write-Host "Деплой успешно завершен!" -ForegroundColor Green
+#Write-Host "Деплой успешно завершен!" -ForegroundColor Green
