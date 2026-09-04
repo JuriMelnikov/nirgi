@@ -473,11 +473,11 @@ function showTechmapInfo() {
         `;
         
         techmapInfo.classList.remove('hidden');
-        
-        // Enable quantity select and add button
+
+        // Enable quantity select only (add button will be enabled when quantity is selected)
         document.getElementById('quantitySelect').disabled = false;
-        document.getElementById('addButton').disabled = false;
-        
+        document.getElementById('addButton').disabled = true;
+
         // Calculate available quantity
         calculateAvailableQuantity();
     } else {
@@ -559,8 +559,8 @@ async function calculateAvailableQuantity() {
             const availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
 
             const quantitySelect = document.getElementById('quantitySelect');
-            quantitySelect.innerHTML = '<option value="">-- Выберите --</option>';
-            
+            quantitySelect.innerHTML = '<option value="">0</option>';
+
             for (let i = 1; i <= availableQuantity; i++) {
                 const option = document.createElement('option');
                 option.value = i;
@@ -573,6 +573,8 @@ async function calculateAvailableQuantity() {
                 document.getElementById('addButton').disabled = true;
             } else {
                 quantitySelect.disabled = false;
+                // Reset add button to disabled until quantity is selected
+                document.getElementById('addButton').disabled = true;
             }
         }
     } catch (error) {
@@ -646,7 +648,17 @@ function setupEventListeners() {
     document.getElementById('operationSelect').addEventListener('change', function() {
         showTechmapInfo();
     });
-    
+
+    // Quantity selection
+    document.getElementById('quantitySelect').addEventListener('change', function() {
+        const addButton = document.getElementById('addButton');
+        if (this.value && this.value !== '') {
+            addButton.disabled = false;
+        } else {
+            addButton.disabled = true;
+        }
+    });
+
     // Add button
     document.getElementById('addButton').addEventListener('click', addWorkResult);
 }
@@ -770,7 +782,7 @@ async function addWorkResult() {
             document.getElementById('operationSelect').disabled = true;
             document.getElementById('operationSelect').innerHTML = '<option value="">-- Сначала выберите модель и раздел --</option>';
             document.getElementById('techmapInfo').classList.add('hidden');
-            document.getElementById('quantitySelect').innerHTML = '<option value="">-- Выберите --</option>';
+            document.getElementById('quantitySelect').innerHTML = '<option value="">0</option>';
             document.getElementById('quantitySelect').disabled = true;
             document.getElementById('addButton').disabled = true;
         } else {
