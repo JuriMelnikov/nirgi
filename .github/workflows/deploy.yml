@@ -17,6 +17,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            # Останавливать скрипт при любой ошибке
+            set -e
+
             # 1. Переходим в директорию, где лежит ваш docker-compose.yml
             cd /srv/nirgi-java # Измените путь, если проект лежит в другом месте
 
