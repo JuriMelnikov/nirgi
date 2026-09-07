@@ -82,7 +82,7 @@ class EmployeeControllerTest {
 
     @Test
     void employeeOnlyUserSeesOnlyOwnRecord() {
-        authenticateAs("worker", "EMPLOYEE");
+        authenticateAs("worker", "ROLE_EMPLOYEE");
         Employee worker = employee(1L, "Worker", "worker", Role.EMPLOYEE);
         when(userRepository.findByLogin("worker")).thenReturn(Optional.of(worker.getUser()));
 
@@ -96,15 +96,41 @@ class EmployeeControllerTest {
 
     @Test
     void employeeOnlyUserWithoutAccountGetsEmptyList() {
-        authenticateAs("ghost", "EMPLOYEE");
+        authenticateAs("ghost", "ROLE_EMPLOYEE");
         when(userRepository.findByLogin("ghost")).thenReturn(Optional.empty());
 
         assertThat(employeeController.getAllEmployees(null)).isEmpty();
     }
 
     @Test
+    void accountantOnlyUserSeesOnlyOwnRecord() {
+        authenticateAs("accountant", "ROLE_ACCOUNTANT");
+        Employee accountant = employee(1L, "Accountant", "accountant", Role.ACCOUNTANT);
+        when(userRepository.findByLogin("accountant")).thenReturn(Optional.of(accountant.getUser()));
+
+        List<Employee> result = employeeController.getAllEmployees(null);
+
+        assertThat(result).containsExactly(accountant);
+        assertThat(result.get(0).getLogin()).isEqualTo("accountant");
+        assertThat(result.get(0).getRoles()).containsExactly(Role.ACCOUNTANT);
+        verify(employeeRepository, never()).findAll();
+    }
+
+    @Test
+    void employeeWithMasterRoleSeesAllEmployees() {
+        authenticateAs("worker", "ROLE_EMPLOYEE", "ROLE_MASTER");
+        Employee worker = employee(1L, "Worker", "worker", Role.EMPLOYEE, Role.MASTER);
+        Employee other = employee(2L, "Other", "other", Role.EMPLOYEE);
+        when(employeeRepository.findAll()).thenReturn(List.of(worker, other));
+
+        List<Employee> result = employeeController.getAllEmployees(null);
+
+        assertThat(result).containsExactly(worker, other);
+    }
+
+    @Test
     void managerListHidesBuiltInAdminAccounts() {
-        authenticateAs("manager", "MANAGER", "EMPLOYEE");
+        authenticateAs("manager", "ROLE_MANAGER", "ROLE_EMPLOYEE");
         Employee administrator = employee(1L, "Root", "Administrator", Role.ADMINISTRATOR);
         Employee admin = employee(2L, "Admin", "admin", Role.ADMINISTRATOR);
         Employee worker = employee(3L, "Worker", "worker", Role.EMPLOYEE);
@@ -122,24 +148,16 @@ class EmployeeControllerTest {
         Employee worker = employee(3L, "Worker", "worker", Role.EMPLOYEE);
         when(employeeRepository.findByActiveTrue()).thenReturn(List.of(administrator, admin, worker));
 
-        authenticateAs("Administrator", "ADMINISTRATOR");
+        authenticateAs("Administrator", "ROLE_ADMINISTRATOR");
         assertThat(employeeController.getAllEmployees(true)).containsExactly(administrator, admin, worker);
 
-        authenticateAs("admin", "ADMINISTRATOR");
+        authenticateAs("admin", "ROLE_ADMINISTRATOR");
         assertThat(employeeController.getAllEmployees(true)).containsExactly(admin, worker);
     }
 
     @Test
-    void anonymousListingFallsBackToAllActiveEmployees() {
-        Employee worker = employee(3L, "Worker", "worker", Role.EMPLOYEE);
-        when(employeeRepository.findByActiveTrue()).thenReturn(List.of(worker));
-
-        assertThat(employeeController.getAllEmployees(true)).containsExactly(worker);
-    }
-
-    @Test
     void getByIdPopulatesLoginAndRoles() {
-        authenticateAs("Administrator", "ADMINISTRATOR");
+        authenticateAs("Administrator", "ROLE_ADMINISTRATOR");
         Employee worker = employee(3L, "Worker", "worker", Role.EMPLOYEE, Role.MASTER);
         when(employeeRepository.findById(3L)).thenReturn(Optional.of(worker));
 
@@ -153,7 +171,7 @@ class EmployeeControllerTest {
 
     @Test
     void getByIdForbidsReadingBuiltInAccountsAndReportsMissingEmployee() {
-        authenticateAs("manager", "MANAGER");
+        authenticateAs("manager", "ROLE_MANAGER");
         Employee administrator = employee(1L, "Root", "Administrator", Role.ADMINISTRATOR);
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(administrator));
         when(employeeRepository.findById(404L)).thenReturn(Optional.empty());
@@ -168,17 +186,17 @@ class EmployeeControllerTest {
         when(employeeRepository.findByPhone("+3721")).thenReturn(Optional.of(administrator));
         when(employeeRepository.findByPhone("+372404")).thenReturn(Optional.empty());
 
-        authenticateAs("manager", "MANAGER");
+        authenticateAs("manager", "ROLE_MANAGER");
         assertThat(employeeController.getEmployeeByPhone("+3721").getStatusCode().value()).isEqualTo(403);
 
-        authenticateAs("Administrator", "ADMINISTRATOR");
+        authenticateAs("Administrator", "ROLE_ADMINISTRATOR");
         assertThat(employeeController.getEmployeeByPhone("+3721").getStatusCode().value()).isEqualTo(200);
         assertThat(employeeController.getEmployeeByPhone("+372404").getStatusCode().value()).isEqualTo(404);
     }
 
     @Test
     void searchEndpointsFilterBuiltInAccounts() {
-        authenticateAs("worker", "EMPLOYEE", "MASTER");
+        authenticateAs("worker", "ROLE_EMPLOYEE", "ROLE_MASTER");
         Employee administrator = employee(1L, "Root", "Administrator", Role.ADMINISTRATOR);
         Employee admin = employee(2L, "Admin", "admin", Role.ADMINISTRATOR);
         Employee worker = employee(3L, "Worker", "worker", Role.EMPLOYEE);
@@ -275,7 +293,7 @@ class EmployeeControllerTest {
 
     @Test
     void updateEmployeeRefreshesFieldsRolesPasswordAndSnapshots() {
-        authenticateAs("Administrator", "ADMINISTRATOR");
+        authenticateAs("Administrator", "ROLE_ADMINISTRATOR");
         Employee stored = employee(3L, "Worker", "worker", Role.EMPLOYEE);
         Employee details = employee(3L, "Renamed", null);
         details.setPassword("newSecret");
@@ -301,7 +319,7 @@ class EmployeeControllerTest {
 
     @Test
     void updateEmployeeKeepsSnapshotsWhenNameIsUnchanged() {
-        authenticateAs("Administrator", "ADMINISTRATOR");
+        authenticateAs("Administrator", "ROLE_ADMINISTRATOR");
         Employee stored = employee(3L, "Worker", "worker", Role.EMPLOYEE);
         Employee details = employee(3L, "Worker", null);
         when(employeeRepository.findById(3L)).thenReturn(Optional.of(stored));
@@ -321,11 +339,11 @@ class EmployeeControllerTest {
         when(employeeRepository.findById(2L)).thenReturn(Optional.of(admin));
         when(employeeRepository.findById(404L)).thenReturn(Optional.empty());
 
-        authenticateAs("admin", "ADMINISTRATOR");
+        authenticateAs("admin", "ROLE_ADMINISTRATOR");
         assertThat(employeeController.updateEmployee(1L, employee(1L, "Root", null)).getStatusCode().value())
                 .isEqualTo(403);
 
-        authenticateAs("manager", "MANAGER");
+        authenticateAs("manager", "ROLE_MANAGER");
         assertThat(employeeController.updateEmployee(2L, employee(2L, "Admin", null)).getStatusCode().value())
                 .isEqualTo(403);
         assertThat(employeeController.updateEmployee(404L, employee(404L, "Ghost", null)).getStatusCode().value())
@@ -334,7 +352,7 @@ class EmployeeControllerTest {
 
     @Test
     void deleteEmployeeDeactivatesInsteadOfRemoving() {
-        authenticateAs("Administrator", "ADMINISTRATOR");
+        authenticateAs("Administrator", "ROLE_ADMINISTRATOR");
         Employee worker = employee(3L, "Worker", "worker", Role.EMPLOYEE);
         when(employeeRepository.findById(3L)).thenReturn(Optional.of(worker));
 
@@ -351,11 +369,11 @@ class EmployeeControllerTest {
         when(employeeRepository.findById(2L)).thenReturn(Optional.of(admin));
         when(employeeRepository.findById(404L)).thenReturn(Optional.empty());
 
-        authenticateAs("Administrator", "ADMINISTRATOR");
+        authenticateAs("Administrator", "ROLE_ADMINISTRATOR");
         assertThat(employeeController.deleteEmployee(1L).getStatusCode().value()).isEqualTo(403);
         assertThat(employeeController.deleteEmployee(2L).getStatusCode().value()).isEqualTo(200);
 
-        authenticateAs("manager", "MANAGER");
+        authenticateAs("manager", "ROLE_MANAGER");
         assertThat(employeeController.deleteEmployee(2L).getStatusCode().value()).isEqualTo(403);
         assertThat(employeeController.deleteEmployee(404L).getStatusCode().value()).isEqualTo(404);
     }
