@@ -593,6 +593,7 @@ function setupEventListeners() {
             } else {
                 weekSelect.disabled = false;
             }
+            loadWorkResults();
         });
     });
     
@@ -601,17 +602,20 @@ function setupEventListeners() {
         currentYear = parseInt(this.value);
         renderCalendar(currentYear, currentMonth);
         loadOrdersForWeek();
+        loadWorkResults();
     });
     
     document.getElementById('monthSelect').addEventListener('change', function() {
         currentMonth = parseInt(this.value) - 1;
         renderCalendar(currentYear, currentMonth);
         loadOrdersForWeek();
+        loadWorkResults();
     });
     
     document.getElementById('weekSelect').addEventListener('change', function() {
         renderCalendar(currentYear, currentMonth);
         loadOrdersForWeek();
+        loadWorkResults();
     });
     
     // Employee selection
