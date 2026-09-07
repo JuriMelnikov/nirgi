@@ -213,6 +213,23 @@ class EmployeeControllerTest {
     }
 
     @Test
+    void accountantOnlyUserSeesOnlyOwnRecordInSearch() {
+        authenticateAs("accountant", "ROLE_ACCOUNTANT");
+        Employee accountant = employee(1L, "Accountant", "accountant", Role.ACCOUNTANT);
+        Employee other = employee(2L, "Other", "other", Role.EMPLOYEE);
+        List<Employee> all = List.of(accountant, other);
+        when(employeeRepository.findBySurname("Accountantov")).thenReturn(all);
+        when(employeeRepository.findByCity("Jõhvi")).thenReturn(all);
+        when(employeeRepository.findByNameContaining("Account")).thenReturn(all);
+        when(employeeRepository.findByFilters("Account", null, null)).thenReturn(all);
+
+        assertThat(employeeController.getEmployeesBySurname("Accountantov")).containsExactly(accountant);
+        assertThat(employeeController.getEmployeesByLocation("Jõhvi")).containsExactly(accountant);
+        assertThat(employeeController.getEmployeesByName("Account")).containsExactly(accountant);
+        assertThat(employeeController.getEmployeesByFilters("Account", null, null)).containsExactly(accountant);
+    }
+
+    @Test
     void createEmployeeGeneratesLoginHashesPasswordAndAppliesRoleInheritance() {
         Employee request = employee(null, "Worker", null);
         request.setPassword("secret");
