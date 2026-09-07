@@ -59,19 +59,21 @@ public class EmployeeController {
             // Check if user has EMPLOYEE role ONLY (no other roles)
             boolean hasEmployeeRole = userDetails.getAuthorities().stream()
                 .anyMatch(auth -> auth.getAuthority().equals("ROLE_EMPLOYEE"));
+            boolean hasAccountantRole = userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ACCOUNTANT"));
             boolean hasOtherRoles = userDetails.getAuthorities().stream()
                 .anyMatch(auth -> 
                     auth.getAuthority().equals("ROLE_MANAGER") ||
                     auth.getAuthority().equals("ROLE_MASTER") ||
                     auth.getAuthority().equals("ROLE_TECHNOLOGIST") ||
-                    auth.getAuthority().equals("ROLE_ADMINISTRATOR") ||
-                    auth.getAuthority().equals("ROLE_ACCOUNTANT")
+                    auth.getAuthority().equals("ROLE_ADMINISTRATOR")
                 );
-            boolean isEmployeeOnly = hasEmployeeRole && !hasOtherRoles;
+            boolean isEmployeeOnly = hasEmployeeRole && !hasOtherRoles && !hasAccountantRole;
+            boolean isAccountantOnly = hasAccountantRole && !hasOtherRoles && !hasEmployeeRole;
             
-            if (isEmployeeOnly) {
+            if (isEmployeeOnly || isAccountantOnly) {
                 // Return only current employee
-                logger.info("EMPLOYEE-only user detected: {}", currentUsername);
+                logger.info("EMPLOYEE or ACCOUNTANT-only user detected: {}", currentUsername);
                 return userRepository.findByLogin(currentUsername)
                     .map(user -> {
                         logger.info("User found: {}, employee: {}", user.getLogin(), 
@@ -85,7 +87,7 @@ public class EmployeeController {
                             }
                             employee.setLogin(employee.getUser().getLogin());
                         }
-                        logger.info("Returning employee for EMPLOYEE user: {} {} (ID: {})", 
+                        logger.info("Returning employee for EMPLOYEE/ACCOUNTANT user: {} {} (ID: {})", 
                             employee.getName(), employee.getSurname(), employee.getId());
                         return java.util.Collections.singletonList(employee);
                     })
@@ -539,6 +541,8 @@ public class EmployeeController {
         String currentUsername = null;
         boolean isAdministrator = false;
         boolean isAdmin = false;
+        boolean isEmployeeOnly = false;
+        boolean isAccountantOnly = false;
         
         if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.UserDetails) {
             org.springframework.security.core.userdetails.UserDetails userDetails = 
@@ -547,10 +551,27 @@ public class EmployeeController {
             currentUsername = userDetails.getUsername();
             isAdministrator = "Administrator".equals(currentUsername);
             isAdmin = "admin".equals(currentUsername);
+            
+            // Check if user has EMPLOYEE role ONLY (no other roles)
+            boolean hasEmployeeRole = userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_EMPLOYEE"));
+            boolean hasAccountantRole = userDetails.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ACCOUNTANT"));
+            boolean hasOtherRoles = userDetails.getAuthorities().stream()
+                .anyMatch(auth -> 
+                    auth.getAuthority().equals("ROLE_MANAGER") ||
+                    auth.getAuthority().equals("ROLE_MASTER") ||
+                    auth.getAuthority().equals("ROLE_TECHNOLOGIST") ||
+                    auth.getAuthority().equals("ROLE_ADMINISTRATOR")
+                );
+            isEmployeeOnly = hasEmployeeRole && !hasOtherRoles && !hasAccountantRole;
+            isAccountantOnly = hasAccountantRole && !hasOtherRoles && !hasEmployeeRole;
         }
         
         final boolean finalIsAdministrator = isAdministrator;
         final boolean finalIsAdmin = isAdmin;
+        final boolean finalIsEmployeeOnly = isEmployeeOnly;
+        final boolean finalIsAccountantOnly = isAccountantOnly;
         final String finalCurrentUsername = currentUsername;
         return employees.stream()
             .filter(employee -> {
@@ -565,6 +586,10 @@ public class EmployeeController {
                 // admin sees themselves and all workers except Administrator
                 if (finalIsAdmin) {
                     return !"Administrator".equals(employeeLogin);
+                }
+                // EMPLOYEE or ACCOUNTANT only users see only themselves
+                if (finalIsEmployeeOnly || finalIsAccountantOnly) {
+                    return employeeLogin.equals(finalCurrentUsername);
                 }
                 // Current user sees themselves
                 if (employeeLogin.equals(finalCurrentUsername)) {
