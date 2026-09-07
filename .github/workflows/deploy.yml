@@ -5,23 +5,9 @@ on:
     branches: [ main ]
 
 jobs:
-  # ЭТАП 1: Автоматическое тестирование с базой данных MariaDB
+  # ЭТАП 1: Автоматическое тестирование
   test:
     runs-on: ubuntu-latest
-
-    # Запуск MariaDB в качестве сервисного контейнера
-    services:
-      mariadb:
-        image: mariadb:latest
-        env:
-          MARIADB_ROOT_PASSWORD: root_password
-          MARIADB_DATABASE: nirgi_db_test  # Имя тестовой базы данных
-          MARIADB_USER: nirgi_user
-          MARIADB_PASSWORD: nirgi_password
-        ports:
-          - 3306:3306
-        # Проверка готовности БД перед запуском тестов
-        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout repository code
@@ -34,13 +20,8 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      # Передаем параметры подключения к тестовой БД через ENV-переменные для Spring Boot
       - name: Run Maven Tests
         run: mvn clean test
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mariadb://localhost:3306/nirgi_db_test
-          SPRING_DATASOURCE_USERNAME: nirgi_user
-          SPRING_DATASOURCE_PASSWORD: nirgi_password
 
   # ЭТАП 2: Деплой на ваш сервер
   deploy:
