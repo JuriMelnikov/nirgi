@@ -32,21 +32,21 @@ document.addEventListener('DOMContentLoaded', async function() {
 // Initialize year select
 function initializeYearSelect() {
     const yearSelect = document.getElementById('yearSelect');
-    
+
     for (let year = currentYear - 2; year <= currentYear + 2; year++) {
         const option = document.createElement('option');
         option.value = year;
         option.textContent = year;
         yearSelect.appendChild(option);
     }
-    
+
     yearSelect.value = currentYear;
 }
 
 // Initialize week select
 function initializeWeekSelect() {
     const weekSelect = document.getElementById('weekSelect');
-    
+
     for (let week = 1; week <= 53; week++) {
         const option = document.createElement('option');
         option.value = week;
@@ -61,7 +61,7 @@ function setDefaults() {
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1; // 1-12
     const currentWeek = getWeekNumber(now);
-    
+
     document.getElementById('yearSelect').value = currentYear;
     document.getElementById('monthSelect').value = currentMonth;
     document.getElementById('weekSelect').value = currentWeek;
@@ -70,7 +70,7 @@ function setDefaults() {
 // Initialize calendar
 function initializeCalendar() {
     renderCalendar(currentYear, currentMonth);
-    
+
     document.getElementById('prevMonth').addEventListener('click', function() {
         currentMonth--;
         if (currentMonth < 0) {
@@ -79,7 +79,7 @@ function initializeCalendar() {
         }
         renderCalendar(currentYear, currentMonth);
     });
-    
+
     document.getElementById('nextMonth').addEventListener('click', function() {
         currentMonth++;
         if (currentMonth > 11) {
@@ -94,35 +94,35 @@ function initializeCalendar() {
 function renderCalendar(year, month) {
     const calendarTitle = document.getElementById('calendarTitle');
     const calendarDays = document.getElementById('calendarDays');
-    
-    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+
+    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
                         'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     calendarTitle.textContent = `${monthNames[month]} ${year}`;
-    
+
     calendarDays.innerHTML = '';
-    
+
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startingDay = firstDay.getDay();
     const totalDays = lastDay.getDate();
-    
+
     let adjustedStartingDay = startingDay === 0 ? 6 : startingDay - 1;
-    
+
     const selectedWeek = parseInt(document.getElementById('weekSelect').value);
-    
+
     // Get current date for highlighting
     const now = new Date();
     const currentDay = now.getDate();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
-    
+
     const totalCells = adjustedStartingDay + totalDays;
     const totalRows = Math.ceil(totalCells / 7);
-    
+
     for (let row = 0; row < totalRows; row++) {
         const mondayDay = row * 7 - adjustedStartingDay + 1;
         let weekNumber;
-        
+
         if (mondayDay <= 0) {
             weekNumber = getWeekNumber(firstDay);
         } else if (mondayDay > totalDays) {
@@ -130,53 +130,55 @@ function renderCalendar(year, month) {
         } else {
             weekNumber = getWeekNumber(new Date(year, month, mondayDay));
         }
-        
+
         const weekCell = document.createElement('div');
         weekCell.className = 'p-1 text-center font-bold text-xs bg-base-300 rounded';
         weekCell.textContent = weekNumber;
-        
+
         if (selectedWeek && weekNumber === selectedWeek) {
             weekCell.classList.add('bg-primary', 'text-primary-content');
         }
-        
+
         weekCell.addEventListener('click', function() {
             document.getElementById('weekSelect').value = weekNumber;
             document.getElementById('monthSelect').value = month + 1;
             renderCalendar(year, month);
             loadOrdersForWeek();
+            loadWorkResults();
         });
-        
+
         calendarDays.appendChild(weekCell);
-        
+
         for (let col = 0; col < 7; col++) {
             const dayNum = row * 7 + col - adjustedStartingDay + 1;
-            
+
             if (dayNum > 0 && dayNum <= totalDays) {
                 const dayCell = document.createElement('div');
                 dayCell.className = 'p-1 text-center cursor-pointer hover:bg-base-300 rounded text-xs';
                 dayCell.textContent = dayNum;
-                
+
                 // Highlight current date
                 if (dayNum === currentDay && month === currentMonth && year === currentYear) {
                     dayCell.classList.add('ring-2', 'ring-accent', 'ring-offset-1', 'font-bold');
                 }
-                
+
                 if (col === 5 || col === 6) {
                     dayCell.classList.add('bg-red-100', 'text-red-800');
                 }
-                
+
                 if (selectedWeek && weekNumber === selectedWeek) {
                     dayCell.classList.remove('bg-red-100', 'text-red-800');
                     dayCell.classList.add('bg-primary', 'text-primary-content');
                 }
-                
+
                 dayCell.addEventListener('click', function() {
                     document.getElementById('weekSelect').value = weekNumber;
                     document.getElementById('monthSelect').value = month + 1;
                     renderCalendar(year, month);
                     loadOrdersForWeek();
+                    loadWorkResults();
                 });
-                
+
                 calendarDays.appendChild(dayCell);
             } else {
                 const emptyCell = document.createElement('div');
@@ -200,37 +202,37 @@ function getWeekNumber(date) {
 // Initialize employee selector based on user roles
 async function initializeEmployeeSelector() {
     const userRoles = JSON.parse(localStorage.getItem('userRoles') || '[]');
-    
+
     // Check if user has only EMPLOYEE role
     const isEmployeeOnly = userRoles.length === 1 && userRoles.includes('EMPLOYEE');
-    
+
     if (isEmployeeOnly) {
         // Show label with current employee's name
         try {
             const token = localStorage.getItem('token');
-            
+
             // Get current employee info from /api/employees (EMPLOYEE now has access)
             const employeesResponse = await fetch('/api/employees', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            
+
             if (employeesResponse.ok) {
                 const employees = await employeesResponse.json();
-                
+
                 // For EMPLOYEE, the endpoint returns only the current employee
                 if (employees && employees.length > 0) {
                     const employee = employees[0];
                     const employeeLabel = document.getElementById('employeeLabel');
                     const employeeSelect = document.getElementById('employeeSelect');
                     const employeeIdInput = document.getElementById('employeeIdInput');
-                    
+
                     employeeLabel.textContent = `${employee.name} ${employee.surname}`;
                     employeeLabel.classList.remove('hidden');
                     employeeIdInput.value = employee.id;
                     employeeSelect.classList.add('hidden');
-                    
+
                     // Load work results for the current employee
                     loadWorkResults();
                 }
@@ -249,7 +251,7 @@ async function initializeEmployeeSelector() {
 function getCurrentEmployeeId() {
     const employeeSelect = document.getElementById('employeeSelect');
     const employeeIdInput = document.getElementById('employeeIdInput');
-    
+
     if (!employeeSelect.classList.contains('hidden') && employeeSelect.value) {
         return parseInt(employeeSelect.value);
     } else if (employeeIdInput.value) {
@@ -268,24 +270,24 @@ async function loadEmployees() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
+
         console.log('Employees response status:', response.status);
-        
+
         if (response.ok) {
             allEmployees = await response.json();
             console.log('Employees loaded:', allEmployees);
-            
+
             const employeeSelect = document.getElementById('employeeSelect');
             employeeSelect.innerHTML = '<option value="">-- Выберите работника --</option>';
             employeeSelect.classList.remove('hidden');
-            
+
             allEmployees.forEach(employee => {
                 const option = document.createElement('option');
                 option.value = employee.id;
                 option.textContent = `${employee.name} ${employee.surname}`;
                 employeeSelect.appendChild(option);
             });
-            
+
             console.log('Employee select options count:', employeeSelect.options.length);
         } else {
             console.error('Failed to load employees:', response.status, response.statusText);
@@ -376,11 +378,11 @@ async function loadModelsForOrder() {
 // Load sections for selected model
 async function loadSectionsForModel() {
     const modelListId = parseInt(document.getElementById('modelSelect').value);
-    
+
     if (!modelListId) {
         return;
     }
-    
+
     try {
         const token = localStorage.getItem('token');
         const response = await fetch('/api/section-lists', {
@@ -388,14 +390,14 @@ async function loadSectionsForModel() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
+
         if (response.ok) {
             allSections = await response.json();
-            
+
             const sectionSelect = document.getElementById('sectionSelect');
             sectionSelect.innerHTML = '<option value="">-- Выберите раздел --</option>';
             sectionSelect.disabled = false;
-            
+
             allSections.forEach(section => {
                 const option = document.createElement('option');
                 option.value = section.id;
@@ -412,11 +414,11 @@ async function loadSectionsForModel() {
 async function loadOperationsForModelAndSection() {
     const modelListId = parseInt(document.getElementById('modelSelect').value);
     const sectionListId = parseInt(document.getElementById('sectionSelect').value);
-    
+
     if (!modelListId || !sectionListId) {
         return;
     }
-    
+
     try {
         const token = localStorage.getItem('token');
         const response = await fetch('/api/techmaps', {
@@ -424,18 +426,18 @@ async function loadOperationsForModelAndSection() {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
+
         if (response.ok) {
             allTechmaps = await response.json();
-            
+
             const operationSelect = document.getElementById('operationSelect');
             operationSelect.innerHTML = '<option value="">-- Выберите операцию --</option>';
             operationSelect.disabled = false;
-            
-            const filteredTechmaps = allTechmaps.filter(t => 
+
+            const filteredTechmaps = allTechmaps.filter(t =>
                 t.modelList.id === modelListId && t.sectionList.id === sectionListId
             );
-            
+
             filteredTechmaps.forEach(techmap => {
                 const option = document.createElement('option');
                 option.value = techmap.id;
@@ -455,14 +457,14 @@ async function loadOperationsForModelAndSection() {
 function showTechmapInfo() {
     const operationSelect = document.getElementById('operationSelect');
     const selectedOption = operationSelect.selectedOptions[0];
-    
+
     if (selectedOption && selectedOption.value) {
         const techmapInfo = document.getElementById('techmapInfo');
         const tbody = document.getElementById('techmapTableBody');
-        
+
         const priceInCents = selectedOption.dataset.price;
         const priceInEuros = parseFloat(priceInCents) / 1000; // Divide by 1000 for thousandths of euro
-        
+
         tbody.innerHTML = `
             <tr>
                 <td style="text-align: center;">${selectedOption.textContent}</td>
@@ -471,7 +473,7 @@ function showTechmapInfo() {
                 <td style="text-align: left;">${formatEuros(priceInEuros)}</td>
             </tr>
         `;
-        
+
         techmapInfo.classList.remove('hidden');
 
         // Enable quantity select only (add button will be enabled when quantity is selected)
@@ -554,7 +556,7 @@ async function calculateAvailableQuantity() {
         if (completedResponse.ok && transferredResponse.ok) {
             const completedQuantity = await completedResponse.json();
             const transferredQuantity = await transferredResponse.json();
-            
+
             // Available quantity = total - transferred - completed in current week
             const availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
 
@@ -596,7 +598,7 @@ function setupEventListeners() {
             loadWorkResults();
         });
     });
-    
+
     // Date selectors
     document.getElementById('yearSelect').addEventListener('change', function() {
         currentYear = parseInt(this.value);
@@ -604,30 +606,30 @@ function setupEventListeners() {
         loadOrdersForWeek();
         loadWorkResults();
     });
-    
+
     document.getElementById('monthSelect').addEventListener('change', function() {
         currentMonth = parseInt(this.value) - 1;
         renderCalendar(currentYear, currentMonth);
         loadOrdersForWeek();
         loadWorkResults();
     });
-    
+
     document.getElementById('weekSelect').addEventListener('change', function() {
         renderCalendar(currentYear, currentMonth);
         loadOrdersForWeek();
         loadWorkResults();
     });
-    
+
     // Employee selection
     document.getElementById('employeeSelect').addEventListener('change', function() {
         loadWorkResults();
     });
-    
+
     // Order selection
     document.getElementById('orderSelect').addEventListener('change', function() {
         loadModelsForOrder();
     });
-    
+
     // Model selection
     document.getElementById('modelSelect').addEventListener('change', function() {
         loadSectionsForModel();
@@ -638,7 +640,7 @@ function setupEventListeners() {
         document.getElementById('quantitySelect').disabled = true;
         document.getElementById('addButton').disabled = true;
     });
-    
+
     // Section selection
     document.getElementById('sectionSelect').addEventListener('change', function() {
         loadOperationsForModelAndSection();
@@ -647,7 +649,7 @@ function setupEventListeners() {
         document.getElementById('quantitySelect').disabled = true;
         document.getElementById('addButton').disabled = true;
     });
-    
+
     // Operation selection
     document.getElementById('operationSelect').addEventListener('change', function() {
         showTechmapInfo();
@@ -737,7 +739,7 @@ async function addWorkResult() {
         if (completedResponse.ok && transferredResponse.ok) {
             const completedQuantity = await completedResponse.json();
             const transferredQuantity = await transferredResponse.json();
-            
+
             // Available quantity = total - transferred - completed in current week
             const availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
 
@@ -810,43 +812,43 @@ async function loadWorkResults() {
         const month = document.getElementById('monthSelect').value;
         const week = document.getElementById('weekSelect').value;
         const period = document.querySelector('input[name="period"]:checked').value;
-        
+
         console.log('Loading work results:', { employeeId, year, month, week, period });
-        
+
         if (!employeeId) {
             console.error('No employee ID selected');
             return;
         }
-        
+
         let url = `/api/work-results/employee/${employeeId}?year=${year}&month=${month}`;
         if (period === 'week') {
             url += `&week=${week}`;
         }
-        
+
         console.log('Fetching work results from:', url);
-        
+
         const response = await fetch(url, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
-        
+
         if (response.ok) {
             const workResults = await response.json();
             console.log('Work results loaded:', workResults);
-            
+
             // Load orders to get total quantities
             const ordersResponse = await fetch('/api/orders', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            
+
             let orders = [];
             if (ordersResponse.ok) {
                 orders = await ordersResponse.json();
             }
-            
+
             renderWorkResultsTable(workResults, orders);
         } else {
             console.error('Failed to load work results:', response.status, response.statusText);
@@ -856,72 +858,92 @@ async function loadWorkResults() {
     }
 }
 
-// Render work results table
+// Render work results table with grouping
 function renderWorkResultsTable(workResults, orders) {
     const tbody = document.getElementById('workResultsTableBody');
     const summarySection = document.getElementById('summarySection');
     const totalTimeElement = document.getElementById('totalTime');
     const totalEarningsElement = document.getElementById('totalEarnings');
-    
+
     tbody.innerHTML = '';
-    
+
     if (workResults.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center">Нет результатов работы</td></tr>';
         summarySection.classList.add('hidden');
         return;
     }
-    
+
     summarySection.classList.remove('hidden');
-    
-    let totalSeconds = 0;
-    let totalEarnings = 0;
-    
+
+    // Group work results by employeeId, orderId, modelListId, sectionListId, techmapId
+    const groups = new Map();
+
     workResults.forEach(workResult => {
-        const tr = document.createElement('tr');
-        
+        const key = `${workResult.employeeId}-${workResult.orderId}-${workResult.modelListId}-${workResult.sectionListId}-${workResult.techmapId}`;
+        if (!groups.has(key)) {
+            groups.set(key, {
+                ids: [],
+                employeeId: workResult.employeeId,
+                orderId: workResult.orderId,
+                modelListId: workResult.modelListId,
+                sectionListId: workResult.sectionListId,
+                techmapId: workResult.techmapId,
+                order: workResult.order,
+                modelList: workResult.modelList,
+                sectionList: workResult.sectionList,
+                techmap: workResult.techmap,
+                totalQuantity: 0,
+                totalCost: 0,
+                totalTime: 0
+            });
+        }
+
+        const group = groups.get(key);
+        group.ids.push(workResult.id);
+        group.totalQuantity += workResult.quantity;
+
         const price = workResult.techmap ? parseFloat(workResult.techmap.price) / 1000 : 0; // Divide by 1000 for thousandths of euro
         const time = workResult.techmap ? parseFloat(workResult.techmap.time) : 0;
-        const totalCost = workResult.quantity * price;
-        const totalTimeForItem = workResult.quantity * time;
-        
-        totalSeconds += totalTimeForItem;
-        totalEarnings += totalCost;
-        
-        // Find order to get total quantity
-        const order = orders.find(o => o.id === workResult.orderId);
-        const model = order?.models?.find(m => m.modelList.id === workResult.modelListId);
+        group.totalCost += workResult.quantity * price;
+        group.totalTime += workResult.quantity * time;
+    });
+
+    let totalSeconds = 0;
+    let totalEarnings = 0;
+
+    groups.forEach((group, key) => {
+        const tr = document.createElement('tr');
+
+        // Find order to get total quantity (already have group.order)
+        const order = group.order;
+        const model = order?.models?.find(m => m.modelList.id === group.modelListId);
         const totalQuantity = model ? model.count : 0;
-        
-        // Get total completed quantity for this employee, order, model, section, and techmap
-        const completedQuantity = workResults
-            .filter(wr => 
-                wr.orderId === workResult.orderId &&
-                wr.modelListId === workResult.modelListId &&
-                wr.sectionListId === workResult.sectionListId &&
-                wr.techmapId === workResult.techmapId
-            )
-            .reduce((sum, wr) => sum + wr.quantity, 0);
-        
+
+        // Get total completed quantity for this group (we have group.totalQuantity)
+        const completedQuantity = group.totalQuantity;
         const remainingQuantity = Math.max(0, totalQuantity - completedQuantity);
-        
+
         tr.innerHTML = `
-            <td>${workResult.order.name}</td>
-            <td>${workResult.modelList.name}</td>
-            <td>${workResult.sectionList ? workResult.sectionList.name : '-'}</td>
-            <td>${workResult.techmap ? workResult.techmap.serial : '-'}</td>
-            <td>${completedQuantity} / ${remainingQuantity}</td>
-            <td>${formatEuros(totalCost)}</td>
+            <td>${group.order.name}</td>
+            <td>${group.modelList.name}</td>
+            <td>${group.sectionList ? group.sectionList.name : '-'}</td>
+            <td>${group.techmap ? group.techmap.serial : '-'}</td>
+            <td>${completedQuantity}</td>
+            <td>${formatEuros(group.totalCost)}</td>
             <td>
-                <button class="btn btn-sm btn-error" onclick="deleteWorkResult(${workResult.id})" style="height: 25px; min-height: 25px; padding: 2px 6px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" style="width: 25px; height: 25px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button class="btn btn-sm btn-error" onclick="deleteWorkResultGroup(${JSON.stringify(group.ids)})" style="height: 25px; min-height: 25px; padding: 2px 6px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="white">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                 </button>
             </td>
         `;
         tbody.appendChild(tr);
+
+        totalSeconds += group.totalTime;
+        totalEarnings += group.totalCost;
     });
-    
+
     totalTimeElement.textContent = formatTime(totalSeconds);
     totalEarningsElement.textContent = `${formatEuros(totalEarnings)}`;
 }
@@ -931,41 +953,43 @@ function formatTime(totalSeconds) {
     if (totalSeconds === null || totalSeconds === undefined || totalSeconds === 0) {
         return '00:00:00';
     }
-    
+
     const seconds = Math.floor(totalSeconds);
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
-    
+
     const pad = (num) => num.toString().padStart(2, '0');
     return `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`;
 }
 
-// Delete work result
-async function deleteWorkResult(workResultId) {
-    if (!confirm('Вы уверены, что хотите удалить этот результат работы?')) {
+// Delete work result group
+async function deleteWorkResultGroup(ids) {
+    if (!ids || ids.length === 0) {
         return;
     }
-    
+
+    if (!confirm('Вы уверены, что хотите удалить эти результаты работы?')) {
+        return;
+    }
+
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`/api/work-results/${workResultId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        
-        if (response.ok) {
-            loadWorkResults();
-        } else {
-            alert('Ошибка при удалении результата работы');
+        // Delete each work result in the group
+        for (const id of ids) {
+            await fetch(`/api/work-results/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
         }
+        loadWorkResults();
     } catch (error) {
-        console.error('Error deleting work result:', error);
-        alert('Ошибка при удалении результата работы');
+        console.error('Error deleting work result group:', error);
+        alert('Ошибка при удалении результатов работы');
     }
 }
 
-// Make deleteWorkResult globally accessible
-window.deleteWorkResult = deleteWorkResult;
+// Make deleteWorkResultGroup globally accessible
+window.deleteWorkResultGroup = deleteWorkResultGroup;
