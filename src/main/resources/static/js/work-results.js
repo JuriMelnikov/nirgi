@@ -777,8 +777,10 @@ async function addWorkResult() {
             loadWorkResults();
             calculateAvailableQuantity();
 
+            // Load models for the current order (same as before adding)
+            await loadModelsForOrder();
+            // Clear model selection
             document.getElementById('modelSelect').value = '';
-            document.getElementById('modelSelect').disabled = true;
             document.getElementById('sectionSelect').value = '';
             document.getElementById('sectionSelect').disabled = true;
             document.getElementById('sectionSelect').innerHTML = '<option value="">-- Сначала выберите модель --</option>';

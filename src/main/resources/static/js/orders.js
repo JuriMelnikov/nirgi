@@ -144,18 +144,27 @@ function initializeExecutionHistoryWeekSelects() {
     }
 }
 
-// Set filter defaults to current date
+// Set filter defaults to current date if not already set
 function setFilterDefaults() {
-    console.log('setFilterDefaults() called - resetting filters to current date');
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    const currentMonth = now.getMonth() + 1; // 1-12
-    const currentWeek = getWeekNumber(now);
-    
-    console.log('Setting filters to:', { currentYear, currentMonth, currentWeek });
-    document.getElementById('filterYear').value = currentYear;
-    document.getElementById('filterMonth').value = currentMonth;
-    document.getElementById('filterWeek').value = currentWeek;
+    console.log('setFilterDefaults() called - setting filters to current date if not already set');
+    const filterYearSelect = document.getElementById('filterYear');
+    const filterMonthSelect = document.getElementById('filterMonth');
+    const filterWeekSelect = document.getElementById('filterWeek');
+
+    // Only set defaults if no value is selected (i.e., empty option)
+    if (!filterYearSelect.value) {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1; // 1-12
+        const currentWeek = getWeekNumber(now);
+
+        console.log('Setting filters to:', { currentYear, currentMonth, currentWeek });
+        filterYearSelect.value = currentYear;
+        filterMonthSelect.value = currentMonth;
+        filterWeekSelect.value = currentWeek;
+    } else {
+        console.log('Filters already have values, skipping default setting');
+    }
 }
 
 // Restore date selection from localStorage
@@ -164,18 +173,23 @@ function restoreDateSelection() {
     if (savedSelection) {
         try {
             const { year, month, week } = JSON.parse(savedSelection);
-            
+
             // Only restore if values are valid
             if (year && month && week) {
                 document.getElementById('orderYear').value = year;
                 document.getElementById('orderMonth').value = month;
                 document.getElementById('orderWeek').value = week;
-                
+
+                // Also set filter selectors to match restored date
+                document.getElementById('filterYear').value = year;
+                document.getElementById('filterMonth').value = month;
+                document.getElementById('filterWeek').value = week;
+
                 // Update calendar to match restored month
                 currentYear = parseInt(year);
                 currentMonth = parseInt(month) - 1; // Convert 1-12 to 0-11
                 renderCalendar(currentYear, currentMonth);
-                
+
                 console.log('Restored date selection:', { year, month, week });
             }
         } catch (error) {
@@ -277,6 +291,12 @@ function renderCalendar(year, month) {
             document.getElementById('orderWeek').value = weekNumber;
             document.getElementById('orderMonth').value = month + 1;
             renderCalendar(year, month);
+            saveDateSelection();
+            // Sync filter selectors
+            document.getElementById('filterYear').value = document.getElementById('orderYear').value;
+            document.getElementById('filterMonth').value = document.getElementById('orderMonth').value;
+            document.getElementById('filterWeek').value = document.getElementById('orderWeek').value;
+            loadOrders();
         });
         
         calendarDays.appendChild(weekCell);
@@ -306,6 +326,12 @@ function renderCalendar(year, month) {
                     document.getElementById('orderWeek').value = weekNumber;
                     document.getElementById('orderMonth').value = month + 1;
                     renderCalendar(year, month);
+                    saveDateSelection();
+                    // Sync filter selectors
+                    document.getElementById('filterYear').value = document.getElementById('orderYear').value;
+                    document.getElementById('filterMonth').value = document.getElementById('orderMonth').value;
+                    document.getElementById('filterWeek').value = document.getElementById('orderWeek').value;
+                    loadOrders();
                 });
                 
                 calendarDays.appendChild(dayCell);
@@ -392,21 +418,40 @@ function setupEventListeners() {
     });
     
     // Update calendar when year/month/week changes
+    // Update calendar when year/month/week changes and sync filters
     document.getElementById('orderYear').addEventListener('change', function() {
-        currentYear = parseInt(this.value);
+        const year = this.value;
+        currentYear = parseInt(year);
         renderCalendar(currentYear, currentMonth);
         saveDateSelection();
+        // Sync filter selectors
+        document.getElementById('filterYear').value = year;
+        document.getElementById('filterMonth').value = document.getElementById('orderMonth').value;
+        document.getElementById('filterWeek').value = document.getElementById('orderWeek').value;
+        loadOrders();
     });
-    
+
     document.getElementById('orderMonth').addEventListener('change', function() {
-        currentMonth = parseInt(this.value) - 1;
+        const month = this.value;
+        currentMonth = parseInt(month) - 1;
         renderCalendar(currentYear, currentMonth);
         saveDateSelection();
+        // Sync filter selectors
+        document.getElementById('filterYear').value = document.getElementById('orderYear').value;
+        document.getElementById('filterMonth').value = month;
+        document.getElementById('filterWeek').value = document.getElementById('orderWeek').value;
+        loadOrders();
     });
-    
+
     document.getElementById('orderWeek').addEventListener('change', function() {
+        const week = this.value;
         renderCalendar(currentYear, currentMonth);
         saveDateSelection();
+        // Sync filter selectors
+        document.getElementById('filterYear').value = document.getElementById('orderYear').value;
+        document.getElementById('filterMonth').value = document.getElementById('orderMonth').value;
+        document.getElementById('filterWeek').value = week;
+        loadOrders();
     });
     
     // Execution history filter changes
