@@ -1,4 +1,7 @@
-docker-compose.yml
+CLAUDE.md
+**.bak
+**.tmp
+.mcp.json
 cb-initial-data.conf
 .windsurfrules
 workspace.Dockerfile
