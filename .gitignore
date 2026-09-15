@@ -1,7 +1,3 @@
-CLAUDE.md
-**.bak
-**.tmp
-.mcp.json
 cb-initial-data.conf
 .windsurfrules
 workspace.Dockerfile
@@ -44,4 +40,6 @@ build/
 deploy.sh
 deploy.psl
 bin
-
+node_modules/
+coverage/
+.vitest-root/
