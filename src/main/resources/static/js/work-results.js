@@ -858,7 +858,7 @@ async function loadWorkResults() {
     }
 }
 
-// Render work results table with grouping
+// Render work results table - show each work result individually with delete button
 function renderWorkResultsTable(workResults, orders) {
     const tbody = document.getElementById('workResultsTableBody');
     const summarySection = document.getElementById('summarySection');
@@ -875,63 +875,26 @@ function renderWorkResultsTable(workResults, orders) {
 
     summarySection.classList.remove('hidden');
 
-    // Group work results by employeeId, orderId, modelListId, sectionListId, techmapId
-    const groups = new Map();
-
-    workResults.forEach(workResult => {
-        const key = `${workResult.employeeId}-${workResult.orderId}-${workResult.modelListId}-${workResult.sectionListId}-${workResult.techmapId}`;
-        if (!groups.has(key)) {
-            groups.set(key, {
-                ids: [],
-                employeeId: workResult.employeeId,
-                orderId: workResult.orderId,
-                modelListId: workResult.modelListId,
-                sectionListId: workResult.sectionListId,
-                techmapId: workResult.techmapId,
-                order: workResult.order,
-                modelList: workResult.modelList,
-                sectionList: workResult.sectionList,
-                techmap: workResult.techmap,
-                totalQuantity: 0,
-                totalCost: 0,
-                totalTime: 0
-            });
-        }
-
-        const group = groups.get(key);
-        group.ids.push(workResult.id);
-        group.totalQuantity += workResult.quantity;
-
-        const price = workResult.techmap ? parseFloat(workResult.techmap.price) / 1000 : 0; // Divide by 1000 for thousandths of euro
-        const time = workResult.techmap ? parseFloat(workResult.techmap.time) : 0;
-        group.totalCost += workResult.quantity * price;
-        group.totalTime += workResult.quantity * time;
-    });
-
+    // Calculate totals for summary
     let totalSeconds = 0;
     let totalEarnings = 0;
 
-    groups.forEach((group, key) => {
+    workResults.forEach(workResult => {
+        // Find order to get order name
+        const order = orders.find(o => o.id === workResult.orderId);
+        const model = order?.models?.find(m => m.modelList.id === workResult.modelListId);
+
         const tr = document.createElement('tr');
 
-        // Find order to get total quantity (already have group.order)
-        const order = group.order;
-        const model = order?.models?.find(m => m.modelList.id === group.modelListId);
-        const totalQuantity = model ? model.count : 0;
-
-        // Get total completed quantity for this group (we have group.totalQuantity)
-        const completedQuantity = group.totalQuantity;
-        const remainingQuantity = Math.max(0, totalQuantity - completedQuantity);
-
         tr.innerHTML = `
-            <td>${group.order.name}</td>
-            <td>${group.modelList.name}</td>
-            <td>${group.sectionList ? group.sectionList.name : '-'}</td>
-            <td>${group.techmap ? group.techmap.serial : '-'}</td>
-            <td>${completedQuantity}</td>
-            <td>${formatEuros(group.totalCost)}</td>
+            <td>${order?.name || 'Неизвестный заказ'}</td>
+            <td>${workResult.modelList?.name || 'Неизвестная модель'}</td>
+            <td>${workResult.sectionList ? workResult.sectionList.name : '-'}</td>
+            <td>${workResult.techmap ? workResult.techmap.serial : '-'}</td>
+            <td>${workResult.quantity}</td>
+            <td>${formatEuros(workResult.quantity * (workResult.techmap ? parseFloat(workResult.techmap.price) / 1000 : 0))}</td>
             <td>
-                <button class="btn btn-sm btn-error" onclick="deleteWorkResultGroup(${JSON.stringify(group.ids)})" style="height: 25px; min-height: 25px; padding: 2px 6px;">
+                <button class="btn btn-sm btn-error" onclick="deleteWorkResult(${workResult.id})" style="height: 25px; min-height: 25px; padding: 2px 6px;">
                     <svg xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="white">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
@@ -940,8 +903,11 @@ function renderWorkResultsTable(workResults, orders) {
         `;
         tbody.appendChild(tr);
 
-        totalSeconds += group.totalTime;
-        totalEarnings += group.totalCost;
+        // Accumulate totals
+        const price = workResult.techmap ? parseFloat(workResult.techmap.price) / 1000 : 0;
+        const time = workResult.techmap ? parseFloat(workResult.techmap.time) : 0;
+        totalSeconds += workResult.quantity * time;
+        totalEarnings += workResult.quantity * price;
     });
 
     totalTimeElement.textContent = formatTime(totalSeconds);
@@ -991,6 +957,32 @@ async function deleteWorkResultGroup(ids) {
     }
 }
 
-// Make deleteWorkResultGroup globally accessible
+// Delete a single work result
+async function deleteWorkResult(id) {
+    if (!id) {
+        return;
+    }
+
+    if (!confirm('Вы уверены, что хотите удалить этот результат работы?')) {
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem('token');
+        await fetch(`/api/work-results/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        loadWorkResults();
+    } catch (error) {
+        console.error('Error deleting work result:', error);
+        alert('Ошибка при удалении результата работы');
+    }
+}
+
+// Make deleteWorkResult and deleteWorkResultGroup globally accessible
+window.deleteWorkResult = deleteWorkResult;
 window.deleteWorkResultGroup = deleteWorkResultGroup;
 export { formatEuros, getWeekNumber, formatTime };
