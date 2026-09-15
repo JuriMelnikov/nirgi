@@ -233,8 +233,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
                 modelListForm.reset();
                 resetModelListEditMode();
+                // Set the selected model in localStorage for the techmap form
+                localStorage.setItem('selectedTechmapModelId', result.id);
                 loadModelLists();
-                loadTechmaps(); // Refresh techmaps to update model dropdown
+                loadTechmaps(); // Refresh techmaps to update model dropdown and filter by selected model
             } else {
                 const errorText = await response.text();
                 alert('Ошибка: ' + errorText);
@@ -279,8 +281,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const result = await response.json();
                 sectionListForm.reset();
                 resetSectionListEditMode();
+                // Set the selected section in localStorage for the techmap form
+                localStorage.setItem('selectedTechmapSectionId', result.id);
                 loadSectionLists();
-                loadTechmaps(); // Refresh techmaps to update section dropdown
+                loadTechmaps(); // Refresh techmaps to update section dropdown and filter by selected section
             } else {
                 const errorText = await response.text();
                 alert('Ошибка: ' + errorText);
