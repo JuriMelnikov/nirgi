@@ -993,3 +993,4 @@ async function deleteWorkResultGroup(ids) {
 
 // Make deleteWorkResultGroup globally accessible
 window.deleteWorkResultGroup = deleteWorkResultGroup;
+export { formatEuros, getWeekNumber, formatTime };

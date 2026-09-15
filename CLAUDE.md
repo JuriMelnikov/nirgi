@@ -42,14 +42,19 @@ Access container shell: `docker compose exec app bash`
 
 ## Code Standards & Style (Java 25 / Spring Boot 4.x)
 - **Syntax:** Actively use modern Java 25 features (Pattern Matching, Records, Virtual Threads, Unnamed Classes, Sequenced Collections)
+  - Example: Use `instanceof` pattern matching: `if (obj instanceof String s) { s.toUpperCase(); }`
+  - Example: Use records for immutable data: `public record UserDto(Long id, String name) {}`
+  - Example: Use virtual threads for concurrent operations: `Thread.startVirtualThread(() -> { /* task */ });`
 - **Style:** Adhere to Google Java Style. Use constructor injection only. `@RequiredArgsConstructor` from Lombok is allowed; avoid field-level `@Autowired`.
 - **Database:** Schema updates are managed automatically by Hibernate via `SPRING_JPA_HIBERNATE_DDL_AUTO: update`.
 - **Validation:** Use Jakarta Validation annotations (`@Valid`, `@NotNull`, `@Size`, etc.) for input validation.
 - **Security:** All endpoints should be secured with appropriate role checks unless explicitly public.
+- **Lombok Usage:** Entities use `@Getter`, `@Setter`, `@NoArgsConstructor`, `@AllArgsConstructor`, `@ToString`. Services and repositories typically don't use Lombok.
 
 ## JavaScript Standards & Modern Practices
 - **Version & Syntax:** Use modern JavaScript (ES11 to ES15+). Prefer `const` and `let` over `var`. Actively use Optional Chaining (`?.`), Nullish Coalescing (`??`), Arrow Functions, and Object/Array Destructuring.
 - **Modularity:** Organize scripts using **ES Modules (`import`/`export`)**. Declare module scripts in Thymeleaf via `<script type="module" thsrc="...">`. Avoid cluttering the global `window` scope.
+  - Current migration state: Some files still use traditional patterns; new code should follow ES module guidelines.
 - **Asynchronous Operations:** Use standard `async/await` syntax for all asynchronous logic. Wrap asynchronous blocks in `try/catch` for robust error handling. Do not use raw `.then().catch()` unless necessary.
 - **DOM Manipulation:**
   - Prefer modern API options like `querySelector` and `querySelectorAll`.
@@ -63,7 +68,7 @@ Access container shell: `docker compose exec app bash`
 ## JavaScript Testing Standards (Vitest)
 - **Framework:** Use **Vitest** for all JavaScript unit and integration tests.
 - **Environment:** Use `jsdom` environment for tests interacting with the DOM. Include `// @vitest-environment jsdom` at the top of the test file if needed.
-- **File Naming:** Name test files as `*.test.js` and place them alongside the code or in a dedicated `src/main/resources/static/js/__tests__/` directory.
+- **File Naming:** Name test files as `*.test.js` and place them in `src/main/resources/static/js/` directory following the feature structure (e.g., `src/main/resources/static/js/work-results.test.js`).
 - **Mocking & Fetch:**
   - Mock all backend API calls (e.g., via `vi.spyOn(global, 'fetch')` or `vi.stubGlobal('fetch', ...)`). Never allow JS tests to make real HTTP requests to Spring Boot.
   - Always mock the JWT token retrieval logic (LocalStorage/Cookies) to simulate authorized states.
@@ -71,7 +76,7 @@ Access container shell: `docker compose exec app bash`
   - Prepare the virtual DOM before testing UI changes by setting `document.body.innerHTML`.
   - Use modern assertions: `expect(element).toBeInTheDocument()`, `expect(element.classList.contains('active')).toBe(true)`.
 - **Test Structure:** Group tests using `describe()`, state behavior with `it('should...')`, and clean up the DOM/mocks in `afterEach()` using `vi.restoreAllMocks()` and `document.body.innerHTML = ''`.
-
+- **Vitest Configuration:** See `vitest.config.js` for configuration details. Tests are configured to use jsdom environment and match files ending in `.test.js`.
 
 ## Application Structure
 - **Controllers:** Handle HTTP requests and return Thymeleaf views or JSON responses
@@ -118,23 +123,36 @@ Based on the HomeController routing logic:
 
 ### Available Test Commands
 ```bash
-# Run all tests
+# Run all tests (backend)
 docker compose exec app mvn test
 
-# Run tests for specific package
+# Run tests for specific package (backend)
 docker compose exec app mvn test -Dtest=ee.jvm.nirgi_java.service.*;
 
-# Run tests with coverage report
+# Run tests with coverage report (backend)
 docker compose exec app mvn test jacoco:report
 
-# Skip tests for faster builds
+# Skip tests for faster builds (backend)
 docker compose exec app mvn clean package -DskipTests
 
 # Run JS tests locally on Windows host
 npm test          # Single run
 npx vitest        # Watch mode
+npm run test:coverage  # With coverage report
 
+# Run specific JS test file
+npx vitest src/main/resources/static/js/work-results.test.js
+
+# Run JS tests in specific directory
+npx vitest src/main/resources/static/js/__tests__/
 ```
+
+### Docker Development Tips
+- For rapid frontend development, changes to `src/main/resources/static/` and `src/main/resources/templates/` are immediately reflected due to volume mounts
+- For backend changes, you can use `docker compose exec app mvn spring-boot:run` for hot reloading (if configured) or rebuild/restart as needed
+- To view logs for a specific service: `docker compose logs -f <service-name>` (e.g., `docker compose logs -f app`)
+- To execute one-off commands in the app container: `docker compose exec app <command>` (e.g., `docker compose exec app ls -la`)
+- When debugging database issues, you can access the MariaDB container: `docker compose exec mariadb mysql -u${MARIADB_USER} -p${MARIADB_PASSWORD} ${MARIADB_DATABASE}`
 
 ## Important Files & Directories
 - `.env` - Environment variables for Docker containers (database credentials, etc.)
@@ -142,6 +160,7 @@ npx vitest        # Watch mode
 - `nginx/` - Nginx configuration and SSL certificates
 - `mariadb_data/` - Persistent MariaDB data volume
 - `target/` - Compiled classes and generated JAR (gitignored)
+- `vitest.config.js` - Vitest configuration for JavaScript testing
 
 ## Agent Guidelines & Constraints
 1. ALWAYS run container tests (`docker compose exec app mvn test`) before committing or finalizing logic changes.
@@ -158,3 +177,6 @@ npx vitest        # Watch mode
 - Port conflicts: Ensure ports 80, 443 (Nginx) and 3306 (MariaDB, though not exposed) are free
 - Template changes not appearing: Verify you're editing files in `src/main/resources/templates/` (not the container paths)
 - Static resource cache issues: Thymeleaf cache is disabled in development (`spring.thymeleaf.cache=false`)
+- JavaScript test failures: Ensure Vitest is installed (`npm install`) and check `vitest.config.js` for configuration
+- Backend test failures: Check that you're running tests inside the container with `docker compose exec app mvn test`
+- Role-based access issues: Verify that endpoints have appropriate `@PreAuthorize` or role checks in controllers
