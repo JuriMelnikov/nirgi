@@ -1,0 +1,8 @@
+2026/09/21 15:58:16 [warn] 204#204: could not build optimal proxy_headers_hash, you should increase either proxy_headers_hash_max_size: 512 or proxy_headers_hash_bucket_size: 64; ignoring proxy_headers_hash_bucket_size
+2026/09/21 16:40:49 [warn] 243#243: 512 worker_connections are not enough, reusing connections
+2026/09/21 17:07:42 [warn] 197#197: could not build optimal proxy_headers_hash, you should increase either proxy_headers_hash_max_size: 512 or proxy_headers_hash_bucket_size: 64; ignoring proxy_headers_hash_bucket_size
+2026/09/21 17:09:42 [warn] 292#292: 512 worker_connections are not enough, reusing connections
+2026/09/21 17:11:49 [warn] 197#197: could not build optimal proxy_headers_hash, you should increase either proxy_headers_hash_max_size: 512 or proxy_headers_hash_bucket_size: 64; ignoring proxy_headers_hash_bucket_size
+2026/09/21 17:12:12 [warn] 197#197: could not build optimal proxy_headers_hash, you should increase either proxy_headers_hash_max_size: 512 or proxy_headers_hash_bucket_size: 64; ignoring proxy_headers_hash_bucket_size
+2026/09/21 17:12:58 [warn] 197#197: could not build optimal proxy_headers_hash, you should increase either proxy_headers_hash_max_size: 512 or proxy_headers_hash_bucket_size: 64; ignoring proxy_headers_hash_bucket_size
+2026/09/21 17:15:49 [warn] 197#197: could not build optimal proxy_headers_hash, you should increase either proxy_headers_hash_max_size: 512 or proxy_headers_hash_bucket_size: 64; ignoring proxy_headers_hash_bucket_size
