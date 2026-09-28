@@ -1,6 +1,0 @@
-2026/09/21 21:29:23 [warn] 277#277: *171 using uninitialized "server" variable while logging request, client: 130.12.180.117, server: nirgi.jvm.ee
-2026/09/21 21:29:24 [warn] 277#277: *171 using uninitialized "server" variable while logging request, client: 130.12.180.117, server: nirgi.jvm.ee
-2026/09/21 21:30:06 [warn] 276#276: *326 using uninitialized "server" variable while logging request, client: 206.189.19.19, server: nirgi.jvm.ee, request: "LEAKIX"
-2026/09/21 21:33:39 [warn] 276#276: *445 an upstream response is buffered to a temporary file /var/cache/nginx/proxy_temp/8/00/0000000008 while reading upstream, client: 46.39.159.221, server: nirgi.jvm.ee, request: "GET /ns/jquery/js/jquery-ui-1.8.21.custom.min.js HTTP/2.0", upstream: "http://172.19.0.3:80/ns/jquery/js/jquery-ui-1.8.21.custom.min.js", host: "nirgi.jvm.ee", referrer: "https://nirgi.jvm.ee/ns/orders.php?"
-2026/09/21 23:14:26 [warn] 247#247: *320 using uninitialized "server" variable while logging request, client: 130.12.180.117, server: nirgi.jvm.ee
-2026/09/21 23:14:26 [warn] 247#247: *320 using uninitialized "server" variable while logging request, client: 130.12.180.117, server: nirgi.jvm.ee

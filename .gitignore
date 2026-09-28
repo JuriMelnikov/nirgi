@@ -1,3 +1,15 @@
+# для локально разработки другой
+/docker-compose.yml/
+# Данные Nginx Proxy Manager
+/npm/
+# Скприты для локальной разработки
+deploy.sh
+deploy.psl
+# Инструменты локальные
+/bin/
+node_modules/
+coverage/
+.vitest-root/
 cb-initial-data.conf
 .windsurfrules
 workspace.Dockerfile
@@ -5,6 +17,7 @@ workspace-run.sh
 mariadb_data/
 .env
 HELP.md
+
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -37,9 +50,4 @@ build/
 
 ### VS Code ###
 .vscode/
-deploy.sh
-deploy.psl
-bin
-node_modules/
-coverage/
-.vitest-root/
+

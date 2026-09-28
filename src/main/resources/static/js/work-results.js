@@ -887,7 +887,7 @@ function renderWorkResultsTable(workResults, orders) {
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
-            <td>${order?.name || 'Неизвестный заказ'}</td>
+            <td>${workResult.order?.name || 'Неизвестный заказ'}</td>
             <td>${workResult.modelList?.name || 'Неизвестная модель'}</td>
             <td>${workResult.sectionList ? workResult.sectionList.name : '-'}</td>
             <td>${workResult.techmap ? workResult.techmap.serial : '-'}</td>

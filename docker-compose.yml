@@ -16,7 +16,11 @@ services:
       - pma
     networks:
       - spring_network
-      - npm-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
   mariadb:
     image: mariadb:11.4
     container_name: mariadb_db
@@ -35,6 +39,11 @@ services:
       retries: 5
     networks:
       - spring_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
 
   app:
     build:
@@ -58,6 +67,11 @@ services:
         condition: service_healthy
     networks:
       - spring_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
 
   pma:
     image: phpmyadmin/phpmyadmin:latest
@@ -68,13 +82,16 @@ services:
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       UPLOAD_LIMIT: 256M
-      PMA_ABSOLUTE_URI: https://pma.jvm.ee
+
     depends_on:
       - mariadb
     networks:
       - spring_network
-
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
 networks:
   spring_network:
-  npm-network:
-    external: true
+
