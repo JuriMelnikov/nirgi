@@ -18,13 +18,18 @@ WORKDIR /app
 # Устанавливаем Maven для запуска тестов
 RUN apk add --no-cache maven
 
+# Создаем пользователя spring
 RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
 
-# Копируем артефакт и исходный код для тестов
+# Копируем артефакт и исходный код для тестов (как root)
 COPY --from=builder /build/target/nirgi-java-0.0.1-SNAPSHOT.jar app.jar
 COPY --from=builder /build/pom.xml ./pom.xml
 COPY --from=builder /build/src ./src
+
+# Меняем владельца на spring
+RUN chown -R spring:spring /app
+
+USER spring:spring
 
 ENV JAVA_OPTS="-XX:+UseG1GC -XX:+UseContainerSupport -Duser.timezone=Europe/Tallinn"
 ENV TZ=Europe/Tallinn
