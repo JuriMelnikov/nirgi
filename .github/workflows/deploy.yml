@@ -42,8 +42,8 @@ jobs:
             # 1. Переходим в директорию проекта
             cd /srv/nirgi-java
 
-            # 2. Скачиваем свежие изменения
-            git pull origin main
+            # 2. Скачиваем свежие изменения и сбрасываем локальные изменения
+            git fetch --all && git reset --hard origin/main
 
             # 3. Пересобираем и запускаем приложение
             docker compose up -d --build app
