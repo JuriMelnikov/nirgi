@@ -7,6 +7,15 @@ let selectedModels = [];
 let allModelLists = [];
 let editSelectedModels = [];
 
+// Запомненные целевая неделя, месяц и год для модального окна переноса заказа.
+// Хранятся, чтобы при повторном открытии модального окна не сбрасывать выбор пользователя.
+// Значения меняются только тогда, когда пользователь явно выбирает другое значение в селекторе.
+let dublTargetYear = null;
+let dublTargetMonth = null;
+let dublTargetWeek = null;
+
+const DUBL_TARGET_STORAGE_KEY = 'dublTargetDateSelection';
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     initializeYearSelects();
@@ -15,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeEditWeekSelects();
     initializeDublYearSelects();
     initializeDublWeekSelects();
+    loadDublTargetDateSelection();
     initializeExecutionHistoryYearSelects();
     initializeExecutionHistoryWeekSelects();
     initializeCalendar();
@@ -110,13 +120,61 @@ function initializeDublYearSelects() {
 // Initialize dubl week select
 function initializeDublWeekSelects() {
     const dublWeekSelect = document.getElementById('dublTargetWeek');
-    
+
     for (let week = 1; week <= 53; week++) {
         const option = document.createElement('option');
         option.value = week;
         option.textContent = week;
         dublWeekSelect.appendChild(option);
     }
+}
+
+// Загрузить запомненную целевую дату переноса из localStorage
+function loadDublTargetDateSelection() {
+    try {
+        const saved = localStorage.getItem(DUBL_TARGET_STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            dublTargetYear = parsed.year;
+            dublTargetMonth = parsed.month;
+            dublTargetWeek = parsed.week;
+            console.log('Loaded dubl target date selection:', { dublTargetYear, dublTargetMonth, dublTargetWeek });
+        }
+    } catch (error) {
+        console.error('Ошибка при загрузке запомненной целевой даты переноса:', error);
+    }
+}
+
+// Сохранить целевую дату переноса в localStorage
+function saveDublTargetDateSelection() {
+    try {
+        localStorage.setItem(DUBL_TARGET_STORAGE_KEY, JSON.stringify({
+            year: dublTargetYear,
+            month: dublTargetMonth,
+            week: dublTargetWeek
+        }));
+        console.log('Saved dubl target date selection:', { dublTargetYear, dublTargetMonth, dublTargetWeek });
+    } catch (error) {
+        console.error('Ошибка при сохранении целевой даты переноса:', error);
+    }
+}
+
+// Вычислить неделю, следующую за указанной (с учётом перехода на новый месяц/год)
+function getNextWeek(year, month, week) {
+    let nextYear = year;
+    let nextMonth = month;
+    let nextWeek = week + 1;
+
+    if (nextWeek > 53) {
+        nextWeek = 1;
+        nextMonth = month + 1;
+        if (nextMonth > 12) {
+            nextMonth = 1;
+            nextYear = year + 1;
+        }
+    }
+
+    return { year: nextYear, month: nextMonth, week: nextWeek };
 }
 
 // Initialize execution history year select
@@ -1005,6 +1063,24 @@ let dublModelsData = [];
 
 function setupDublEventListeners() {
     document.getElementById('createDublOrderForm').addEventListener('submit', handleDublOrderSubmit);
+
+    // Запоминаем целевую неделю, месяц и год, выбранные пользователем,
+    // чтобы при повторном открытии модального окна не сбрасывать их.
+    // Значения меняются только если пользователь выберет в селекторе другое значение.
+    document.getElementById('dublTargetYear').addEventListener('change', function() {
+        dublTargetYear = this.value;
+        saveDublTargetDateSelection();
+    });
+
+    document.getElementById('dublTargetMonth').addEventListener('change', function() {
+        dublTargetMonth = this.value;
+        saveDublTargetDateSelection();
+    });
+
+    document.getElementById('dublTargetWeek').addEventListener('change', function() {
+        dublTargetWeek = this.value;
+        saveDublTargetDateSelection();
+    });
 }
 
 function openDublModal(orderId) {
@@ -1023,10 +1099,12 @@ function openDublModal(orderId) {
             currentDublOrderId = orderId;
             dublModelsData = [];
             
-            // Set default target week to next week from order's week
-            document.getElementById('dublTargetYear').value = order.year;
-            document.getElementById('dublTargetMonth').value = order.month;
-            document.getElementById('dublTargetWeek').value = order.week + 1;
+            // Целевая неделя по умолчанию — следующая после недели заказа.
+            // Если пользователь ранее выбрал другое значение в селекторе, используем запомненное.
+            const defaultTarget = getNextWeek(order.year, order.month, order.week);
+            document.getElementById('dublTargetYear').value = dublTargetYear !== null ? dublTargetYear : defaultTarget.year;
+            document.getElementById('dublTargetMonth').value = dublTargetMonth !== null ? dublTargetMonth : defaultTarget.month;
+            document.getElementById('dublTargetWeek').value = dublTargetWeek !== null ? dublTargetWeek : defaultTarget.week;
             
             // Populate models with completed work inputs
             const container = document.getElementById('dublModelsContainer');
