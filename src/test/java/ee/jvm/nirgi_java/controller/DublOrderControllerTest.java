@@ -97,6 +97,41 @@ class DublOrderControllerTest {
         assertThat(conflict.getBody()).isEqualTo(Map.of("message", "Перенос уже существует"));
     }
 
+    private static DublOrderController.SimpleDublOrderRequest simpleRequest() {
+        DublOrderController.SimpleDublOrderRequest request = new DublOrderController.SimpleDublOrderRequest();
+        request.setOrderId(1L);
+        request.setTargetYear(2025);
+        request.setTargetMonth(8);
+        request.setTargetWeek(34);
+        return request;
+    }
+
+    @Test
+    void createSimpleDublOrderReturnsCreatedTransfer() {
+        DublOrder created = dublOrder(7L);
+        when(dublOrderService.createSimpleDublOrder(1L, 2025, 8, 34)).thenReturn(created);
+
+        var response = dublOrderController.createSimpleDublOrder(simpleRequest());
+
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
+        assertThat(response.getBody()).isSameAs(created);
+    }
+
+    @Test
+    void createSimpleDublOrderMapsValidationToBadRequestAndConflictToConflict() {
+        when(dublOrderService.createSimpleDublOrder(1L, 2025, 8, 34))
+                .thenThrow(new IllegalArgumentException("Некорректное количество"))
+                .thenThrow(new IllegalStateException("Перенос уже существует"));
+
+        var badRequest = dublOrderController.createSimpleDublOrder(simpleRequest());
+        var conflict = dublOrderController.createSimpleDublOrder(simpleRequest());
+
+        assertThat(badRequest.getStatusCode().value()).isEqualTo(400);
+        assertThat(badRequest.getBody()).isEqualTo(Map.of("message", "Некорректное количество"));
+        assertThat(conflict.getStatusCode().value()).isEqualTo(409);
+        assertThat(conflict.getBody()).isEqualTo(Map.of("message", "Перенос уже существует"));
+    }
+
     @Test
     void updateCompletedWorkReturnsOkOrBadRequest() {
         DublOrder updated = dublOrder(7L);

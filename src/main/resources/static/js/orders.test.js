@@ -120,4 +120,43 @@ describe('orders.js - модальное окно переноса заказа 
     expect(document.getElementById('dublTargetMonth').value).toBe('3')
     expect(document.getElementById('dublTargetWeek').value).toBe('10')
   })
+
+  test('при переносе на сервер уходит только orderId, targetYear, targetMonth, targetWeek', async () => {
+    // Задаём явно запомненные значения, чтобы не зависеть от состояния предыдущих тестов.
+    const yearSelect = document.getElementById('dublTargetYear')
+    const monthSelect = document.getElementById('dublTargetMonth')
+    const weekSelect = document.getElementById('dublTargetWeek')
+    yearSelect.value = '2027'
+    monthSelect.value = '3'
+    weekSelect.value = '10'
+    yearSelect.dispatchEvent(new Event('change'))
+    monthSelect.dispatchEvent(new Event('change'))
+    weekSelect.dispatchEvent(new Event('change'))
+
+    fetch.mockResolvedValueOnce(orderResponse({ ...baseOrder, id: 1 })) // GET /api/orders/1
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: 7 }) }) // POST /api/dubl-orders/simple
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => [] }) // loadOrders после успеха
+
+    window.openDublModal(1)
+    await flushPromises()
+
+    expect(document.getElementById('dublTargetYear').value).toBe('2027')
+    expect(document.getElementById('dublTargetMonth').value).toBe('3')
+    expect(document.getElementById('dublTargetWeek').value).toBe('10')
+
+    const form = document.getElementById('createDublOrderForm')
+    form.dispatchEvent(new Event('submit'))
+    await flushPromises()
+
+    const postCall = fetch.mock.calls.find(([url]) => url === '/api/dubl-orders/simple')
+    expect(postCall).toBeTruthy()
+    const body = JSON.parse(postCall[1].body)
+    expect(body).toEqual({
+      orderId: 1,
+      targetYear: 2027,
+      targetMonth: 3,
+      targetWeek: 10,
+    })
+    expect(body.completedWork).toBeUndefined()
+  })
 })

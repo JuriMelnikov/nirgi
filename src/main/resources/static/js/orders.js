@@ -1097,88 +1097,15 @@ function openDublModal(orderId) {
         })
         .then(order => {
             currentDublOrderId = orderId;
-            dublModelsData = [];
-            
+
             // Целевая неделя по умолчанию — следующая после недели заказа.
             // Если пользователь ранее выбрал другое значение в селекторе, используем запомненное.
             const defaultTarget = getNextWeek(order.year, order.month, order.week);
             document.getElementById('dublTargetYear').value = dublTargetYear !== null ? dublTargetYear : defaultTarget.year;
             document.getElementById('dublTargetMonth').value = dublTargetMonth !== null ? dublTargetMonth : defaultTarget.month;
             document.getElementById('dublTargetWeek').value = dublTargetWeek !== null ? dublTargetWeek : defaultTarget.week;
-            
-            // Populate models with completed work inputs
-            const container = document.getElementById('dublModelsContainer');
-            container.innerHTML = '';
-            
-            if (order.models && order.models.length > 0) {
-                // Fetch completed work from work_results table
-                fetch(`/api/work-results/completed-work-by-order-week?orderId=${orderId}&year=${order.year}&month=${order.month}&week=${order.week}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Failed to load completed work');
-                    return response.json();
-                })
-                .then(completedWorkMap => {
-                    order.models.forEach(model => {
-                        const completedWork = completedWorkMap[model.modelList.id] || 0;
-                        const div = document.createElement('div');
-                        div.className = 'flex items-center gap-2 bg-base-200 p-2 rounded';
-                        div.innerHTML = `
-                            <span class="flex-1">${model.modelList.name} (всего: ${model.count}, выполнено: ${completedWork})</span>
-                            <input type="number" 
-                                   class="input input-bordered w-24" 
-                                   min="0" 
-                                   max="${model.count}" 
-                                   value="${completedWork}" 
-                                   data-model-id="${model.modelList.id}" 
-                                   data-total-count="${model.count}"
-                                   placeholder="Выполнено">
-                        `;
-                        container.appendChild(div);
-                        
-                        dublModelsData.push({
-                            modelListId: model.modelList.id,
-                            totalCount: model.count,
-                            completedInOriginalWeek: completedWork
-                        });
-                    });
-                    
-                    document.getElementById('createDublOrderModal').showModal();
-                })
-                .catch(error => {
-                    console.error('Error loading completed work:', error);
-                    // Fallback to manual input if API fails
-                    order.models.forEach(model => {
-                        const div = document.createElement('div');
-                        div.className = 'flex items-center gap-2 bg-base-200 p-2 rounded';
-                        div.innerHTML = `
-                            <span class="flex-1">${model.modelList.name} (всего: ${model.count})</span>
-                            <input type="number" 
-                                   class="input input-bordered w-24" 
-                                   min="0" 
-                                   max="${model.count}" 
-                                   value="0" 
-                                   data-model-id="${model.modelList.id}" 
-                                   data-total-count="${model.count}"
-                                   placeholder="Выполнено">
-                        `;
-                        container.appendChild(div);
-                        
-                        dublModelsData.push({
-                            modelListId: model.modelList.id,
-                            totalCount: model.count,
-                            completedInOriginalWeek: 0
-                        });
-                    });
-                    
-                    document.getElementById('createDublOrderModal').showModal();
-                });
-            } else {
-                document.getElementById('createDublOrderModal').showModal();
-            }
+
+            document.getElementById('createDublOrderModal').showModal();
         })
         .catch(error => {
             console.error('Error loading order:', error);
@@ -1198,42 +1125,28 @@ function closeDublModal() {
 
 async function handleDublOrderSubmit(event) {
     event.preventDefault();
-    
+
     const targetYear = parseInt(document.getElementById('dublTargetYear').value);
     const targetMonth = parseInt(document.getElementById('dublTargetMonth').value);
     const targetWeek = parseInt(document.getElementById('dublTargetWeek').value);
-    
-    console.log('Creating dubl order with:', { targetYear, targetMonth, targetWeek });
-    
-    // Collect completed work from inputs
-    const completedWork = {};
-    const inputs = document.querySelectorAll('#dublModelsContainer input');
-    inputs.forEach(input => {
-        const modelId = parseInt(input.dataset.modelId);
-        const totalCount = parseInt(input.dataset.totalCount);
-        const completed = parseInt(input.value) || 0;
-        
-        if (completed < 0 || completed > totalCount) {
-            alert(`Значение должно быть от 0 до ${totalCount}`);
-            return;
-        }
-        
-        completedWork[modelId] = completed;
-    });
-    
+
+    if (!targetYear || !targetMonth || !targetWeek) {
+        alert('Пожалуйста, выберите целевую неделю, месяц и год');
+        return;
+    }
+
+    console.log('Creating simple dubl order with:', { orderId: currentDublOrderId, targetYear, targetMonth, targetWeek });
+
     const orderData = {
         orderId: currentDublOrderId,
-        completedWork: completedWork,
         targetYear: targetYear,
         targetMonth: targetMonth,
         targetWeek: targetWeek
     };
-    
-    console.log('Order data:', orderData);
-    
+
     try {
         const token = localStorage.getItem('token');
-        const response = await fetch('/api/dubl-orders', {
+        const response = await fetch('/api/dubl-orders/simple', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1241,32 +1154,17 @@ async function handleDublOrderSubmit(event) {
             },
             body: JSON.stringify(orderData)
         });
-        
+
         if (response.ok) {
             const result = await response.json();
             console.log('Dubl order created:', result);
             closeDublModal();
-            alert('Заказ успешно перенесен на следующую неделю');
+            alert('Заказ успешно перенесен');
+            loadOrders();
         } else if (response.status === 409) {
             const error = await response.json();
             console.error('Dubl order already exists:', error);
-            
-            // Load existing dubl orders for this order
-            const existingResponse = await fetch(`/api/dubl-orders/order/${currentDublOrderId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (existingResponse.ok) {
-                const existingOrders = await existingResponse.json();
-                console.log('Existing dubl orders for this order:', existingOrders);
-                alert(`Заказ уже был перенесен ранее. Существующие переносы:\n${existingOrders.map(o => 
-                    `ID: ${o.id}, Целевая неделя: ${o.targetYear}/${o.targetMonth}/${o.targetWeek}`
-                ).join('\n')}`);
-            } else {
-                alert('Ошибка при переносе заказа: ' + (error.message || 'Неизвестная ошибка'));
-            }
+            alert('Ошибка при переносе заказа: ' + (error.message || 'Перенос на эту неделю уже существует'));
         } else {
             const error = await response.json();
             console.error('Error creating dubl order:', error);

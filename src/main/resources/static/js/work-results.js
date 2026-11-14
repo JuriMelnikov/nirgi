@@ -354,19 +354,39 @@ async function loadModelsForOrder() {
     const isTransferred = selectedOption.dataset.isTransferred === 'true';
     const originalOrderId = selectedOption.dataset.originalOrderId ? parseInt(selectedOption.dataset.originalOrderId) : null;
 
-    selectedOrder = allOrders.find(o => o.id === orderId);
+    let orderForModels = allOrders.find(o => o.id === orderId);
+
+    // Для перенесённого заказа модели загружаются из оригинального заказа,
+    // дальше селекторы работают как при выборе оригинального заказа.
+    if (isTransferred && originalOrderId) {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`/api/orders/${originalOrderId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (response.ok) {
+                orderForModels = await response.json();
+            }
+        } catch (error) {
+            console.error('Error loading original order for models:', error);
+        }
+    }
+
+    selectedOrder = orderForModels;
 
     try {
         const modelSelect = document.getElementById('modelSelect');
         modelSelect.innerHTML = '<option value="">-- Выберите модель --</option>';
         modelSelect.disabled = false;
 
-        if (selectedOrder.models && selectedOrder.models.length > 0) {
-            selectedOrder.models.forEach(model => {
+        if (orderForModels.models && orderForModels.models.length > 0) {
+            orderForModels.models.forEach(model => {
                 const option = document.createElement('option');
                 option.value = model.modelListId;
                 option.textContent = model.modelListName;
-                option.dataset.remainingCount = model.remainingCount || model.count;
+                option.dataset.remainingCount = model.count;
                 modelSelect.appendChild(option);
             });
         }
@@ -508,29 +528,24 @@ async function calculateAvailableQuantity() {
         const token = localStorage.getItem('token');
         const orderSelect = document.getElementById('orderSelect');
         const selectedOption = orderSelect.selectedOptions[0];
-        const isTransferred = selectedOption.dataset.isTransferred === 'true';
         const originalOrderId = selectedOption.dataset.originalOrderId ? parseInt(selectedOption.dataset.originalOrderId) : orderId;
         const modelSelect = document.getElementById('modelSelect');
         const selectedModelOption = modelSelect.selectedOptions[0];
-        const remainingCount = selectedModelOption ? parseInt(selectedModelOption.dataset.remainingCount) : null;
 
+        // Количество всегда берем из оригинального заказа (как при выборе оригинального заказа)
         let totalQuantity;
-        if (isTransferred && remainingCount !== null) {
-            totalQuantity = remainingCount;
-        } else {
-            const orderResponse = await fetch(`/api/orders/${originalOrderId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (orderResponse.ok) {
-                const order = await orderResponse.json();
-                const model = order.models.find(m => m.modelList.id === modelListId);
-                totalQuantity = model ? model.count : 0;
-            } else {
-                return;
+        const orderResponse = await fetch(`/api/orders/${originalOrderId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
+
+        if (orderResponse.ok) {
+            const order = await orderResponse.json();
+            const model = order.models.find(m => m.modelList.id === modelListId);
+            totalQuantity = model ? model.count : 0;
+        } else {
+            return;
         }
 
         // Get completed quantity in current week only (not total across all periods)
@@ -688,32 +703,26 @@ async function addWorkResult() {
 
     const orderSelect = document.getElementById('orderSelect');
     const selectedOption = orderSelect.selectedOptions[0];
-    const isTransferred = selectedOption.dataset.isTransferred === 'true';
     const originalOrderId = selectedOption.dataset.originalOrderId ? parseInt(selectedOption.dataset.originalOrderId) : orderId;
 
     try {
         const token = localStorage.getItem('token');
         const modelSelect = document.getElementById('modelSelect');
-        const selectedModelOption = modelSelect.selectedOptions[0];
-        const remainingCount = selectedModelOption ? parseInt(selectedModelOption.dataset.remainingCount) : null;
 
+        // Количество всегда берем из оригинального заказа (как при выборе оригинального заказа)
         let totalQuantity;
-        if (isTransferred && remainingCount !== null) {
-            totalQuantity = remainingCount;
-        } else {
-            const orderResponse = await fetch(`/api/orders/${originalOrderId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (orderResponse.ok) {
-                const order = await orderResponse.json();
-                const model = order.models.find(m => m.modelList.id === modelListId);
-                totalQuantity = model ? model.count : 0;
-            } else {
-                return;
+        const orderResponse = await fetch(`/api/orders/${originalOrderId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
+
+        if (orderResponse.ok) {
+            const order = await orderResponse.json();
+            const model = order.models.find(m => m.modelList.id === modelListId);
+            totalQuantity = model ? model.count : 0;
+        } else {
+            return;
         }
 
         // Get completed quantity in current week only

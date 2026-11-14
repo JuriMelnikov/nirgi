@@ -104,6 +104,37 @@ class DublOrderServiceTest {
     }
 
     @Test
+    void createSimpleDublOrderSavesOnlyTargetFields() {
+        when(orderRepository.findById(100L)).thenReturn(Optional.of(order));
+        when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 12))
+                .thenReturn(Optional.empty());
+
+        DublOrder created = dublOrderService.createSimpleDublOrder(100L, 2026, 3, 12);
+
+        assertThat(created.getOrder()).isSameAs(order);
+        assertThat(created.getOriginalYear()).isEqualTo(2026);
+        assertThat(created.getOriginalMonth()).isEqualTo(3);
+        assertThat(created.getOriginalWeek()).isEqualTo(11);
+        assertThat(created.getTargetYear()).isEqualTo(2026);
+        assertThat(created.getTargetMonth()).isEqualTo(3);
+        assertThat(created.getTargetWeek()).isEqualTo(12);
+        assertThat(created.getDublModels()).isEmpty();
+        verify(dublOrderRepository).save(created);
+    }
+
+    @Test
+    void createSimpleDublOrderFailsWhenDuplicateAlreadyExistsForTargetWeek() {
+        when(orderRepository.findById(100L)).thenReturn(Optional.of(order));
+        when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 12))
+                .thenReturn(Optional.of(new DublOrder()));
+
+        assertThatThrownBy(() -> dublOrderService.createSimpleDublOrder(100L, 2026, 3, 12))
+                .isInstanceOf(IllegalStateException.class);
+
+        verify(dublOrderRepository, never()).save(any());
+    }
+
+    @Test
     void createDublOrderFailsWhenOrderMissing() {
         when(orderRepository.findById(404L)).thenReturn(Optional.empty());
 

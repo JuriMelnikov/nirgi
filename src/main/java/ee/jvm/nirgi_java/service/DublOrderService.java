@@ -50,6 +50,42 @@ public class DublOrderService {
     }
 
     /**
+     * Создает упрощенную запись переноса заказа для модального окна переноса.
+     * Сохраняются только ссылка на оригинальный заказ и целевая неделя/месяц/год.
+     * Остальные поля (original-поля заполняются из оригинального заказа,
+     * DublModels не создаются).
+     *
+     * @param orderId      ID оригинального заказа
+     * @param targetYear   целевой год переноса
+     * @param targetMonth  целевой месяц переноса
+     * @param targetWeek   целевая неделя переноса
+     * @return созданный DublOrder
+     */
+    public DublOrder createSimpleDublOrder(Long orderId, Integer targetYear, Integer targetMonth, Integer targetWeek) {
+        Order originalOrder = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderId));
+
+        // Проверяем, не существует ли уже дубликат для этой целевой недели
+        Optional<DublOrder> existingDubl = dublOrderRepository
+                .findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(orderId, targetYear, targetMonth, targetWeek);
+
+        if (existingDubl.isPresent()) {
+            throw new IllegalStateException("DublOrder already exists for this order and target week");
+        }
+
+        DublOrder dublOrder = new DublOrder();
+        dublOrder.setOrder(originalOrder);
+        dublOrder.setOriginalYear(originalOrder.getYear());
+        dublOrder.setOriginalMonth(originalOrder.getMonth());
+        dublOrder.setOriginalWeek(originalOrder.getWeek());
+        dublOrder.setTargetYear(targetYear);
+        dublOrder.setTargetMonth(targetMonth);
+        dublOrder.setTargetWeek(targetWeek);
+
+        return dublOrderRepository.save(dublOrder);
+    }
+
+    /**
      * Создает дубликат ордера для следующей недели с указанием выполненной работы в оригинальной неделе
      * 
      * @param orderId ID оригинального ордера
