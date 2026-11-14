@@ -81,8 +81,8 @@ public class OrderController {
                 List<CombinedOrderDTO.ModelInfo> modelInfos = dublOrder.getDublModels().stream()
                     .map(dm -> new CombinedOrderDTO.ModelInfo(dm.getModelList(), dm.getTotalCount(), dm.getRemainingCount()))
                     .toList();
-                result.add(new CombinedOrderDTO(dublOrder.getId(), originalOrder.getName() + " (перенос с недели: " + dublOrder.getOriginalWeek() + ")", 
-                    dublOrder.getTargetYear(), dublOrder.getTargetMonth(), dublOrder.getTargetWeek(), 
+                result.add(new CombinedOrderDTO(dublOrder.getId(), originalOrder.getName() + " (перенос с недели: " + dublOrder.getOriginalWeek() + ")",
+                    dublOrder.getTargetYear(), dublOrder.getTargetMonth(), dublOrder.getTargetWeek(),
                     modelInfos, true, originalOrder.getId()));
             }
         }

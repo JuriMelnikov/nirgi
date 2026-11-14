@@ -163,8 +163,11 @@ class WorkResultServiceTest {
 
     @Test
     void createWorkResultFailsWhenQuantityExceedsAvailableAfterCompletedAndTransferred() {
+        // Заказ не перенесён — действует старая логика: всего - выполнено в неделю - перенесено из недели.
         when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapAndDate(1L, 100L, 1L, null, null, 2026, 3, 11))
                 .thenReturn(3);
+        when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 11))
+                .thenReturn(Optional.empty());
         when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 11))
                 .thenReturn(List.of(dublOrderTransferring(4)));
 
@@ -174,6 +177,56 @@ class WorkResultServiceTest {
 
         assertThat(workResultService.createWorkResult(1L, 100L, 1L, null, null, 3, 2026, 3, 11).getQuantity())
                 .isEqualTo(3);
+    }
+
+    @Test
+    void createWorkResultForTransferredOrderConsidersCompletedInAllWeeks() {
+        // Оригинальный заказ перенесён (есть DublOrder). Выполненная работа в
+        // неделю оригинала должна уменьшать доступное количество в целевой неделе.
+        DublOrder transferred = new DublOrder();
+        transferred.setOrder(order);
+        transferred.setTargetYear(2026);
+        transferred.setTargetMonth(3);
+        transferred.setTargetWeek(34);
+        transferred.addDublModel(new DublModel(30L, transferred, shirts, 10, 9, 1));
+
+        when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 34))
+                .thenReturn(Optional.of(transferred));
+        when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapIncludingTransferred(1L, 100L, 1L, null, null))
+                .thenReturn(9);
+
+        // Доступно: 10 всего - 9 выполнено (в т.ч. в неделю оригинала) = 1
+        assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 2, 2026, 3, 34))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Available quantity: 1");
+
+        WorkResult created = workResultService.createWorkResult(1L, 100L, 1L, null, null, 1, 2026, 3, 34);
+        assertThat(created.getQuantity()).isEqualTo(1);
+    }
+
+    @Test
+    void createWorkResultForOriginalWeekDoesNotDoubleCountTransferredWork() {
+        // Просмотр оригинального заказа в его исходной неделе: доступно =
+        // всего - перенесено из недели - выполнено в эту неделю. Работа, сделанная
+        // на перенесённом заказе в целевой неделе, не уменьшает её повторно.
+        DublOrder transferred = new DublOrder();
+        transferred.setOrder(order);
+        transferred.setTargetYear(2026);
+        transferred.setTargetMonth(3);
+        transferred.setTargetWeek(34);
+        transferred.addDublModel(new DublModel(30L, transferred, shirts, 10, 3, 7));
+
+        when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 33))
+                .thenReturn(Optional.empty());
+        when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 33))
+                .thenReturn(List.of(transferred));
+        when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapAndDate(1L, 100L, 1L, null, null, 2026, 3, 33))
+                .thenReturn(3);
+
+        // Доступно: 10 всего - 7 перенесено - 3 выполнено в исходной неделе = 0
+        assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 1, 2026, 3, 33))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Available quantity: 0");
     }
 
     @Test

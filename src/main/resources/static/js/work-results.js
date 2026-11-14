@@ -384,8 +384,10 @@ async function loadModelsForOrder() {
         if (orderForModels.models && orderForModels.models.length > 0) {
             orderForModels.models.forEach(model => {
                 const option = document.createElement('option');
-                option.value = model.modelListId;
-                option.textContent = model.modelListName;
+                // CombinedOrderDTO.ModelInfo (плоская: modelListId/modelListName)
+                // и Order.Model (вложенная: modelList.id/modelList.name)
+                option.value = model.modelListId ?? model.modelList?.id;
+                option.textContent = model.modelListName ?? model.modelList?.name;
                 option.dataset.remainingCount = model.count;
                 modelSelect.appendChild(option);
             });
@@ -548,52 +550,77 @@ async function calculateAvailableQuantity() {
             return;
         }
 
-        // Get completed quantity in current week only (not total across all periods)
-        const completedResponse = await fetch(
-            `/api/work-results/completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}&year=${year}&month=${month}&week=${week}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+        const isTransferred = !!selectedOption.dataset.originalOrderId;
+        let completedQuantity = 0;
+        let transferredQuantity = 0;
+
+        if (isTransferred) {
+            // Для перенесённого заказа учитываем выполненную работу во всех неделях
+            // (включая неделю оригинального заказа), а не только в целевой неделе
+            const totalCompletedResponse = await fetch(
+                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 }
+            );
+            if (totalCompletedResponse.ok) {
+                completedQuantity = await totalCompletedResponse.json();
             }
-        );
-
-        // Get transferred quantity for current week
-        const transferredResponse = await fetch(
-            `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+        } else {
+            // Get completed quantity in current week only (not total across all periods)
+            const completedResponse = await fetch(
+                `/api/work-results/completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}&year=${year}&month=${month}&week=${week}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 }
+            );
+
+            // Get transferred quantity for current week
+            const transferredResponse = await fetch(
+                `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (completedResponse.ok && transferredResponse.ok) {
+                completedQuantity = await completedResponse.json();
+                transferredQuantity = await transferredResponse.json();
             }
-        );
+        }
 
-        if (completedResponse.ok && transferredResponse.ok) {
-            const completedQuantity = await completedResponse.json();
-            const transferredQuantity = await transferredResponse.json();
+        // Available quantity calculation
+        let availableQuantity;
+        if (isTransferred) {
+            availableQuantity = totalQuantity - completedQuantity;
+        } else {
+            availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
+        }
 
-            // Available quantity = total - transferred - completed in current week
-            const availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
+        const quantitySelect = document.getElementById('quantitySelect');
+        quantitySelect.innerHTML = '<option value="">0</option>';
 
-            const quantitySelect = document.getElementById('quantitySelect');
-            quantitySelect.innerHTML = '<option value="">0</option>';
+        for (let i = 1; i <= availableQuantity; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            quantitySelect.appendChild(option);
+        }
 
-            for (let i = 1; i <= availableQuantity; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                quantitySelect.appendChild(option);
-            }
-
-            if (availableQuantity <= 0) {
-                quantitySelect.disabled = true;
-                document.getElementById('addButton').disabled = true;
-            } else {
+        if (availableQuantity <= 0) {
+            quantitySelect.disabled = true;
+            document.getElementById('addButton').disabled = true;
+        } else {
                 quantitySelect.disabled = false;
                 // Reset add button to disabled until quantity is selected
                 document.getElementById('addButton').disabled = true;
             }
-        }
     } catch (error) {
         console.error('Error calculating available quantity:', error);
     }
@@ -725,37 +752,59 @@ async function addWorkResult() {
             return;
         }
 
-        // Get completed quantity in current week only
-        const completedResponse = await fetch(
-            `/api/work-results/completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}&year=${year}&month=${month}&week=${week}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+        const isTransferred = !!selectedOption.dataset.originalOrderId;
+        let completedQuantity = 0;
+        let transferredQuantity = 0;
+
+        if (isTransferred) {
+            // Для перенесённого заказа учитываем выполненную работу во всех неделях
+            // (включая неделю оригинального заказа), а не только в целевой неделе
+            const totalCompletedResponse = await fetch(
+                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 }
+            );
+            if (totalCompletedResponse.ok) {
+                completedQuantity = await totalCompletedResponse.json();
             }
-        );
-
-        // Get transferred quantity for current week
-        const transferredResponse = await fetch(
-            `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+        } else {
+            // Get completed quantity in current week only
+            const completedResponse = await fetch(
+                `/api/work-results/completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}&year=${year}&month=${month}&week=${week}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 }
+            );
+
+            // Get transferred quantity for current week
+            const transferredResponse = await fetch(
+                `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (completedResponse.ok && transferredResponse.ok) {
+                completedQuantity = await completedResponse.json();
+                transferredQuantity = await transferredResponse.json();
             }
-        );
+        }
 
-        if (completedResponse.ok && transferredResponse.ok) {
-            const completedQuantity = await completedResponse.json();
-            const transferredQuantity = await transferredResponse.json();
+        // Available quantity
+        const availableQuantity = isTransferred
+            ? totalQuantity - completedQuantity
+            : totalQuantity - transferredQuantity - completedQuantity;
 
-            // Available quantity = total - transferred - completed in current week
-            const availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
-
-            if (quantity > availableQuantity) {
-                alert(`Невозможно добавить ${quantity} изделий. Доступное количество: ${availableQuantity} (Всего: ${totalQuantity}, Перенесено: ${transferredQuantity}, Уже выполнено: ${completedQuantity})`);
-                return;
-            }
+        if (quantity > availableQuantity) {
+            alert(`Невозможно добавить ${quantity} изделий. Доступное количество: ${availableQuantity} (Всего: ${totalQuantity}, Перенесено: ${transferredQuantity}, Уже выполнено: ${completedQuantity})`);
+            return;
         }
     } catch (error) {
         console.error('Error validating quantity:', error);

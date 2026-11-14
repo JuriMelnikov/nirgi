@@ -139,16 +139,30 @@ public class WorkResultService {
                 .orElseThrow(() -> new IllegalArgumentException("Model not found in order"));
         
         Integer totalQuantity = model.getCount();
-        Integer completedInCurrentWeek = getCompletedQuantity(employeeId, orderId, modelListId, sectionListId, techmapId, year, month, week);
-        
-        // Check if there are transferred instances for this model in the current week
-        Integer transferredQuantity = getTransferredQuantity(orderId, modelListId, year, month, week);
-        
-        // Available quantity for current week = total - transferred - completed in current week
-        Integer availableQuantity = totalQuantity - transferredQuantity - completedInCurrentWeek;
-        
+
+        // Работа ведётся в целевой неделе перенесённого заказа, если существует
+        // DublOrder с этим оригинальным заказом и совпадающей целевой датой.
+        // Для перенесённого заказа выполненную работу нужно учитывать во всех
+        // неделях (включая неделю оригинала), а не только в целевой.
+        boolean isTransferred = !dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(
+                orderId, year, month, week).isEmpty();
+
+        Integer completedQuantity;
+        Integer transferredQuantity = 0;
+
+        if (isTransferred) {
+            completedQuantity = getTotalCompletedQuantity(employeeId, orderId, modelListId, sectionListId, techmapId);
+        } else {
+            completedQuantity = getCompletedQuantity(employeeId, orderId, modelListId, sectionListId, techmapId, year, month, week);
+            transferredQuantity = getTransferredQuantity(orderId, modelListId, year, month, week);
+        }
+
+        Integer availableQuantity = isTransferred
+                ? totalQuantity - completedQuantity
+                : totalQuantity - transferredQuantity - completedQuantity;
+
         if (quantity > availableQuantity) {
-            throw new IllegalArgumentException("Cannot add " + quantity + " items. Available quantity: " + availableQuantity + " (Total: " + totalQuantity + ", Transferred: " + transferredQuantity + ", Already completed: " + completedInCurrentWeek + ")");
+            throw new IllegalArgumentException("Cannot add " + quantity + " items. Available quantity: " + availableQuantity + " (Total: " + totalQuantity + ", Transferred: " + transferredQuantity + ", Already completed: " + completedQuantity + ")");
         }
 
         WorkResult workResult = new WorkResult(employee, order, modelList, sectionList, techmap, quantity, year, month, week);
