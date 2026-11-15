@@ -163,20 +163,43 @@ class WorkResultServiceTest {
 
     @Test
     void createWorkResultFailsWhenQuantityExceedsAvailableAfterCompletedAndTransferred() {
-        // Заказ не перенесён — действует старая логика: всего - выполнено в неделю - перенесено из недели.
-        when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapAndDate(1L, 100L, 1L, null, null, 2026, 3, 11))
+        // Заказ не перенесён: выполнено считается по всем неделям, из него вычитаем
+        // экземпляры, перенесённые из этой недели в другую.
+        when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapIncludingTransferred(1L, 100L, 1L, null, null))
                 .thenReturn(3);
         when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 11))
                 .thenReturn(Optional.empty());
         when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 11))
                 .thenReturn(List.of(dublOrderTransferring(4)));
 
+        // Доступно: 10 всего - 3 выполнено (все недели) - 4 перенесено из недели = 3
         assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 4, 2026, 3, 11))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Available quantity: 3");
 
         assertThat(workResultService.createWorkResult(1L, 100L, 1L, null, null, 3, 2026, 3, 11).getQuantity())
                 .isEqualTo(3);
+    }
+
+    @Test
+    void createWorkResultCountsCompletedAcrossAllWeeks() {
+        // Две записи work_results в разных неделях для одного заказа/модели:
+        // выполненное должно суммироваться по всем неделям, а не только по текущей.
+        when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 11))
+                .thenReturn(Optional.empty());
+        when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 11))
+                .thenReturn(List.of());
+        // Неделя 11: выполнено 1, неделя 33: выполнено 1 -> итого 2 по всем неделям.
+        when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapIncludingTransferred(1L, 100L, 1L, null, null))
+                .thenReturn(2);
+
+        // Доступно: 10 всего - 2 выполнено (сумма по неделям) - 0 перенесено = 8
+        WorkResult created = workResultService.createWorkResult(1L, 100L, 1L, null, null, 8, 2026, 3, 11);
+        assertThat(created.getQuantity()).isEqualTo(8);
+
+        assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 9, 2026, 3, 11))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Available quantity: 8");
     }
 
     @Test

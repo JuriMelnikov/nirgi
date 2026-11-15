@@ -569,9 +569,10 @@ async function calculateAvailableQuantity() {
                 completedQuantity = await totalCompletedResponse.json();
             }
         } else {
-            // Get completed quantity in current week only (not total across all periods)
-            const completedResponse = await fetch(
-                `/api/work-results/completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}&year=${year}&month=${month}&week=${week}`,
+            // Выполнено по всем неделям (не только текущей), чтобы экземпляры,
+            // выполненные в других неделях, не были упущены при расчёте доступного количества.
+            const totalCompletedResponse = await fetch(
+                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -579,7 +580,7 @@ async function calculateAvailableQuantity() {
                 }
             );
 
-            // Get transferred quantity for current week
+            // Экземпляры, перенесённые из этой недели в другую, недоступны здесь.
             const transferredResponse = await fetch(
                 `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
                 {
@@ -589,8 +590,8 @@ async function calculateAvailableQuantity() {
                 }
             );
 
-            if (completedResponse.ok && transferredResponse.ok) {
-                completedQuantity = await completedResponse.json();
+            if (totalCompletedResponse.ok && transferredResponse.ok) {
+                completedQuantity = await totalCompletedResponse.json();
                 transferredQuantity = await transferredResponse.json();
             }
         }
@@ -771,9 +772,10 @@ async function addWorkResult() {
                 completedQuantity = await totalCompletedResponse.json();
             }
         } else {
-            // Get completed quantity in current week only
-            const completedResponse = await fetch(
-                `/api/work-results/completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}&year=${year}&month=${month}&week=${week}`,
+            // Выполнено по всем неделям (не только текущей), чтобы экземпляры,
+            // выполненные в других неделях, не были упущены при проверке количества.
+            const totalCompletedResponse = await fetch(
+                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -781,7 +783,7 @@ async function addWorkResult() {
                 }
             );
 
-            // Get transferred quantity for current week
+            // Экземпляры, перенесённые из этой недели в другую, недоступны здесь.
             const transferredResponse = await fetch(
                 `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
                 {
@@ -791,8 +793,8 @@ async function addWorkResult() {
                 }
             );
 
-            if (completedResponse.ok && transferredResponse.ok) {
-                completedQuantity = await completedResponse.json();
+            if (totalCompletedResponse.ok && transferredResponse.ok) {
+                completedQuantity = await totalCompletedResponse.json();
                 transferredQuantity = await transferredResponse.json();
             }
         }
@@ -1043,4 +1045,4 @@ async function deleteWorkResult(id) {
 // Make deleteWorkResult and deleteWorkResultGroup globally accessible
 window.deleteWorkResult = deleteWorkResult;
 window.deleteWorkResultGroup = deleteWorkResultGroup;
-export { formatEuros, getWeekNumber, formatTime };
+export { formatEuros, getWeekNumber, formatTime, calculateAvailableQuantity, addWorkResult };

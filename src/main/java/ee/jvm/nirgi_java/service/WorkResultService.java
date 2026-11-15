@@ -142,24 +142,26 @@ public class WorkResultService {
 
         // Работа ведётся в целевой неделе перенесённого заказа, если существует
         // DublOrder с этим оригинальным заказом и совпадающей целевой датой.
-        // Для перенесённого заказа выполненную работу нужно учитывать во всех
-        // неделях (включая неделю оригинала), а не только в целевой.
+        // Выполненную работу всегда считаем как сумму по всем записям work_results
+        // (все недели), чтобы экземпляры, выполненные в любой неделе, учитывались
+        // при расчёте доступного количества.
         boolean isTransferred = !dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(
                 orderId, year, month, week).isEmpty();
 
-        Integer completedQuantity;
+        // Выполнено всего по всем неделям (включая неделю оригинала при переносе).
+        Integer completedQuantity = getTotalCompletedQuantity(employeeId, orderId, modelListId, sectionListId, techmapId);
+
         Integer transferredQuantity = 0;
-
+        Integer availableQuantity;
         if (isTransferred) {
-            completedQuantity = getTotalCompletedQuantity(employeeId, orderId, modelListId, sectionListId, techmapId);
+            // Перенесённый заказ: целевая неделя, выполнено учитывается из всех недель.
+            availableQuantity = totalQuantity - completedQuantity;
         } else {
-            completedQuantity = getCompletedQuantity(employeeId, orderId, modelListId, sectionListId, techmapId, year, month, week);
+            // Оригинальный заказ: из выполненного по всем неделям вычитаем
+            // экземпляры, перенесённые из этой недели в другую (они недоступны здесь).
             transferredQuantity = getTransferredQuantity(orderId, modelListId, year, month, week);
+            availableQuantity = totalQuantity - completedQuantity - transferredQuantity;
         }
-
-        Integer availableQuantity = isTransferred
-                ? totalQuantity - completedQuantity
-                : totalQuantity - transferredQuantity - completedQuantity;
 
         if (quantity > availableQuantity) {
             throw new IllegalArgumentException("Cannot add " + quantity + " items. Available quantity: " + availableQuantity + " (Total: " + totalQuantity + ", Transferred: " + transferredQuantity + ", Already completed: " + completedQuantity + ")");
