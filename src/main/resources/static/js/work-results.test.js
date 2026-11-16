@@ -59,11 +59,9 @@ describe('formatTime', () => {
 describe('calculateAvailableQuantity', () => {
   let fetchMock;
   let completedQty = 0;
-  let transferredQty = 0;
 
   beforeEach(() => {
     completedQty = 0;
-    transferredQty = 0;
     fetchMock = vi.spyOn(global, 'fetch').mockImplementation(async (url) => {
       const u = String(url);
       if (u.startsWith('/api/orders/')) {
@@ -71,9 +69,6 @@ describe('calculateAvailableQuantity', () => {
       }
       if (u.includes('/total-completed-quantity')) {
         return { ok: true, json: async () => completedQty };
-      }
-      if (u.includes('/transferred-quantity')) {
-        return { ok: true, json: async () => transferredQty };
       }
       return { ok: false, status: 404, json: async () => ({}) };
     });
@@ -106,10 +101,9 @@ describe('calculateAvailableQuantity', () => {
     }
   }
 
-  it('обычный заказ: выполнено считается по всем неделям, перенесённое вычитается', async () => {
+  it('обычный заказ: выполнено считается по всем неделям, доступно = всего − выполнено', async () => {
     setupDom({ isTransferred: false });
     completedQty = 2; // 1 экземпляр в неделе 11 + 1 в неделе 33
-    transferredQty = 1;
 
     await calculateAvailableQuantity();
 
@@ -122,17 +116,18 @@ describe('calculateAvailableQuantity', () => {
       expect.stringContaining('/completed-quantity'),
       expect.anything()
     );
-    expect(fetchMock).toHaveBeenCalledWith(
+    // transferred-quantity не запрашивается
+    expect(fetchMock).not.toHaveBeenCalledWith(
       expect.stringContaining('/transferred-quantity'),
       expect.anything()
     );
 
-    // available = 10 всего - 2 выполнено (все недели) - 1 перенесено = 7
+    // available = 10 всего - 2 выполнено (все недели) = 8
     const quantitySelect = document.getElementById('quantitySelect');
-    expect(quantitySelect.options.length).toBe(8); // "0" + 1..7
+    expect(quantitySelect.options.length).toBe(9); // "0" + 1..8
   });
 
-  it('перенесённый заказ: выполнено по всем неделям, перенесённое не запрашивается', async () => {
+  it('перенесённый заказ: выполнено по всем неделям, доступно = всего − выполнено', async () => {
     setupDom({ isTransferred: true });
     completedQty = 4;
 
@@ -159,7 +154,6 @@ describe('calculateAvailableQuantity', () => {
   it('когда выполнено больше или равно всего, доступное количество равно 0', async () => {
     setupDom({ isTransferred: false });
     completedQty = 10;
-    transferredQty = 0;
 
     await calculateAvailableQuantity();
 

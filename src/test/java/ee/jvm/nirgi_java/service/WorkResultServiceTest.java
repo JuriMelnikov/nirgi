@@ -162,38 +162,34 @@ class WorkResultServiceTest {
     }
 
     @Test
-    void createWorkResultFailsWhenQuantityExceedsAvailableAfterCompletedAndTransferred() {
-        // Заказ не перенесён: выполнено считается по всем неделям, из него вычитаем
-        // экземпляры, перенесённые из этой недели в другую.
+    void createWorkResultFailsWhenQuantityExceedsAvailable() {
+        // Заказ не перенесён: выполнено считается по всем неделям.
+        // Доступно = всего − выполнено (без отдельного учёта переноса).
         when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapIncludingTransferred(1L, 100L, 1L, null, null))
                 .thenReturn(3);
         when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 11))
                 .thenReturn(Optional.empty());
-        when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 11))
-                .thenReturn(List.of(dublOrderTransferring(4)));
 
-        // Доступно: 10 всего - 3 выполнено (все недели) - 4 перенесено из недели = 3
-        assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 4, 2026, 3, 11))
+        // Доступно: 10 всего - 3 выполнено (все недели) = 7
+        assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 8, 2026, 3, 11))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Available quantity: 3");
+                .hasMessageContaining("Available quantity: 7");
 
-        assertThat(workResultService.createWorkResult(1L, 100L, 1L, null, null, 3, 2026, 3, 11).getQuantity())
-                .isEqualTo(3);
+        assertThat(workResultService.createWorkResult(1L, 100L, 1L, null, null, 7, 2026, 3, 11).getQuantity())
+                .isEqualTo(7);
     }
 
     @Test
     void createWorkResultCountsCompletedAcrossAllWeeks() {
         // Две записи work_results в разных неделях для одного заказа/модели:
-        // выполненное должно суммироваться по всем неделям, а не только по текущей.
+        // выполненное должно суммироваться по всем неделям.
         when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 11))
                 .thenReturn(Optional.empty());
-        when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 11))
-                .thenReturn(List.of());
         // Неделя 11: выполнено 1, неделя 33: выполнено 1 -> итого 2 по всем неделям.
         when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapIncludingTransferred(1L, 100L, 1L, null, null))
                 .thenReturn(2);
 
-        // Доступно: 10 всего - 2 выполнено (сумма по неделям) - 0 перенесено = 8
+        // Доступно: 10 всего - 2 выполнено (сумма по неделям) = 8
         WorkResult created = workResultService.createWorkResult(1L, 100L, 1L, null, null, 8, 2026, 3, 11);
         assertThat(created.getQuantity()).isEqualTo(8);
 
@@ -228,10 +224,9 @@ class WorkResultServiceTest {
     }
 
     @Test
-    void createWorkResultForOriginalWeekDoesNotDoubleCountTransferredWork() {
-        // Просмотр оригинального заказа в его исходной неделе: доступно =
-        // всего - перенесено из недели - выполнено в эту неделю. Работа, сделанная
-        // на перенесённом заказе в целевой неделе, не уменьшает её повторно.
+    void createWorkResultForOriginalWeekCountsCompletedAcrossAllWeeks() {
+        // Просмотр оригинального заказа в его исходной неделе: выполнено считается
+        // по всем записям work_results (все недели), доступно = всего − выполнено.
         DublOrder transferred = new DublOrder();
         transferred.setOrder(order);
         transferred.setTargetYear(2026);
@@ -241,15 +236,17 @@ class WorkResultServiceTest {
 
         when(dublOrderRepository.findByOrderIdAndTargetYearAndTargetMonthAndTargetWeek(100L, 2026, 3, 33))
                 .thenReturn(Optional.empty());
-        when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 33))
-                .thenReturn(List.of(transferred));
-        when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapAndDate(1L, 100L, 1L, null, null, 2026, 3, 33))
+        // Выполнено по всем неделям (включая неделю оригинала и целевую неделю переноса) = 3.
+        when(workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapIncludingTransferred(1L, 100L, 1L, null, null))
                 .thenReturn(3);
 
-        // Доступно: 10 всего - 7 перенесено - 3 выполнено в исходной неделе = 0
-        assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 1, 2026, 3, 33))
+        // Доступно: 10 всего - 3 выполнено (все недели) = 7
+        assertThatThrownBy(() -> workResultService.createWorkResult(1L, 100L, 1L, null, null, 8, 2026, 3, 33))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Available quantity: 0");
+                .hasMessageContaining("Available quantity: 7");
+
+        WorkResult created = workResultService.createWorkResult(1L, 100L, 1L, null, null, 7, 2026, 3, 33);
+        assertThat(created.getQuantity()).isEqualTo(7);
     }
 
     @Test

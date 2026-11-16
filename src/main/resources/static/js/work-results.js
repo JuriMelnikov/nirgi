@@ -550,59 +550,24 @@ async function calculateAvailableQuantity() {
             return;
         }
 
-        const isTransferred = !!selectedOption.dataset.originalOrderId;
         let completedQuantity = 0;
-        let transferredQuantity = 0;
 
-        if (isTransferred) {
-            // Для перенесённого заказа учитываем выполненную работу во всех неделях
-            // (включая неделю оригинального заказа), а не только в целевой неделе
-            const totalCompletedResponse = await fetch(
-                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+        // Выполнено по всем записям work_results (все недели).
+        const totalCompletedResponse = await fetch(
+            `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-            );
-            if (totalCompletedResponse.ok) {
-                completedQuantity = await totalCompletedResponse.json();
             }
-        } else {
-            // Выполнено по всем неделям (не только текущей), чтобы экземпляры,
-            // выполненные в других неделях, не были упущены при расчёте доступного количества.
-            const totalCompletedResponse = await fetch(
-                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            );
+        );
 
-            // Экземпляры, перенесённые из этой недели в другую, недоступны здесь.
-            const transferredResponse = await fetch(
-                `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            );
-
-            if (totalCompletedResponse.ok && transferredResponse.ok) {
-                completedQuantity = await totalCompletedResponse.json();
-                transferredQuantity = await transferredResponse.json();
-            }
+        if (totalCompletedResponse.ok) {
+            completedQuantity = await totalCompletedResponse.json();
         }
 
-        // Available quantity calculation
-        let availableQuantity;
-        if (isTransferred) {
-            availableQuantity = totalQuantity - completedQuantity;
-        } else {
-            availableQuantity = totalQuantity - transferredQuantity - completedQuantity;
-        }
+        // Доступное количество = всего − выполнено (по всем неделям).
+        const availableQuantity = totalQuantity - completedQuantity;
 
         const quantitySelect = document.getElementById('quantitySelect');
         quantitySelect.innerHTML = '<option value="">0</option>';
@@ -753,59 +718,27 @@ async function addWorkResult() {
             return;
         }
 
-        const isTransferred = !!selectedOption.dataset.originalOrderId;
         let completedQuantity = 0;
-        let transferredQuantity = 0;
 
-        if (isTransferred) {
-            // Для перенесённого заказа учитываем выполненную работу во всех неделях
-            // (включая неделю оригинального заказа), а не только в целевой неделе
-            const totalCompletedResponse = await fetch(
-                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+        // Выполнено по всем записям work_results (все недели).
+        const totalCompletedResponse = await fetch(
+            `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-            );
-            if (totalCompletedResponse.ok) {
-                completedQuantity = await totalCompletedResponse.json();
             }
-        } else {
-            // Выполнено по всем неделям (не только текущей), чтобы экземпляры,
-            // выполненные в других неделях, не были упущены при проверке количества.
-            const totalCompletedResponse = await fetch(
-                `/api/work-results/total-completed-quantity?employeeId=${employeeId}&orderId=${originalOrderId}&modelListId=${modelListId}&sectionListId=${sectionListId}&techmapId=${techmapId}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            );
+        );
 
-            // Экземпляры, перенесённые из этой недели в другую, недоступны здесь.
-            const transferredResponse = await fetch(
-                `/api/work-results/transferred-quantity?orderId=${originalOrderId}&modelListId=${modelListId}&year=${year}&month=${month}&week=${week}`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                }
-            );
-
-            if (totalCompletedResponse.ok && transferredResponse.ok) {
-                completedQuantity = await totalCompletedResponse.json();
-                transferredQuantity = await transferredResponse.json();
-            }
+        if (totalCompletedResponse.ok) {
+            completedQuantity = await totalCompletedResponse.json();
         }
 
-        // Available quantity
-        const availableQuantity = isTransferred
-            ? totalQuantity - completedQuantity
-            : totalQuantity - transferredQuantity - completedQuantity;
+        // Доступное количество = всего − выполнено (по всем неделям).
+        const availableQuantity = totalQuantity - completedQuantity;
 
         if (quantity > availableQuantity) {
-            alert(`Невозможно добавить ${quantity} изделий. Доступное количество: ${availableQuantity} (Всего: ${totalQuantity}, Перенесено: ${transferredQuantity}, Уже выполнено: ${completedQuantity})`);
+            alert(`Невозможно добавить ${quantity} изделий. Доступное количество: ${availableQuantity} (Всего: ${totalQuantity}, Уже выполнено: ${completedQuantity})`);
             return;
         }
     } catch (error) {
