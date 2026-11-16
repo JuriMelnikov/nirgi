@@ -164,6 +164,7 @@ function renderCalendar(year, month) {
                 const dayCell = document.createElement('div');
                 dayCell.className = 'p-1 text-center cursor-pointer hover:bg-base-300 rounded text-xs';
                 dayCell.textContent = dayNum;
+                dayCell.dataset.week = weekNumber;
 
                 // Highlight current date
                 if (dayNum === currentDay && month === currentMonth && year === currentYear) {
@@ -218,14 +219,16 @@ function resetSelect(select, placeholder, disabled = true) {
     select.disabled = disabled;
 }
 
-// Обновить подсветку выбранной недели в календаре
+// Обновить подсветку выбранной недели в календаре (вся строка: номер недели + все 7 дней)
 function refreshWeekHighlight() {
     const selectedWeek = parseInt(document.getElementById('weekSelect').value);
     if (!selectedWeek) {
         return;
     }
-    document.querySelectorAll('#calendarDays > div[data-week-cell="true"]').forEach(cell => {
-        const isSelected = cell.textContent.trim() === String(selectedWeek);
+    const weekStr = String(selectedWeek);
+
+    document.querySelectorAll('#calendarDays > div[data-week-cell="true"], #calendarDays > div[data-week]').forEach(cell => {
+        const isSelected = cell.dataset.week ? cell.dataset.week === weekStr : cell.textContent.trim() === weekStr;
         if (isSelected) {
             cell.classList.add('bg-primary', 'text-primary-content');
             cell.classList.remove('bg-red-100', 'text-red-800');
