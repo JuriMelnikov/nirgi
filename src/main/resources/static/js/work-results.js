@@ -221,14 +221,16 @@ function resetSelect(select, placeholder, disabled = true) {
 
 // Обновить подсветку выбранной недели в календаре (вся строка: номер недели + все 7 дней)
 function refreshWeekHighlight() {
-    const selectedWeek = parseInt(document.getElementById('weekSelect').value);
+    const weekSelect = document.getElementById('weekSelect');
+    const selectedWeek = parseInt(weekSelect.value);
     if (!selectedWeek) {
         return;
     }
     const weekStr = String(selectedWeek);
 
     document.querySelectorAll('#calendarDays > div[data-week-cell="true"], #calendarDays > div[data-week]').forEach(cell => {
-        const isSelected = cell.dataset.week ? cell.dataset.week === weekStr : cell.textContent.trim() === weekStr;
+        const cellWeek = cell.dataset.week ? cell.dataset.week : cell.textContent.trim();
+        const isSelected = cellWeek === weekStr;
         if (isSelected) {
             cell.classList.add('bg-primary', 'text-primary-content');
             cell.classList.remove('bg-red-100', 'text-red-800');
