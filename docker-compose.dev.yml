@@ -1,0 +1,102 @@
+# docker-compose.dev.yml — локальная разработка на Windows (localhost)
+#
+# Запуск:     docker compose -f docker-compose.dev.yml up -d --build
+# Остановка:  docker compose -f docker-compose.dev.yml down
+# Логи:       docker compose -f docker-compose.dev.yml logs -f app
+#
+# Отличия от продакшн-версии (docker-compose.yml):
+#  - Нет Nginx Proxy Manager: приложение доступно напрямую на http://localhost:8080
+#  - Открыты порты: приложение 8080, phpMyAdmin 8081, MariaDB 3306, Java-debug 5005
+#  - БД хранится в именованном томе (не в ./mariadb_data), чтобы не трогать прод-данные
+#  - Кэш Thymeleaf отключён; статика и шаблоны монтируются с хоста (правки видны сразу)
+#  - Переменные берутся из того же .env
+
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: mariadb_dev
+    restart: unless-stopped
+    ports:
+      # Доступ к БД с хоста (DBeaver, IntelliJ Database Tools и т.п.)
+      # Если порт 3306 занят локальным MySQL/MariaDB — замените на "3307:3306"
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - mariadb_dev_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dev_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring_app_dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"   # Приложение: http://localhost:8080
+      - "5005:5005"   # Remote debug: в IDEA Run -> Attach to Process (host=localhost, port=5005)
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/${MARIADB_DATABASE}?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: ${MARIADB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MARIADB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      CORS_ALLOWED_ORIGINS: http://localhost:8080,http://localhost,https://localhost
+      SPRING_WEB_RESOURCES_STATIC_LOCATIONS: file:/app/static/
+      SPRING_THYMELEAF_PREFIX: file:/app/templates/
+      SPRING_THYMELEAF_CACHE: "false"
+      # Тот же JAVA_OPTS, что в Dockerfile, + агент удалённой отладки
+      JAVA_OPTS: "-XX:+UseG1GC -XX:+UseContainerSupport -Duser.timezone=Europe/Tallinn -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    volumes:
+      - ./src/main/resources/static:/app/static
+      - ./src/main/resources/templates:/app/templates
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - dev_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
+
+  pma:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_dev_java
+    restart: unless-stopped
+    ports:
+      - "8081:80"     # phpMyAdmin: http://localhost:8081
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      UPLOAD_LIMIT: 256M
+    depends_on:
+      - mariadb
+    networks:
+      - dev_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "3"
+
+networks:
+  dev_network:
+
+volumes:
+  mariadb_dev_data:
