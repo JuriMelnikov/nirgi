@@ -305,23 +305,6 @@ class WorkResultServiceTest {
     }
 
     @Test
-    void transferredQuantityCountsOnlyMatchingOrderAndModel() {
-        Order otherOrder = new Order(200L, "Order-2", 2026, 3, 11);
-        DublOrder otherOrderTransfer = new DublOrder();
-        otherOrderTransfer.setOrder(otherOrder);
-        otherOrderTransfer.addDublModel(new DublModel(20L, otherOrderTransfer, shirts, 10, 0, 10));
-
-        DublOrder otherModelTransfer = new DublOrder();
-        otherModelTransfer.setOrder(order);
-        otherModelTransfer.addDublModel(new DublModel(21L, otherModelTransfer, new ModelList(5L, "Other"), 10, 0, 7));
-
-        when(dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(2026, 3, 11))
-                .thenReturn(List.of(dublOrderTransferring(4), otherOrderTransfer, otherModelTransfer));
-
-        assertThat(workResultService.getTransferredQuantityForCurrentWeek(100L, 1L, 2026, 3, 11)).isEqualTo(4);
-    }
-
-    @Test
     void getCompletedWorkByOrderAndWeekSumsQuantityPerModel() {
         ModelList trousers = new ModelList(2L, "Trousers");
         when(workResultRepository.findByOrderIdAndYearAndMonthAndWeek(100L, 2026, 3, 11)).thenReturn(List.of(
@@ -356,10 +339,4 @@ class WorkResultServiceTest {
         assertThat(workResultService.getWorkResultsByEmployeeOrderAndDate(1L, 100L, 2026, 3, 11)).containsExactly(workResult);
     }
 
-    private DublOrder dublOrderTransferring(int remainingCount) {
-        DublOrder dublOrder = new DublOrder();
-        dublOrder.setOrder(order);
-        dublOrder.addDublModel(new DublModel(30L, dublOrder, shirts, 10, 10 - remainingCount, remainingCount));
-        return dublOrder;
-    }
 }

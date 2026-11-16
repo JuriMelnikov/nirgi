@@ -35,9 +35,6 @@ public class WorkResultService {
     @Autowired
     private SettingsService settingsService;
 
-    @Autowired
-    private DublOrderRepository dublOrderRepository;
-
     public List<WorkResult> getAllWorkResults() {
         return workResultRepository.findAll();
     }
@@ -80,26 +77,6 @@ public class WorkResultService {
         Integer quantity = workResultRepository.sumQuantityByEmployeeOrderModelSectionTechmapIncludingTransferred(
                 employeeId, orderId, modelListId, sectionListId, techmapId);
         return quantity != null ? quantity : 0;
-    }
-
-    private Integer getTransferredQuantity(Long orderId, Long modelListId, Integer year, Integer month, Integer week) {
-        // Check if this week is an original week (has transfers from it)
-        List<ee.jvm.nirgi_java.classes.DublOrder> dublOrdersAsOriginal = dublOrderRepository.findByOriginalYearAndOriginalMonthAndOriginalWeek(year, month, week);
-        
-        Integer transferredFromThisWeek = dublOrdersAsOriginal.stream()
-            .filter(dublOrder -> dublOrder.getOrder().getId().equals(orderId))
-            .flatMap(dublOrder -> dublOrder.getDublModels().stream())
-            .filter(dublModel -> dublModel.getModelList().getId().equals(modelListId))
-            .mapToInt(ee.jvm.nirgi_java.classes.DublModel::getRemainingCount)
-            .sum();
-        
-        // For validation, we need to subtract what was transferred FROM this week
-        // because those instances are not available in the original week
-        return transferredFromThisWeek;
-    }
-
-    public Integer getTransferredQuantityForCurrentWeek(Long orderId, Long modelListId, Integer year, Integer month, Integer week) {
-        return getTransferredQuantity(orderId, modelListId, year, month, week);
     }
 
     public WorkResult createWorkResult(Long employeeId, Long orderId, Long modelListId, Long sectionListId, 

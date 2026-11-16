@@ -102,18 +102,6 @@ public class WorkResultController {
         return ResponseEntity.ok(quantity);
     }
 
-    @GetMapping("/transferred-quantity")
-    public ResponseEntity<Integer> getTransferredQuantity(
-            @RequestParam Long orderId,
-            @RequestParam Long modelListId,
-            @RequestParam Integer year,
-            @RequestParam Integer month,
-            @RequestParam Integer week) {
-        Integer quantity = workResultService.getTransferredQuantityForCurrentWeek(
-                orderId, modelListId, year, month, week);
-        return ResponseEntity.ok(quantity);
-    }
-
     @GetMapping("/completed-work-by-order-week")
     public ResponseEntity<Map<Long, Integer>> getCompletedWorkByOrderAndWeek(
             @RequestParam Long orderId,
