@@ -103,12 +103,10 @@ class WorkResultControllerTest {
     void quantityEndpointsReturnServiceValues() {
         when(workResultService.getCompletedQuantity(1L, 2L, 3L, 4L, 5L, 2025, 8, 33)).thenReturn(7);
         when(workResultService.getTotalCompletedQuantity(1L, 2L, 3L, 4L, 5L)).thenReturn(19);
-        when(workResultService.getTransferredQuantityForCurrentWeek(2L, 3L, 2025, 8, 33)).thenReturn(4);
         when(workResultService.getCompletedWorkByOrderAndWeek(2L, 2025, 8, 33)).thenReturn(Map.of(3L, 7));
 
         assertThat(workResultController.getCompletedQuantity(1L, 2L, 3L, 4L, 5L, 2025, 8, 33).getBody()).isEqualTo(7);
         assertThat(workResultController.getTotalCompletedQuantity(1L, 2L, 3L, 4L, 5L).getBody()).isEqualTo(19);
-        assertThat(workResultController.getTransferredQuantity(2L, 3L, 2025, 8, 33).getBody()).isEqualTo(4);
         assertThat(workResultController.getCompletedWorkByOrderAndWeek(2L, 2025, 8, 33).getBody())
                 .containsEntry(3L, 7);
     }

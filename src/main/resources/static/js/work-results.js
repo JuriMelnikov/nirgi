@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     initializeCalendar();
     await initializeEmployeeSelector();
     setDefaults();
+    // Первичная отрисовка календаря ПОСЛЕ установки значений по умолчанию,
+    // чтобы неделя подсветилась корректно.
+    renderCalendar(currentYear, currentMonth);
     setupEventListeners();
     loadOrdersForWeek();
     loadWorkResults();
@@ -134,17 +137,22 @@ function renderCalendar(year, month) {
         const weekCell = document.createElement('div');
         weekCell.className = 'p-1 text-center font-bold text-xs bg-base-300 rounded';
         weekCell.textContent = weekNumber;
+        weekCell.dataset.weekCell = 'true';
 
         if (selectedWeek && weekNumber === selectedWeek) {
             weekCell.classList.add('bg-primary', 'text-primary-content');
         }
 
         weekCell.addEventListener('click', function() {
+            document.getElementById('yearSelect').value = year;
             document.getElementById('weekSelect').value = weekNumber;
             document.getElementById('monthSelect').value = month + 1;
-            renderCalendar(year, month);
+            currentYear = year;
+            currentMonth = month;
+            renderCalendar(currentYear, currentMonth);
             loadOrdersForWeek();
             loadWorkResults();
+            refreshWeekHighlight();
         });
 
         calendarDays.appendChild(weekCell);
@@ -172,11 +180,15 @@ function renderCalendar(year, month) {
                 }
 
                 dayCell.addEventListener('click', function() {
+                    document.getElementById('yearSelect').value = year;
                     document.getElementById('weekSelect').value = weekNumber;
                     document.getElementById('monthSelect').value = month + 1;
-                    renderCalendar(year, month);
+                    currentYear = year;
+                    currentMonth = month;
+                    renderCalendar(currentYear, currentMonth);
                     loadOrdersForWeek();
                     loadWorkResults();
+                    refreshWeekHighlight();
                 });
 
                 calendarDays.appendChild(dayCell);
@@ -197,6 +209,30 @@ function getWeekNumber(date) {
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     return weekNo;
+}
+
+// Сброс селектора к начальному состоянию: одна пустая опция-заглушка
+function resetSelect(select, placeholder, disabled = true) {
+    select.innerHTML = `<option value="">${placeholder}</option>`;
+    select.selectedIndex = 0;
+    select.disabled = disabled;
+}
+
+// Обновить подсветку выбранной недели в календаре
+function refreshWeekHighlight() {
+    const selectedWeek = parseInt(document.getElementById('weekSelect').value);
+    if (!selectedWeek) {
+        return;
+    }
+    document.querySelectorAll('#calendarDays > div[data-week-cell="true"]').forEach(cell => {
+        const isSelected = cell.textContent.trim() === String(selectedWeek);
+        if (isSelected) {
+            cell.classList.add('bg-primary', 'text-primary-content');
+            cell.classList.remove('bg-red-100', 'text-red-800');
+        } else {
+            cell.classList.remove('bg-primary', 'text-primary-content');
+        }
+    });
 }
 
 // Initialize employee selector based on user roles
@@ -335,6 +371,15 @@ async function loadOrdersForWeek() {
                 option.dataset.originalOrderId = order.originalOrderId || '';
                 orderSelect.appendChild(option);
             });
+
+            // Каскад: заказы перезагружены для выбранной даты, сбрасываем заказ и всё нижележащее
+            selectedOrder = null;
+            resetSelect(document.getElementById('modelSelect'), '-- Сначала выберите заказ --');
+            resetSelect(document.getElementById('sectionSelect'), '-- Сначала выберите модель --');
+            resetSelect(document.getElementById('operationSelect'), '-- Сначала выберите модель и раздел --');
+            resetSelect(document.getElementById('quantitySelect'), '0');
+            document.getElementById('techmapInfo').classList.add('hidden');
+            document.getElementById('addButton').disabled = true;
         }
     } catch (error) {
         console.error('Error loading orders:', error);
@@ -392,6 +437,13 @@ async function loadModelsForOrder() {
                 modelSelect.appendChild(option);
             });
         }
+
+        // Каскад: модели загружены, сбрасываем раздел и всё нижележащее
+        resetSelect(document.getElementById('sectionSelect'), '-- Сначала выберите модель --');
+        resetSelect(document.getElementById('operationSelect'), '-- Сначала выберите модель и раздел --');
+        resetSelect(document.getElementById('quantitySelect'), '0');
+        document.getElementById('techmapInfo').classList.add('hidden');
+        document.getElementById('addButton').disabled = true;
     } catch (error) {
         console.error('Error loading models:', error);
     }
@@ -426,6 +478,12 @@ async function loadSectionsForModel() {
                 option.textContent = section.name;
                 sectionSelect.appendChild(option);
             });
+
+            // Каскад: разделы загружены, сбрасываем операцию и всё нижележащее
+            resetSelect(document.getElementById('operationSelect'), '-- Сначала выберите модель и раздел --');
+            resetSelect(document.getElementById('quantitySelect'), '0');
+            document.getElementById('techmapInfo').classList.add('hidden');
+            document.getElementById('addButton').disabled = true;
         }
     } catch (error) {
         console.error('Error loading sections:', error);
@@ -469,6 +527,11 @@ async function loadOperationsForModelAndSection() {
                 option.dataset.price = techmap.price; // Store as string in cents
                 operationSelect.appendChild(option);
             });
+
+            // Каскад: операции загружены, сбрасываем количество и всё нижележащее
+            resetSelect(document.getElementById('quantitySelect'), '0');
+            document.getElementById('techmapInfo').classList.add('hidden');
+            document.getElementById('addButton').disabled = true;
         }
     } catch (error) {
         console.error('Error loading operations:', error);
@@ -641,21 +704,11 @@ function setupEventListeners() {
     // Model selection
     document.getElementById('modelSelect').addEventListener('change', function() {
         loadSectionsForModel();
-        document.getElementById('sectionSelect').value = '';
-        document.getElementById('operationSelect').innerHTML = '<option value="">-- Сначала выберите модель и раздел --</option>';
-        document.getElementById('operationSelect').disabled = true;
-        document.getElementById('techmapInfo').classList.add('hidden');
-        document.getElementById('quantitySelect').disabled = true;
-        document.getElementById('addButton').disabled = true;
     });
 
     // Section selection
     document.getElementById('sectionSelect').addEventListener('change', function() {
         loadOperationsForModelAndSection();
-        document.getElementById('operationSelect').value = '';
-        document.getElementById('techmapInfo').classList.add('hidden');
-        document.getElementById('quantitySelect').disabled = true;
-        document.getElementById('addButton').disabled = true;
     });
 
     // Operation selection
