@@ -116,8 +116,8 @@ function renderCalendar(year, month) {
     // Get current date for highlighting
     const now = new Date();
     const currentDay = now.getDate();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
+    const nowMonth = now.getMonth();
+    const nowYear = now.getFullYear();
 
     const totalCells = adjustedStartingDay + totalDays;
     const totalRows = Math.ceil(totalCells / 7);
@@ -168,7 +168,7 @@ function renderCalendar(year, month) {
                 dayCell.dataset.week = weekNumber;
 
                 // Highlight current date
-                if (dayNum === currentDay && month === currentMonth && year === currentYear) {
+                if (dayNum === currentDay && month === nowMonth && year === nowYear) {
                     dayCell.classList.add('ring-2', 'ring-accent', 'ring-offset-1', 'font-bold');
                 }
 
