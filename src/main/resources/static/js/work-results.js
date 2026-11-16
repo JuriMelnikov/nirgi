@@ -153,7 +153,7 @@ function renderCalendar(year, month) {
             renderCalendar(currentYear, currentMonth);
             loadOrdersForWeek();
             loadWorkResults();
-            refreshWeekHighlight();
+            highlightWeekRow(weekNumber);
         });
 
         calendarDays.appendChild(weekCell);
@@ -190,7 +190,7 @@ function renderCalendar(year, month) {
                     renderCalendar(currentYear, currentMonth);
                     loadOrdersForWeek();
                     loadWorkResults();
-                    refreshWeekHighlight();
+                    highlightWeekRow(weekNumber);
                 });
 
                 calendarDays.appendChild(dayCell);
@@ -220,14 +220,9 @@ function resetSelect(select, placeholder, disabled = true) {
     select.disabled = disabled;
 }
 
-// Обновить подсветку выбранной недели в календаре (вся строка: номер недели + все 7 дней)
-function refreshWeekHighlight() {
-    const weekSelect = document.getElementById('weekSelect');
-    const selectedWeek = parseInt(weekSelect.value);
-    if (!selectedWeek) {
-        return;
-    }
-    const weekStr = String(selectedWeek);
+// Подсветить всю строку недели в календаре (номер недели + все 7 дней)
+function highlightWeekRow(weekNumber) {
+    const weekStr = String(weekNumber);
 
     document.querySelectorAll('#calendarDays > div[data-week-cell="true"], #calendarDays > div[data-week]').forEach(cell => {
         const cellWeek = cell.dataset.week ? cell.dataset.week : cell.textContent.trim();
@@ -693,6 +688,7 @@ function setupEventListeners() {
 
     document.getElementById('weekSelect').addEventListener('change', function() {
         renderCalendar(currentYear, currentMonth);
+        highlightWeekRow(parseInt(this.value));
         loadOrdersForWeek();
         loadWorkResults();
     });
