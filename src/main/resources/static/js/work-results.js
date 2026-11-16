@@ -141,6 +141,7 @@ function renderCalendar(year, month) {
 
         if (selectedWeek && weekNumber === selectedWeek) {
             weekCell.classList.add('bg-primary', 'text-primary-content');
+            weekCell.classList.remove('bg-base-300');
         }
 
         weekCell.addEventListener('click', function() {
@@ -233,7 +234,7 @@ function refreshWeekHighlight() {
         const isSelected = cellWeek === weekStr;
         if (isSelected) {
             cell.classList.add('bg-primary', 'text-primary-content');
-            cell.classList.remove('bg-red-100', 'text-red-800');
+            cell.classList.remove('bg-base-300', 'bg-red-100', 'text-red-800');
         } else {
             cell.classList.remove('bg-primary', 'text-primary-content');
         }
