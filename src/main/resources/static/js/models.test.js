@@ -12,13 +12,68 @@ function getModelsHTMLInnerHTML() {
   return bodyMatch ? bodyMatch[1] : ''
 }
 
-beforeEach(async () => {
-  // Clear localStorage
-  localStorage.clear()
+let domContentLoadedHandlers = []
 
-  // Set up global mocks for auth-helper functions
+// Test-specific response globals
+let testModelListResponse = []
+let testSectionListResponse = []
+let testTechmapsResponse = []
+let testPostModelResponse = { id: undefined }
+let testPostSectionResponse = { id: undefined }
+let testGetModelByIdResponse = { id: undefined }
+let testPutModelResponse = { id: undefined }
+
+async function setupModule() {
+  // Clean up any leftover DOMContentLoaded listeners from previous runs
+  domContentLoadedHandlers.forEach(h => document.removeEventListener('DOMContentLoaded', h))
+  domContentLoadedHandlers = []
+
+  // Clear localStorage and DOM
+  localStorage.clear()
+  document.body.innerHTML = ''
+
+  // Set up global mocks
   global.requireAuth = vi.fn(() => true)
-  global.authFetch = vi.fn()
+
+  // Use mockImplementation so responses are chosen by URL pattern, not call count
+  global.authFetch = vi.fn(async (url, options) => {
+    const u = String(url)
+    const method = (options && options.method) || 'GET'
+
+    if (u === '/api/model-list' && method === 'GET') {
+      return Promise.resolve({ ok: true, json: async () => testModelListResponse })
+    }
+    if (u === '/api/section-lists' && method === 'GET') {
+      return Promise.resolve({ ok: true, json: async () => testSectionListResponse })
+    }
+    if (u === '/api/techmaps' && method === 'GET') {
+      return Promise.resolve({ ok: true, json: async () => testTechmapsResponse })
+    }
+    if (u === '/api/model-list' && method === 'POST') {
+      return Promise.resolve({ ok: true, json: async () => testPostModelResponse })
+    }
+    if (u === '/api/section-lists' && method === 'POST') {
+      return Promise.resolve({ ok: true, json: async () => testPostSectionResponse })
+    }
+    if (u.startsWith('/api/model-list/') && method === 'GET') {
+      return Promise.resolve({ ok: true, json: async () => testGetModelByIdResponse })
+    }
+    if (u.startsWith('/api/model-list/') && method === 'PUT') {
+      return Promise.resolve({ ok: true, json: async () => testPutModelResponse })
+    }
+
+    // Default fallback for any other call
+    return Promise.resolve({ ok: true, json: async () => [] })
+  })
+
+  // Track DOMContentLoaded listeners added by the module
+  const origAddEventListener = document.addEventListener.bind(document)
+  document.addEventListener = ((type, listener, options) => {
+    if (type === 'DOMContentLoaded') {
+      domContentLoadedHandlers.push(listener)
+    }
+    return origAddEventListener(type, listener, options)
+  })
 
   // Set DOM to the models.html body content
   document.body.innerHTML = getModelsHTMLInnerHTML()
@@ -26,45 +81,57 @@ beforeEach(async () => {
   // Import the module under test (this will set up event listeners)
   await import('./models.js')
 
+  // Restore original addEventListener
+  document.addEventListener = origAddEventListener
+
   // Simulate DOMContentLoaded so that the initialization code runs
   document.dispatchEvent(new Event('DOMContentLoaded'))
+
+  // Wait for async initialization (loadModelLists, loadSectionLists, loadTechmaps) to complete
+  await new Promise(resolve => setTimeout(resolve, 50))
+}
+
+beforeEach(async () => {
+  // Reset test-specific response globals to defaults
+  testModelListResponse = []
+  testSectionListResponse = []
+  testTechmapsResponse = []
+  testPostModelResponse = { id: undefined }
+  testPostSectionResponse = { id: undefined }
+  testGetModelByIdResponse = { id: undefined }
+  testPutModelResponse = { id: undefined }
+
+  vi.restoreAllMocks()
+  vi.resetModules()
 })
 
 afterEach(() => {
   vi.restoreAllMocks()
-  // Reset the module registry to avoid state leakage
-  vi.resetModules()
+  // Clean up tracked listeners
+  domContentLoadedHandlers.forEach(h => document.removeEventListener('DOMContentLoaded', h))
+  domContentLoadedHandlers = []
 })
 
 describe('models.js - model list form submission', () => {
   test('sets selectedTechmapModelId in localStorage after successful model save', async () => {
-    // Mock authFetch for the initialization calls and the submit call
-    // Order of calls during initialization:
-    // 1. GET /api/model-list (loadModelLists)
-    // 2. GET /api/section-lists (loadSectionLists)
-    // 3. GET /api/techmaps (loadTechmaps)
-    // Then, when we submit the form (adding a new model):
-    // 4. POST /api/model-list
+    // Configure responses for this test BEFORE module initialization
+    testModelListResponse = [{ id: 1, name: 'Model 1' }]
+    testSectionListResponse = [{ id: 1, name: 'Section 1' }]
+    testTechmapsResponse = []
+    testPostModelResponse = { id: 123, name: 'Test Model' }
 
-    const mockModelListResponse = { id: 1, name: 'Model 1' } // dummy, not really used
-    const mockSectionListResponse = { id: 1, name: 'Section 1' }
-    const mockTechmapsResponse = []
+    await setupModule()
 
-    const mockNewModelResponse = { id: 123, name: 'Test Model' }
-
-    authFetch
-      .mockResolvedValueOnce({ ok: true, json: async () => mockModelListResponse }) // loadModelLists
-      .mockResolvedValueOnce({ ok: true, json: async () => mockSectionListResponse }) // loadSectionLists
-      .mockResolvedValueOnce({ ok: true, json: async () => mockTechmapsResponse }) // loadTechmaps
-      .mockResolvedValueOnce({ ok: true, json: async () => mockNewModelResponse }) // submit form
+    // Set form field value before submitting
+    document.getElementById('modelListName').value = 'Test Model'
 
     // Get the form and submit it
     const form = document.getElementById('addModelListForm')
     const submitEvent = new Event('submit', { cancelable: true })
     form.dispatchEvent(submitEvent)
 
-    // Wait for next tick to allow async processing
-    await Promise.resolve()
+    // Wait for all async processing (including post-submit loadModelLists/loadTechmaps)
+    await new Promise(resolve => setTimeout(resolve, 50))
 
     // Verify authFetch was called with correct arguments for POST (adding new model)
     expect(authFetch).toHaveBeenCalledWith(
@@ -81,48 +148,46 @@ describe('models.js - model list form submission', () => {
   })
 
   test('sets selectedTechmapModelId when editing an existing model', async () => {
-    // Mock authFetch for initialization and the editing flow
-    // Initialization calls:
-    // 1. GET /api/model-list
-    // 2. GET /api/section-lists
-    // 3. GET /api/techmaps
-    // Then, when we select a model from the dropdown (to edit):
-    // 4. GET /api/model-list/456 (to load model data)
-    // Then, when we submit the form (updating the model):
-    // 5. PUT /api/model-list/456
+    // Configure responses for this test BEFORE module initialization
+    testModelListResponse = [{ id: 456, name: 'Existing Model' }, { id: 789, name: 'Another Model' }]
+    testSectionListResponse = [{ id: 1, name: 'Section 1' }]
+    testTechmapsResponse = []
+    testGetModelByIdResponse = { id: 456, name: 'Existing Model' }
+    testPutModelResponse = { id: 456, name: 'Updated Model' }
 
-    const mockModelListResponse = [{ id: 456, name: 'Existing Model' }, { id: 789, name: 'Another Model' }]
-    const mockSectionListResponse = [{ id: 1, name: 'Section 1' }]
-    const mockTechmapsResponse = []
-    const mockModelData = { id: 456, name: 'Existing Model' }
-    const updatedModelData = { id: 456, name: 'Updated Model' }
-
-    authFetch
-      .mockResolvedValueOnce({ ok: true, json: async () => mockModelListResponse }) // loadModelLists
-      .mockResolvedValueOnce({ ok: true, json: async () => mockSectionListResponse }) // loadSectionLists
-      .mockResolvedValueOnce({ ok: true, json: async () => mockTechmapsResponse }) // loadTechmaps
-      .mockResolvedValueOnce({ ok: true, json: async () => mockModelData }) // GET for dropdown change
-      .mockResolvedValueOnce({ ok: true, json: async () => updatedModelData }) // PUT for form submit
+    await setupModule()
 
     // Simulate user selecting the model from dropdown
     const modelSelect = document.getElementById('modelListSelect')
-    modelSelect.value = '456'
+    // Find the option with value "456" and select it by index
+    let optionIndex = -1
+    for (let i = 0; i < modelSelect.options.length; i++) {
+      if (modelSelect.options[i].value === '456') {
+        optionIndex = i
+        break
+      }
+    }
+    expect(optionIndex).toBeGreaterThanOrEqual(0, 'option with value 456 should exist in modelListSelect')
+    if (optionIndex >= 0) {
+      modelSelect.selectedIndex = optionIndex
+    }
     modelSelect.dispatchEvent(new Event('change'))
 
     // Wait for the GET request to finish and populate the form
-    await Promise.resolve()
+    await new Promise(resolve => setTimeout(resolve, 50))
 
-    // Now the form should be populated with the model name and editingModelListId set
+    // Change the name to updated value before submitting
+    document.getElementById('modelListName').value = 'Updated Model'
+
     // Submit the form
     const form = document.getElementById('addModelListForm')
     const submitEvent = new Event('submit', { cancelable: true })
     form.dispatchEvent(submitEvent)
 
-    await Promise.resolve()
+    await new Promise(resolve => setTimeout(resolve, 50))
 
     // Verify the PUT call was made with the updated data
-    expect(authFetch).toHaveBeenNthCalledWith(
-      5,
+    expect(authFetch).toHaveBeenCalledWith(
       '/api/model-list/456',
       expect.objectContaining({
         method: 'PUT',
@@ -138,31 +203,24 @@ describe('models.js - model list form submission', () => {
 
 describe('models.js - section list form submission', () => {
   test('sets selectedTechmapSectionId in localStorage after successful section save', async () => {
-    // Mock authFetch for initialization and the submit call
-    // Initialization calls:
-    // 1. GET /api/model-list
-    // 2. GET /api/section-lists
-    // 3. GET /api/techmaps
-    // Then, when we submit the form (adding a new section):
-    // 4. POST /api/section-lists
+    // Configure responses for this test BEFORE module initialization
+    testModelListResponse = [{ id: 1, name: 'Model 1' }]
+    testSectionListResponse = [{ id: 1, name: 'Section 1' }]
+    testTechmapsResponse = []
+    testPostSectionResponse = { id: 789, name: 'Test Section' }
 
-    const mockModelListResponse = [{ id: 1, name: 'Model 1' }]
-    const mockSectionListResponse = [{ id: 1, name: 'Section 1' }]
-    const mockTechmapsResponse = []
-    const mockNewSectionResponse = { id: 789, name: 'Test Section' }
+    await setupModule()
 
-    authFetch
-      .mockResolvedValueOnce({ ok: true, json: async () => mockModelListResponse }) // loadModelLists
-      .mockResolvedValueOnce({ ok: true, json: async () => mockSectionListResponse }) // loadSectionLists
-      .mockResolvedValueOnce({ ok: true, json: async () => mockTechmapsResponse }) // loadTechmaps
-      .mockResolvedValueOnce({ ok: true, json: async () => mockNewSectionResponse }) // submit form
+    // Set form field value before submitting
+    document.getElementById('sectionListName').value = 'Test Section'
 
     // Get the form and submit it
     const form = document.getElementById('addSectionListForm')
     const submitEvent = new Event('submit', { cancelable: true })
     form.dispatchEvent(submitEvent)
 
-    await Promise.resolve()
+    // Wait for all async processing (including post-submit loadSectionLists/loadTechmaps)
+    await new Promise(resolve => setTimeout(resolve, 50))
 
     expect(authFetch).toHaveBeenCalledWith(
       '/api/section-lists',
