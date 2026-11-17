@@ -1159,7 +1159,6 @@ async function handleDublOrderSubmit(event) {
             const result = await response.json();
             console.log('Dubl order created:', result);
             closeDublModal();
-            alert('Заказ успешно перенесен');
             loadOrders();
         } else if (response.status === 409) {
             const error = await response.json();
