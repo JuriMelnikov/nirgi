@@ -140,7 +140,7 @@ function renderCalendar(year, month) {
         weekCell.dataset.weekCell = 'true';
 
         if (selectedWeek && weekNumber === selectedWeek) {
-            weekCell.classList.add('bg-primary', 'text-primary-content');
+            weekCell.classList.add('bg-purple-50', 'text-purple-900');
             weekCell.classList.remove('bg-base-300');
         }
 
@@ -178,7 +178,7 @@ function renderCalendar(year, month) {
 
                 if (selectedWeek && weekNumber === selectedWeek) {
                     dayCell.classList.remove('bg-red-100', 'text-red-800');
-                    dayCell.classList.add('bg-primary', 'text-primary-content');
+                    dayCell.classList.add('bg-purple-50', 'text-purple-900');
                 }
 
                 dayCell.addEventListener('click', function() {
@@ -228,10 +228,10 @@ function highlightWeekRow(weekNumber) {
         const cellWeek = cell.dataset.week ? cell.dataset.week : cell.textContent.trim();
         const isSelected = cellWeek === weekStr;
         if (isSelected) {
-            cell.classList.add('bg-primary', 'text-primary-content');
+            cell.classList.add('bg-purple-50', 'text-purple-900');
             cell.classList.remove('bg-base-300', 'bg-red-100', 'text-red-800');
         } else {
-            cell.classList.remove('bg-primary', 'text-primary-content');
+            cell.classList.remove('bg-purple-50', 'text-purple-900');
         }
     });
 }
