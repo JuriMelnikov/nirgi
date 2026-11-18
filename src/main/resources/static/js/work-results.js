@@ -825,22 +825,10 @@ async function addWorkResult() {
 
         if (response.ok) {
             loadWorkResults();
-            calculateAvailableQuantity();
 
-            // Load models for the current order (same as before adding)
-            await loadModelsForOrder();
-            // Clear model selection
-            document.getElementById('modelSelect').value = '';
-            document.getElementById('sectionSelect').value = '';
-            document.getElementById('sectionSelect').disabled = true;
-            document.getElementById('sectionSelect').innerHTML = '<option value="">-- Сначала выберите модель --</option>';
-            document.getElementById('operationSelect').value = '';
-            document.getElementById('operationSelect').disabled = true;
-            document.getElementById('operationSelect').innerHTML = '<option value="">-- Сначала выберите модель и раздел --</option>';
-            document.getElementById('techmapInfo').classList.add('hidden');
-            document.getElementById('quantitySelect').innerHTML = '<option value="">0</option>';
-            document.getElementById('quantitySelect').disabled = true;
-            document.getElementById('addButton').disabled = true;
+            // Заказ, модель и раздел остаются выбраны — они меняются только пользователем явно.
+            // Очищаются только операция и количество; список операций загружается для выбранной модели и раздела.
+            await loadOperationsForModelAndSection();
         } else {
             const error = await response.json();
             alert('Ошибка при добавлении результата работы: ' + (error.message || 'Неизвестная ошибка'));
@@ -923,11 +911,14 @@ function renderWorkResultsTable(workResults, orders) {
 
     summarySection.classList.remove('hidden');
 
+    // Новые результаты сначала — сортируем по id по убыванию (последний добавленный сверху)
+    const sortedResults = [...workResults].sort((a, b) => (b.id || 0) - (a.id || 0));
+
     // Calculate totals for summary
     let totalSeconds = 0;
     let totalEarnings = 0;
 
-    workResults.forEach(workResult => {
+    sortedResults.forEach(workResult => {
         // Find order to get order name
         const order = orders.find(o => o.id === workResult.orderId);
         const model = order?.models?.find(m => m.modelList.id === workResult.modelListId);

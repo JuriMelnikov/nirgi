@@ -60,7 +60,7 @@ function renderSalaryTable(records) {
     salaryTableFoot.classList.remove('hidden');
 
     const totalEarnings = records.reduce((sum, record) => sum + (record.totalEarnings || 0), 0);
-    totalEarningsFooter.textContent = `€${formatNumber(totalEarnings)}`;
+    totalEarningsFooter.textContent = `${formatNumber(totalEarnings)}`;
 
     records.forEach(record => {
         const row = document.createElement('tr');
@@ -68,7 +68,7 @@ function renderSalaryTable(records) {
             <td>${record.employeeName || '-'}</td>
             <td>${record.employeeSurname || '-'}</td>
             <td>${formatTime(record.totalTime)}</td>
-            <td>€${formatNumber(record.totalEarnings)}</td>
+            <td>${formatNumber(record.totalEarnings)}</td>
         `;
         salaryTableBody.appendChild(row);
     });
