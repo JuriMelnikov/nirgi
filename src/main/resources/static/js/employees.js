@@ -323,11 +323,6 @@ let inactiveEmployeeData = null;
 
             if (response.ok) {
                 const result = await response.json();
-                if (editingEmployeeId) {
-                    alert('Работник успешно обновлен! ID: ' + result.id);
-                } else {
-                    alert('Работник успешно добавлен! ID: ' + result.id);
-                }
                 form.reset();
                 resetEditMode();
                 loadEmployees(); // Reload employees list after adding/updating employee
