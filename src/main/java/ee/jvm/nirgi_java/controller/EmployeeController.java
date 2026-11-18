@@ -15,8 +15,10 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -258,7 +260,18 @@ public class EmployeeController {
     public ResponseEntity<?> createEmployee(@RequestBody Employee employee) {
         logger.info("Received employee data: {}", employee);
         try {
-            // Check if phone already exists
+            // Check if inactive employee exists with same name, surname, phone
+            Optional<Employee> inactiveEmployee = employeeRepository.findByNameAndSurnameAndPhoneAndActiveFalse(
+                    employee.getName(), employee.getSurname(), employee.getPhone());
+            if (inactiveEmployee.isPresent()) {
+                Employee emp = inactiveEmployee.get();
+                Map<String, Object> response = new HashMap<>();
+                response.put("inactiveEmployee", true);
+                response.put("employee", emp);
+                return ResponseEntity.status(409).body(response);
+            }
+
+            // Check if phone already exists (active)
             if (employeeRepository.findByPhone(employee.getPhone()).isPresent()) {
                 return ResponseEntity.badRequest().body("Работник с таким номером телефона уже существует");
             }

@@ -102,6 +102,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const formTitle = document.getElementById('formTitle');
     const formIcon = document.getElementById('formIcon');
     const nameInput = document.getElementById('name');
+    const inactiveEmployeeNotice = document.getElementById('inactiveEmployeeNotice');
+    const inactiveEmployeeNoticeText = document.getElementById('inactiveEmployeeNoticeText');
+    const activateInactiveBtn = document.getElementById('activateInactiveBtn');
+    const dismissInactiveBtn = document.getElementById('dismissInactiveBtn');
     const surnameInput = document.getElementById('surname');
     const loginInput = document.getElementById('login');
     const passwordInput = document.getElementById('password');
@@ -109,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const eyeIcon = document.getElementById('eyeIcon');
     const eyeOffIcon = document.getElementById('eyeOffIcon');
     let editingEmployeeId = null;
+let inactiveEmployeeData = null;
 
     // Toggle password visibility
     togglePasswordBtn.addEventListener('click', function() {
@@ -156,6 +161,31 @@ document.addEventListener('DOMContentLoaded', function() {
     cancelButton.addEventListener('click', function() {
         resetEditMode();
         form.reset();
+    });
+
+    // Activate inactive employee button
+    activateInactiveBtn.addEventListener('click', function() {
+        if (!inactiveEmployeeData) return;
+        populateForm(inactiveEmployeeData);
+        document.getElementById('active').checked = true;
+        editingEmployeeId = inactiveEmployeeData.id;
+        submitButtonText.textContent = 'Активировать работника';
+        submitButton.classList.remove('btn-primary');
+        submitButton.classList.add('btn-success');
+        cancelButton.classList.remove('hidden');
+        deleteButton.classList.add('hidden');
+        formTitle.textContent = 'Активация работника';
+        formIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l7 14m0-7L6 18" />';
+        inactiveEmployeeNotice.classList.add('hidden');
+        inactiveEmployeeData = null;
+    });
+
+    // Dismiss inactive employee notice
+    dismissInactiveBtn.addEventListener('click', function() {
+        inactiveEmployeeData = null;
+        inactiveEmployeeNotice.classList.add('hidden');
+        form.reset();
+        resetEditMode();
     });
 
     // Delete button click handler
@@ -213,12 +243,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Check if phone already exists (only when creating new employee)
+        // Check if phone already exists among ACTIVE employees (only when creating new employee)
         if (!editingEmployeeId) {
             const phone = employeeData.phone;
             const employees = await authFetch('/api/employees').then(r => r.json());
-            const phoneExists = employees.some(employee => employee.phone === phone);
-            if (phoneExists) {
+            const phoneExistsActive = employees.some(employee => employee.phone === phone && employee.active !== false);
+            if (phoneExistsActive) {
                 alert('Работник с таким номером телефона уже существует');
                 return;
             }
@@ -260,6 +290,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 form.reset();
                 resetEditMode();
                 loadEmployees(); // Reload employees list after adding/updating employee
+            } else if (response.status === 409) {
+                const data = await response.json();
+                if (data.inactiveEmployee && data.employee) {
+                    inactiveEmployeeData = data.employee;
+                    inactiveEmployeeNoticeText.textContent =
+                        'Работник ' + data.employee.surname + ' ' + data.employee.name +
+                        ' (тел. ' + data.employee.phone + ') уже существует, но находится в неактивном состоянии.';
+                    inactiveEmployeeNotice.classList.remove('hidden');
+                } else {
+                    alert('Работник с такими данными уже существует в неактивном состоянии');
+                }
             } else {
                 const errorText = await response.text();
                 // console.error('Error response:', errorText);
@@ -368,6 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetEditMode() {
         editingEmployeeId = null;
+        inactiveEmployeeData = null;
         submitButtonText.textContent = 'Добавить работника';
         submitButton.classList.remove('btn-warning');
         submitButton.classList.add('btn-primary');
