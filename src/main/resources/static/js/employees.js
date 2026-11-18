@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const formTitle = document.getElementById('formTitle');
     const formIcon = document.getElementById('formIcon');
     const nameInput = document.getElementById('name');
-    const inactiveEmployeeNotice = document.getElementById('inactiveEmployeeNotice');
+    const inactiveEmployeeModal = document.getElementById('inactiveEmployeeModal');
     const inactiveEmployeeNoticeText = document.getElementById('inactiveEmployeeNoticeText');
     const activateInactiveBtn = document.getElementById('activateInactiveBtn');
     const dismissInactiveBtn = document.getElementById('dismissInactiveBtn');
@@ -152,10 +152,10 @@ let inactiveEmployeeData = null;
     nameInput.addEventListener('input', autoGenerateLogin);
     surnameInput.addEventListener('input', autoGenerateLogin);
 
-    // Clear inactive employee notice when user modifies fields
+    // Clear inactive employee modal when user modifies fields
     function clearInactiveNotice() {
         inactiveEmployeeData = null;
-        inactiveEmployeeNotice.classList.add('hidden');
+        inactiveEmployeeModal.classList.remove('modal-open');
     }
 
     nameInput.addEventListener('input', clearInactiveNotice);
@@ -182,10 +182,10 @@ let inactiveEmployeeData = null;
                 inactiveEmployeeNoticeText.textContent =
                     'Работник ' + inactiveEmployee.surname + ' ' + inactiveEmployee.name +
                     ' (тел. ' + inactiveEmployee.phone + ') уже существует, но находится в неактивном состоянии.';
-                inactiveEmployeeNotice.classList.remove('hidden');
+                inactiveEmployeeModal.classList.add('modal-open');
             } else {
                 inactiveEmployeeData = null;
-                inactiveEmployeeNotice.classList.add('hidden');
+                inactiveEmployeeModal.classList.remove('modal-open');
             }
         } catch (error) {
             console.error('Error checking inactive employee:', error);
@@ -217,14 +217,14 @@ let inactiveEmployeeData = null;
         deleteButton.classList.add('hidden');
         formTitle.textContent = 'Активация работника';
         formIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 4l7 14m0-7L6 18" />';
-        inactiveEmployeeNotice.classList.add('hidden');
+        inactiveEmployeeModal.classList.remove('modal-open');
         inactiveEmployeeData = null;
     });
 
-    // Dismiss inactive employee notice
+    // Dismiss inactive employee modal
     dismissInactiveBtn.addEventListener('click', function() {
         inactiveEmployeeData = null;
-        inactiveEmployeeNotice.classList.add('hidden');
+        inactiveEmployeeModal.classList.remove('modal-open');
         form.reset();
         resetEditMode();
     });
