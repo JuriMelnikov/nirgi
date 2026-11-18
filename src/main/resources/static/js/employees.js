@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const activateInactiveBtn = document.getElementById('activateInactiveBtn');
     const dismissInactiveBtn = document.getElementById('dismissInactiveBtn');
     const surnameInput = document.getElementById('surname');
+    const phoneInput = document.getElementById('phone');
     const loginInput = document.getElementById('login');
     const passwordInput = document.getElementById('password');
     const togglePasswordBtn = document.getElementById('togglePassword');
