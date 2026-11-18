@@ -151,6 +151,46 @@ let inactiveEmployeeData = null;
     nameInput.addEventListener('input', autoGenerateLogin);
     surnameInput.addEventListener('input', autoGenerateLogin);
 
+    // Clear inactive employee notice when user modifies fields
+    function clearInactiveNotice() {
+        inactiveEmployeeData = null;
+        inactiveEmployeeNotice.classList.add('hidden');
+    }
+
+    nameInput.addEventListener('input', clearInactiveNotice);
+    surnameInput.addEventListener('input', clearInactiveNotice);
+    phoneInput.addEventListener('input', clearInactiveNotice);
+
+    // Check for inactive employee on phone blur
+    phoneInput.addEventListener('blur', async function() {
+        if (editingEmployeeId) return;
+        const phone = phoneInput.value.trim();
+        const name = nameInput.value.trim();
+        const surname = surnameInput.value.trim();
+        if (!phone || !name || !surname) return;
+        try {
+            const response = await authFetch(
+                '/api/employees/check-inactive?' +
+                'name=' + encodeURIComponent(name) +
+                '&surname=' + encodeURIComponent(surname) +
+                '&phone=' + encodeURIComponent(phone)
+            );
+            if (response.ok) {
+                const inactiveEmployee = await response.json();
+                inactiveEmployeeData = inactiveEmployee;
+                inactiveEmployeeNoticeText.textContent =
+                    'Работник ' + inactiveEmployee.surname + ' ' + inactiveEmployee.name +
+                    ' (тел. ' + inactiveEmployee.phone + ') уже существует, но находится в неактивном состоянии.';
+                inactiveEmployeeNotice.classList.remove('hidden');
+            } else {
+                inactiveEmployeeData = null;
+                inactiveEmployeeNotice.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Error checking inactive employee:', error);
+        }
+    });
+
     // Active only checkbox change handler
     const activeOnlyCheckbox = document.getElementById('activeOnly');
     activeOnlyCheckbox.addEventListener('change', function() {

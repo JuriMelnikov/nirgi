@@ -230,6 +230,16 @@ public class EmployeeController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/check-inactive")
+    public ResponseEntity<Employee> checkInactiveEmployee(
+            @RequestParam String name,
+            @RequestParam String surname,
+            @RequestParam String phone) {
+        return employeeRepository.findByNameAndSurnameAndPhoneAndActiveFalse(name, surname, phone)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @GetMapping("/search/surname")
     public List<Employee> getEmployeesBySurname(@RequestParam String surname) {
         List<Employee> employees = employeeRepository.findBySurname(surname);
