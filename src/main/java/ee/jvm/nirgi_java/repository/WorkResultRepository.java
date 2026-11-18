@@ -62,7 +62,7 @@ public interface WorkResultRepository extends JpaRepository<WorkResult, Long> {
            "wr.employeeNameSnapshot, " +
            "wr.employeeSurnameSnapshot, " +
            "SUM(wr.quantity * CAST(wr.techmapTimeSnapshot AS double)), " +
-           "SUM(wr.quantity * CAST(wr.techmapPriceSnapshot AS double) / 100.0)" +
+           "SUM(wr.quantity * CAST(wr.techmapPriceSnapshot AS double) / 1000.0)" +
            ") FROM WorkResult wr " +
            "WHERE wr.year = :year AND wr.month = :month " +
            "GROUP BY wr.employee.id, wr.employeeNameSnapshot, wr.employeeSurnameSnapshot")

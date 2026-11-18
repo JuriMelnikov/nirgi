@@ -95,7 +95,8 @@ public class Techmap {
     }
 
     /**
-     * Price stored in cents, formatted for display in euros. Returns the raw
+     * Price stored as euros multiplied by 1000 (thousandths of a euro, e.g.
+     * "1500" = €1.500), formatted for display in euros. Returns the raw
      * value when it is not a valid number.
      */
     @Transient
@@ -106,7 +107,7 @@ public class Techmap {
         }
         try {
             return new BigDecimal(price.trim())
-                    .movePointLeft(2)
+                    .movePointLeft(3)
                     .setScale(3, RoundingMode.HALF_UP)
                     .toPlainString() + " €";
         } catch (NumberFormatException e) {
