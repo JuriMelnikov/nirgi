@@ -287,37 +287,37 @@
     <dialog id="createDublOrderModal" class="modal">
         <div class="modal-box">
             <h3 class="font-bold text-lg mb-[3px]">Перенести заказ на следующую неделю</h3>
-            <form id="createDublOrderForm" class="space-y-[3px]">
+            <form id="createDublOrderForm" class="space-y-[8px]">
                 <input type="hidden" id="dublOrderId">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text font-medium">Целевая неделя</span>
                     </label>
-                    <div class="grid grid-cols-3 gap-[3px]">
-                        <select id="dublTargetWeek" class="select select-bordered w-20" style="height: 25px !important; padding: 1px;">
+                    <div class="grid grid-cols-3 gap-[5px]">
+                        <select id="dublTargetWeek" class="select select-bordered w-full" style="height: 25px !important; padding: 1px;">
                         </select>
-                        <select id="dublTargetMonth" class="select select-bordered w-24" style="height: 25px !important; padding: 1px;">
-                            <option value="1">Янв</option>
-                            <option value="2">Фев</option>
-                            <option value="3">Мар</option>
-                            <option value="4">Апр</option>
+                        <select id="dublTargetMonth" class="select select-bordered w-full" style="height: 25px !important; padding: 1px;">
+                            <option value="1">Январь</option>
+                            <option value="2">Февраль</option>
+                            <option value="3">Март</option>
+                            <option value="4">Апрель</option>
                             <option value="5">Май</option>
-                            <option value="6">Июн</option>
-                            <option value="7">Июл</option>
-                            <option value="8">Авг</option>
-                            <option value="9">Сен</option>
-                            <option value="10">Окт</option>
-                            <option value="11">Ноя</option>
-                            <option value="12">Дек</option>
+                            <option value="6">Июнь</option>
+                            <option value="7">Июль</option>
+                            <option value="8">Август</option>
+                            <option value="9">Сентябрь</option>
+                            <option value="10">Октябрь</option>
+                            <option value="11">Ноябрь</option>
+                            <option value="12">Декабрь</option>
                         </select>
-                        <select id="dublTargetYear" class="select select-bordered w-20" style="height: 25px !important; padding: 1px;">
+                        <select id="dublTargetYear" class="select select-bordered w-full" style="height: 25px !important; padding: 1px;">
                         </select>
                     </div>
                 </div>
 
-                <div class="modal-action">
-                    <button type="button" class="btn" onclick="closeDublModal()">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Перенести</button>
+                <div class="modal-action mt-[10px]">
+                    <button type="button" class="btn btn-xs" onclick="closeDublModal()" style="font-size: 0.95rem;">Отмена</button>
+                    <button type="submit" class="btn btn-primary btn-xs" style="font-size: 0.95rem;">Перенести</button>
                 </div>
             </form>
         </div>
