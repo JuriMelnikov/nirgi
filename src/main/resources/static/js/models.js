@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Techmap Form
     const techmapForm = document.getElementById('addTechmapForm');
     let editingTechmapId = null;
+    let previousTechmapModelId = null;
+    let previousTechmapSectionId = null;
     let allTechmaps = [];
 
     // Price is stored in tenths of cents (for 3 decimal places), but edited in euros
@@ -187,6 +189,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('techmapCancelButton').addEventListener('click', function() {
         resetTechmapEditMode();
         techmapForm.reset();
+        document.getElementById('techmapModelList').value = previousTechmapModelId;
+        document.getElementById('techmapSectionList').value = previousTechmapSectionId;
     });
 
     // Filter techmaps table when model or section changes
@@ -592,6 +596,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Global function for edit button
     window.editTechmap = async function(id) {
         try {
+            // Запомнить выбранные модель и раздел до перезагрузки списков селектов
+            previousTechmapModelId = document.getElementById('techmapModelList').value;
+            previousTechmapSectionId = document.getElementById('techmapSectionList').value;
+
             // Reload model and section lists to ensure they contain all options
             await loadModelLists();
             await loadSectionLists();
@@ -601,6 +609,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const techmap = await response.json();
                 populateTechmapForm(techmap);
                 setTechmapEditMode(id);
+                // Прокрутить страницу вверх, чтобы были видны редакторы
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 alert('Ошибка загрузки данных технологической карты');
             }
