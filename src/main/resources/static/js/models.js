@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function populateModelListSelect(modelLists) {
-        modelListSelect.innerHTML = '<option value="">-- Выберите модель --</option>';
+        modelListSelect.innerHTML = '<option value="">-- Выберите модель для изменения --</option>';
         modelLists.forEach(modelList => {
             const option = document.createElement('option');
             option.value = modelList.id;
@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function populateSectionListSelect(sectionLists) {
-        sectionListSelect.innerHTML = '<option value="">-- Выберите раздел --</option>';
+        sectionListSelect.innerHTML = '<option value="">-- Выберите раздел для изменения --</option>';
         sectionLists.forEach(sectionList => {
             const option = document.createElement('option');
             option.value = sectionList.id;
@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateTechmapModelSelect(modelLists) {
         const techmapModelSelect = document.getElementById('techmapModelList');
         if (techmapModelSelect) {
-            techmapModelSelect.innerHTML = '<option value="">-- Выберите модель --</option>';
+            techmapModelSelect.innerHTML = '<option value="">-- Выберите модель для изменения --</option>';
             modelLists.forEach(modelList => {
                 const option = document.createElement('option');
                 option.value = modelList.id;
@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function populateTechmapSectionSelect(sectionLists) {
         const techmapSectionSelect = document.getElementById('techmapSectionList');
         if (techmapSectionSelect) {
-            techmapSectionSelect.innerHTML = '<option value="">-- Выберите раздел --</option>';
+            techmapSectionSelect.innerHTML = '<option value="">-- Выберите раздел для изменения --</option>';
             sectionLists.forEach(sectionList => {
                 const option = document.createElement('option');
                 option.value = sectionList.id;
