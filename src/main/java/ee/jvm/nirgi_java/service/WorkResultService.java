@@ -2,7 +2,6 @@ package ee.jvm.nirgi_java.service;
 
 import ee.jvm.nirgi_java.classes.*;
 import ee.jvm.nirgi_java.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,26 +13,29 @@ import java.util.stream.Collectors;
 @Transactional
 public class WorkResultService {
 
-    @Autowired
-    private WorkResultRepository workResultRepository;
+    private final WorkResultRepository workResultRepository;
+    private final EmployeeRepository employeeRepository;
+    private final OrderRepository orderRepository;
+    private final ModelListRepository modelListRepository;
+    private final SectionListRepository sectionListRepository;
+    private final TechmapRepository techmapRepository;
+    private final SettingsService settingsService;
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private ModelListRepository modelListRepository;
-
-    @Autowired
-    private SectionListRepository sectionListRepository;
-
-    @Autowired
-    private TechmapRepository techmapRepository;
-
-    @Autowired
-    private SettingsService settingsService;
+    public WorkResultService(WorkResultRepository workResultRepository,
+                             EmployeeRepository employeeRepository,
+                             OrderRepository orderRepository,
+                             ModelListRepository modelListRepository,
+                             SectionListRepository sectionListRepository,
+                             TechmapRepository techmapRepository,
+                             SettingsService settingsService) {
+        this.workResultRepository = workResultRepository;
+        this.employeeRepository = employeeRepository;
+        this.orderRepository = orderRepository;
+        this.modelListRepository = modelListRepository;
+        this.sectionListRepository = sectionListRepository;
+        this.techmapRepository = techmapRepository;
+        this.settingsService = settingsService;
+    }
 
     public List<WorkResult> getAllWorkResults() {
         return workResultRepository.findAll();

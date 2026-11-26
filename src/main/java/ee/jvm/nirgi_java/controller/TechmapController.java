@@ -6,7 +6,6 @@ import ee.jvm.nirgi_java.repository.ModelListRepository;
 import ee.jvm.nirgi_java.repository.SectionListRepository;
 import ee.jvm.nirgi_java.repository.WorkResultRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,18 +16,20 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class TechmapController {
 
-    @Autowired
-    private TechmapRepository techmapRepository;
+    private final TechmapRepository techmapRepository;
+    private final ModelListRepository modelListRepository;
+    private final SectionListRepository sectionListRepository;
+    private final WorkResultRepository workResultRepository;
 
-    @Autowired
-    private ModelListRepository modelListRepository;
-
-    @Autowired
-    private SectionListRepository sectionListRepository;
-
-
-    @Autowired
-    private WorkResultRepository workResultRepository;
+    public TechmapController(TechmapRepository techmapRepository,
+                             ModelListRepository modelListRepository,
+                             SectionListRepository sectionListRepository,
+                             WorkResultRepository workResultRepository) {
+        this.techmapRepository = techmapRepository;
+        this.modelListRepository = modelListRepository;
+        this.sectionListRepository = sectionListRepository;
+        this.workResultRepository = workResultRepository;
+    }
 
     @GetMapping
     public List<Techmap> getAllTechmaps() {

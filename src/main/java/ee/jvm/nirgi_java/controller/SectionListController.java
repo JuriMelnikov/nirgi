@@ -3,7 +3,6 @@ package ee.jvm.nirgi_java.controller;
 import ee.jvm.nirgi_java.classes.SectionList;
 import ee.jvm.nirgi_java.repository.SectionListRepository;
 import ee.jvm.nirgi_java.repository.TechmapRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +13,14 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class SectionListController {
 
-    @Autowired
-    private SectionListRepository sectionListRepository;
+    private final SectionListRepository sectionListRepository;
+    private final TechmapRepository techmapRepository;
 
-    @Autowired
-    private TechmapRepository techmapRepository;
+    public SectionListController(SectionListRepository sectionListRepository,
+                                 TechmapRepository techmapRepository) {
+        this.sectionListRepository = sectionListRepository;
+        this.techmapRepository = techmapRepository;
+    }
 
     @GetMapping
     public List<SectionList> getAllSectionLists() {

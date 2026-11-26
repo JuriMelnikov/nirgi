@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/auth")
+@Slf4j
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -44,14 +46,13 @@ public class AuthController {
                     .map(authority -> authority.getAuthority().replace("ROLE_", ""))
                     .collect(Collectors.toSet());
 
-            System.out.println("User logged in: " + userDetails.getUsername());
-            System.out.println("User roles: " + roles);
+            log.info("User logged in: {}", userDetails.getUsername());
+            log.info("User roles: {}", roles);
 
             AuthResponse response = new AuthResponse(token, userDetails.getUsername(), roles);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.err.println("Login failed for user: " + loginRequest.getLogin());
-            e.printStackTrace();
+            log.error("Login failed for user: {}", loginRequest.getLogin(), e);
             return ResponseEntity.status(401).body("{\"error\": \"Неверный логин или пароль\"}");
         }
     }

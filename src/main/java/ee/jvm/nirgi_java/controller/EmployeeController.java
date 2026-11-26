@@ -6,7 +6,6 @@ import ee.jvm.nirgi_java.repository.EmployeeRepository;
 import ee.jvm.nirgi_java.repository.WorkResultRepository;
 import ee.jvm.nirgi_java.security.Role;
 import ee.jvm.nirgi_java.security.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -26,17 +25,20 @@ public class EmployeeController {
 
     private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final WorkResultRepository workResultRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private WorkResultRepository workResultRepository;
+    public EmployeeController(EmployeeRepository employeeRepository,
+                              UserRepository userRepository,
+                              PasswordEncoder passwordEncoder,
+                              WorkResultRepository workResultRepository) {
+        this.employeeRepository = employeeRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.workResultRepository = workResultRepository;
+    }
 
     @GetMapping
     public List<Employee> getAllEmployees(@RequestParam(required = false) Boolean activeOnly) {

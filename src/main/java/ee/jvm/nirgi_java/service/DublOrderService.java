@@ -8,7 +8,6 @@ import ee.jvm.nirgi_java.classes.Order;
 import ee.jvm.nirgi_java.repository.DublOrderRepository;
 import ee.jvm.nirgi_java.repository.ModelListRepository;
 import ee.jvm.nirgi_java.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +19,17 @@ import java.util.Optional;
 @Transactional
 public class DublOrderService {
 
-    @Autowired
-    private DublOrderRepository dublOrderRepository;
+    private final DublOrderRepository dublOrderRepository;
+    private final OrderRepository orderRepository;
+    private final ModelListRepository modelListRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private ModelListRepository modelListRepository;
+    public DublOrderService(DublOrderRepository dublOrderRepository,
+                            OrderRepository orderRepository,
+                            ModelListRepository modelListRepository) {
+        this.dublOrderRepository = dublOrderRepository;
+        this.orderRepository = orderRepository;
+        this.modelListRepository = modelListRepository;
+    }
 
     public List<DublOrder> getAllDublOrders() {
         return dublOrderRepository.findAll();

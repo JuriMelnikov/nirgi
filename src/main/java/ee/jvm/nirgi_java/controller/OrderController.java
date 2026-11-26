@@ -7,6 +7,7 @@ import ee.jvm.nirgi_java.dto.CombinedOrderDTO;
 import ee.jvm.nirgi_java.service.DublOrderService;
 import ee.jvm.nirgi_java.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 @RequestMapping("/api/orders")
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
 
     private final OrderService orderService;
@@ -56,12 +58,12 @@ public class OrderController {
             @RequestParam(required = false) Integer year,
             @RequestParam(required = false) Integer month,
             @RequestParam(required = false) Integer week) {
-        System.out.println("Searching orders with transferred: year=" + year + ", month=" + month + ", week=" + week);
+        log.debug("Searching orders with transferred: year={}, month={}, week={}", year, month, week);
         List<CombinedOrderDTO> result = new ArrayList<>();
 
         if (year != null && month != null && week != null) {
             List<Order> regularOrders = orderService.getOrdersByYearMonthWeek(year, month, week);
-            System.out.println("Regular orders found: " + regularOrders.size());
+            log.debug("Regular orders found: {}", regularOrders.size());
             for (Order order : regularOrders) {
                 List<CombinedOrderDTO.ModelInfo> modelInfos = order.getModels().stream()
                     .map(m -> new CombinedOrderDTO.ModelInfo(m.getModelList(), m.getCount(), m.getCount()))
@@ -71,12 +73,10 @@ public class OrderController {
             }
 
             List<DublOrder> transferredOrders = dublOrderService.getDublOrdersByTargetWeek(year, month, week);
-            System.out.println("Transferred orders found: " + transferredOrders.size());
+            log.debug("Transferred orders found: {}", transferredOrders.size());
             for (DublOrder dublOrder : transferredOrders) {
-                System.out.println("Transferred order: id=" + dublOrder.getId() + 
-                    ", targetYear=" + dublOrder.getTargetYear() + 
-                    ", targetMonth=" + dublOrder.getTargetMonth() + 
-                    ", targetWeek=" + dublOrder.getTargetWeek());
+                log.debug("Transferred order: id={}, targetYear={}, targetMonth={}, targetWeek={}",
+                        dublOrder.getId(), dublOrder.getTargetYear(), dublOrder.getTargetMonth(), dublOrder.getTargetWeek());
                 Order originalOrder = dublOrder.getOrder();
                 List<CombinedOrderDTO.ModelInfo> modelInfos = dublOrder.getDublModels().stream()
                     .map(dm -> new CombinedOrderDTO.ModelInfo(dm.getModelList(), dm.getTotalCount(), dm.getRemainingCount()))
@@ -86,7 +86,7 @@ public class OrderController {
                     modelInfos, true, originalOrder.getId()));
             }
         }
-        System.out.println("Total orders returned: " + result.size());
+        log.debug("Total orders returned: {}", result.size());
         return result;
     }
 

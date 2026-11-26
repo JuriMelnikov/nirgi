@@ -2,7 +2,6 @@ package ee.jvm.nirgi_java.controller;
 
 import ee.jvm.nirgi_java.classes.DublOrder;
 import ee.jvm.nirgi_java.service.DublOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,11 @@ import java.util.Map;
 @RequestMapping("/api/dubl-orders")
 public class DublOrderController {
 
-    @Autowired
-    private DublOrderService dublOrderService;
+    private final DublOrderService dublOrderService;
+
+    public DublOrderController(DublOrderService dublOrderService) {
+        this.dublOrderService = dublOrderService;
+    }
 
     @GetMapping
     public ResponseEntity<List<DublOrder>> getAllDublOrders() {

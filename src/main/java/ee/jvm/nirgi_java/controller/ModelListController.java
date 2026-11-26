@@ -3,7 +3,6 @@ package ee.jvm.nirgi_java.controller;
 import ee.jvm.nirgi_java.classes.ModelList;
 import ee.jvm.nirgi_java.repository.ModelListRepository;
 import ee.jvm.nirgi_java.repository.TechmapRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +13,14 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class ModelListController {
 
-    @Autowired
-    private ModelListRepository modelListRepository;
+    private final ModelListRepository modelListRepository;
+    private final TechmapRepository techmapRepository;
 
-    @Autowired
-    private TechmapRepository techmapRepository;
+    public ModelListController(ModelListRepository modelListRepository,
+                               TechmapRepository techmapRepository) {
+        this.modelListRepository = modelListRepository;
+        this.techmapRepository = techmapRepository;
+    }
 
     @GetMapping
     public List<ModelList> getAllModelLists() {

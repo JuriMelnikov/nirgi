@@ -2,7 +2,6 @@ package ee.jvm.nirgi_java.controller;
 
 import ee.jvm.nirgi_java.classes.WorkResult;
 import ee.jvm.nirgi_java.service.WorkResultService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +12,11 @@ import java.util.Map;
 @RequestMapping("/api/work-results")
 public class WorkResultController {
 
-    @Autowired
-    private WorkResultService workResultService;
+    private final WorkResultService workResultService;
+
+    public WorkResultController(WorkResultService workResultService) {
+        this.workResultService = workResultService;
+    }
 
     @GetMapping
     public ResponseEntity<List<WorkResult>> getAllWorkResults() {
