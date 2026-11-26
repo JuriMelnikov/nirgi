@@ -23,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - View Spring application logs only: `docker compose logs -f app`
 - View Nginx logs: `docker compose logs -f nginx_proxy`
 - View phpMyAdmin logs: `docker compose logs -f phpmyadmin`
-- Commit and push changes: `.\deploy.ps1` (see the script for details)
+- Commit and push changes: `git commit` followed by `git push` (deployment to the server is handled by GitHub)
 - Install JS dependencies (Run once): `npm install`
 - Run all JS tests once (Vitest): `npm test`
 - Run JS tests in watch mode (TDD): `npx vitest`
