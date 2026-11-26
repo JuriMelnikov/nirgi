@@ -1,7 +1,7 @@
 // Явно импортируем тестовые функции из vitest
 import { describe, test, expect, beforeEach, afterEach, it, vi } from 'vitest'
 // Импортируем функции напрямую из экспортированного модуля
-import { formatEuros, getWeekNumber, formatTime, calculateAvailableQuantity } from './work-results.js';
+import { formatEuros, getWeekNumber, formatTime, calculateAvailableQuantity, addWorkResult } from './work-results.js';
 
 describe('formatEuros', () => {
   test('форматирует положительные числа правильно', () => {
@@ -160,5 +160,152 @@ describe('calculateAvailableQuantity', () => {
     const quantitySelect = document.getElementById('quantitySelect');
     expect(quantitySelect.options.length).toBe(1); // только "0"
     expect(quantitySelect.disabled).toBe(true);
+  });
+});
+
+describe('addWorkResult', () => {
+  let fetchMock;
+  let completedQty = 0;
+  let postFails = false;
+
+  beforeEach(() => {
+    completedQty = 0;
+    postFails = false;
+    fetchMock = vi.spyOn(global, 'fetch').mockImplementation(async (url, options) => {
+      const u = String(url);
+      const method = (options && options.method) || 'GET';
+      if (u.startsWith('/api/orders/')) {
+        return { ok: true, json: async () => ({ models: [{ modelList: { id: 1 }, count: 10 }] }) };
+      }
+      if (u.includes('/total-completed-quantity')) {
+        return { ok: true, json: async () => completedQty };
+      }
+      if (u === '/api/work-results' && method === 'POST') {
+        if (postFails) {
+          return { ok: false, json: async () => ({ message: 'Серверная ошибка' }) };
+        }
+        return { ok: true, json: async () => ({ id: 999 }) };
+      }
+      return { ok: false, status: 404, json: async () => ({}) };
+    });
+    vi.stubGlobal('localStorage', {
+      getItem: () => 'test-token',
+    });
+    vi.stubGlobal('alert', vi.fn());
+  });
+
+  afterEach(() => {
+    fetchMock.mockRestore();
+    vi.restoreAllMocks();
+    document.body.innerHTML = '';
+  });
+
+  function setupDom({ isTransferred = false, quantity = 3, year = 2026, month = 3, week = 11 } = {}) {
+    document.body.innerHTML = `
+      <label><input type="radio" name="period" value="month" checked> Месяц</label>
+      <select id="employeeSelect" class="hidden"></select>
+      <input id="employeeIdInput" value="1">
+      <select id="orderSelect">
+        <option value="100" data-original-order-id="${isTransferred ? '50' : ''}">Order</option>
+      </select>
+      <select id="modelSelect"><option value="1">Model</option></select>
+      <select id="sectionSelect"><option value="2">Section</option></select>
+      <select id="operationSelect"><option value="3">Op</option></select>
+      <select id="yearSelect"><option value="${year}" selected>${year}</option></select>
+      <select id="monthSelect"><option value="${month}" selected>${month}</option></select>
+      <select id="weekSelect"><option value="${week}" selected>${week}</option></select>
+      <select id="quantitySelect"><option value="${quantity}" selected>${quantity}</option></select>
+      <div id="techmapInfo"></div>
+      <button id="addButton"></button>
+    `;
+    for (const id of ['orderSelect', 'modelSelect', 'sectionSelect', 'operationSelect', 'yearSelect', 'monthSelect', 'weekSelect', 'quantitySelect']) {
+      document.getElementById(id).selectedIndex = 0;
+    }
+  }
+
+  it('успешное добавление: POST с правильным телом, алерт не вызывается', async () => {
+    setupDom({ quantity: 3 });
+    completedQty = 2; // доступно = 10 всего − 2 выполнено = 8, 3 <= 8
+
+    await addWorkResult();
+
+    const postCalls = fetchMock.mock.calls.filter(([url]) => String(url) === '/api/work-results');
+    expect(postCalls.length).toBe(1);
+    const [, options] = postCalls[0];
+    expect(options.method).toBe('POST');
+    expect(options.headers.Authorization).toBe('Bearer test-token');
+    expect(JSON.parse(options.body)).toEqual({
+      employeeId: 1,
+      orderId: 100,
+      modelListId: 1,
+      sectionListId: 2,
+      techmapId: 3,
+      quantity: 3,
+      year: 2026,
+      month: 3,
+      week: 11,
+    });
+    expect(alert).not.toHaveBeenCalled();
+  });
+
+  it('перенесённый заказ: в запросе к заказу и в теле POST используется оригинальный orderId', async () => {
+    setupDom({ isTransferred: true, quantity: 3 });
+    completedQty = 4; // доступно = 10 − 4 = 6, 3 <= 6
+
+    await addWorkResult();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining('/api/orders/50'),
+      expect.anything()
+    );
+    const postCalls = fetchMock.mock.calls.filter(([url]) => String(url) === '/api/work-results');
+    expect(postCalls.length).toBe(1);
+    expect(JSON.parse(postCalls[0][1].body).orderId).toBe(50);
+    expect(alert).not.toHaveBeenCalled();
+  });
+
+  it('количество больше доступного: алерт, POST не выполняется', async () => {
+    setupDom({ quantity: 9 });
+    completedQty = 2; // доступно = 10 − 2 = 8, 9 > 8
+
+    await addWorkResult();
+
+    const postCalls = fetchMock.mock.calls.filter(([url]) => String(url) === '/api/work-results');
+    expect(postCalls.length).toBe(0);
+    expect(alert).toHaveBeenCalledWith(
+      expect.stringContaining('Невозможно добавить 9 изделий')
+    );
+  });
+
+  it('не заполнены все поля: алерт, запросов нет', async () => {
+    document.body.innerHTML = `
+      <select id="employeeSelect" class="hidden"></select>
+      <input id="employeeIdInput" value="1">
+      <select id="orderSelect"><option value="100">Order</option></select>
+      <select id="modelSelect"><option value="1">Model</option></select>
+      <select id="sectionSelect"><option value="2">Section</option></select>
+      <select id="operationSelect"><option value="3">Op</option></select>
+      <select id="yearSelect"><option value="2026" selected>2026</option></select>
+      <select id="monthSelect"><option value="3" selected>3</option></select>
+      <select id="weekSelect"><option value="11" selected>11</option></select>
+      <select id="quantitySelect"></select>
+    `;
+
+    await addWorkResult();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(alert).toHaveBeenCalledWith('Пожалуйста, заполните все поля');
+  });
+
+  it('ошибка сервера при добавлении: алерт об ошибке', async () => {
+    setupDom({ quantity: 3 });
+    completedQty = 2;
+    postFails = true;
+
+    await addWorkResult();
+
+    expect(alert).toHaveBeenCalledWith(
+      expect.stringContaining('Ошибка при добавлении результата работы')
+    );
   });
 });
